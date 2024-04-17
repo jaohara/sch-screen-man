@@ -5,10 +5,10 @@ import apiRoutes from './routes/apiRoutes.js';
 const app = express();
 const port = 3000;
 
-// use the router for the API Routes on /api
+// use the router defined in ./routes/apiRoutes.js to handle api-relevant routes
 app.use('/api', apiRoutes);
 
-// serve static files from `./public`
+// serve static files from ./public
 app.use(express.static('public'));
 
 app.listen(port, () => {

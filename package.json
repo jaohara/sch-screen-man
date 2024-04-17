@@ -1,0 +1,20 @@
+{
+  "name": "sch-screen-man",
+  "version": "1.0.0",
+  "description": "An express app to manage the Raspberry Pis that drive the menu screens at Stoup's Capitol Hill location.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "express",
+    "brewery",
+    "screen"
+  ],
+  "author": "John O'Hara",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

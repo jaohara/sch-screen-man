@@ -11,12 +11,12 @@ router.get('/restart/:screenId', (req, res) => {
 
   // hardcoded right coffee screen test
   if (screenId === '420') {
-    // console.log("Testing Right togo/coffee screen restart...");
-    console.log("Testing left mez screen restart...");
+    // console.log("Testing left mez screen restart...");
+    console.log("Testing Right togo/coffee screen restart...");
     // res.send("Route /api/restart/420 triggering reboot of left mez screen...");
     res.send("Route /api/restart/420 triggering reboot of right coffee screen...");
 
-    connectAndReboot(420);
+    // connectAndReboot(420);
 
     return;
   }

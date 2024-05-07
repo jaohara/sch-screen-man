@@ -131,6 +131,7 @@ dist
 .pnp.*
 
 # project-specific ignores
+pi-conf.js
 backend/pi-conf.js
 backend/ssh-keys/
 backend/public/

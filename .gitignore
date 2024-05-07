@@ -133,3 +133,4 @@ dist
 # project-specific ignores
 backend/pi-conf.js
 backend/ssh-keys/
+backend/public/

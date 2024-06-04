@@ -6,9 +6,8 @@ import React, {
 import styles from "./Screen.module.scss";
 
 function Screen ({
-
+  screen,
 }) {
-  
 
   // on initial load
   useEffect(() => {

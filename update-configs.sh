@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Run this after you update the ./pi-conf.js file. It will copy the file into each
+#  of the project directories.
+
 # Path to the Raspberry Pi Config file
 CONFIG_FILE="pi-conf.js"
 

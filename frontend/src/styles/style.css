@@ -6,6 +6,8 @@
   --common-border-size: 2px;
   --common-margin: 1rem;
   --common-padding: 1rem;
+  --screen-group-header-size: 1.4rem;
+  --screen-margin: .25rem;
   --screen-width: 200px;
 
   /* Base Colors */
@@ -19,10 +21,11 @@
   /* Complimentary Colors */
   --green-yellow: #ABFF4F;
   --onyx: #393D3F;
+  --onyx-dark: #222425;
   --raspberry: #D81159;
 
   /* Colors (Role) */
-  --background-color: var(--onyx);
+  --background-color: var(--onyx-dark);
   --border-color: var(--white);
   --button-background-color: transparent;
   --button-border-color: var(--stoup-orange);
@@ -30,6 +33,7 @@
   --button-hover-border-color: var(--stoup-orange);
   --button-hover-text-color: var(--onyx);
   --button-text-color: var(--white);
+  --screen-group-background-color: var(--onyx);
 
   --text-color: var(--white);
 
@@ -37,6 +41,16 @@
 }
 
 * {
+  box-sizing: border-box;
   color: var(--text-color);
   font-family: var(--app-font-stack);
+}
+
+html {
+  background-color: var(--background-color);
+}
+
+body {
+  margin: 0rem;
+  padding: var(--common-padding);
 }

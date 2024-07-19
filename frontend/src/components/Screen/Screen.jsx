@@ -18,18 +18,34 @@ function Screen ({
   const [ screenImage, setScreenImage ] = useState(null);
   const [ screenImageIsLoaded, setScreenImageIsLoaded ] = useState(false);
   const [ screenImageLoadingFailed, setScreenImageLoadingFailed ] = useState(false);
+  const [ screenIsOnline, setScreenIsOnline ] = useState(false);
+  const [ screenStatusIsLoaded, setScreenStatusIsLoaded ] = useState(false);
+
+  /*
+    TODO: 
+     - Display the name of each screen
+     - use screenIsOnline/screenStatusIsLoaded to display a circle to indicate if a screen is online
+     - Ping screen to get status
+     - Figure out best size for screens
+     - Allow screens/screen image to resize responsively based on current viewport width
+     - Use Puppeteer to get a screenshot of the menu webpages 
+  */
 
   // on initial load
   useEffect(() => {
     // fetch image from `https://picsum.photos/${SCREEN_IMAGE_WIDTH}/${SCREEN_IMAGE_HEIGHT}`
     const fetchImage = async () => {
       try {
+        // eventually use puppeteer (https://www.npmjs.com/package/puppeteer) on the backend
+        //  to request and save a screenshot of the screen pages.
+
         const url = `https://picsum.photos/${SCREEN_IMAGE_WIDTH}/${SCREEN_IMAGE_HEIGHT}`;
         const response = await fetch(url);
         setScreenImage(response.url);
         setScreenImageIsLoaded(true);
       }
       catch (error) {
+        // TODO: Maybe devise a better error handling approach?
         //handle error here
         setScreenImageLoadingFailed(true);
       }

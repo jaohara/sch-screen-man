@@ -4,3 +4,19 @@
   margin: var(--screen-margin);
   padding: var(--common-padding);
 }
+
+.screen-image-wrapper { 
+  margin-bottom: var(--common-margin);
+  max-height: var(--screen-image-height);
+  max-width: var(--screen-image-width);
+  min-height: var(--screen-image-height);
+  min-width: var(--screen-image-width);
+  
+  &, img {
+    border-radius: var(--common-border-radius); 
+  }
+}
+
+.screen-controls {
+  width: 100%;
+}

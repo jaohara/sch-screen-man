@@ -2,7 +2,7 @@
 //  issuing commands to the networked Pis. It is imported by the 
 //  appropriate modules in `./routes/`.
 import { Client } from "ssh2";
-import piConfig from "./pi-conf.js";
+import { piConfig } from "./pi-conf.js";
 
 
 

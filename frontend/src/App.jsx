@@ -4,6 +4,7 @@ import {
 } from 'react'
 import styles from './App.module.scss';
 
+import TitleBar from './components/TitleBar/TitleBar.jsx';
 import ScreenGroup from './components/ScreenGroup/ScreenGroup';
 
 import { groupMetaData, piConfig } from '../pi-conf.js';
@@ -78,9 +79,10 @@ function App() {
 
   return (
     <div className={styles.app}>
-      <div className={styles.header}>
+      {/* <div className={styles.header}>
         <h1>Stoup Screen Manager</h1>
-      </div>
+      </div> */}
+      <TitleBar />
 
       {screenGroupsJSX}
     </div>

@@ -1,7 +1,7 @@
 import express from "express";
 import { Client } from "ssh2";
 
-import piConfig from "../pi-conf.js";
+import { piConfig } from "../pi-conf.js";
 
 import { createErrorResponseObject } from "./utils.js";
 import { connectAndReboot } from "../piController.js";

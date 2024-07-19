@@ -6,7 +6,7 @@
   justify-content: center;
   margin-bottom: var(--common-margin);
   padding: var(--common-padding);
-  width: 100vw;
+  width: 100%;
 }
 
 .screens {
@@ -17,6 +17,6 @@
 }
 
 .header {
-  font-size: var(--screen-group-header-size);
+  font-size: var(--screen-group-header-font-size);
   margin-top: 0rem;
 }

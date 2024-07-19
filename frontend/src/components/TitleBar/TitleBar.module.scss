@@ -1,0 +1,10 @@
+.title-bar {
+  margin-top: 0rem;
+  margin-bottom: var(--common-margin);
+  padding-top: 0rem;
+
+  h1 {
+    font-size: var(--title-bar-font-size);
+    margin: 0rem;
+  }
+}

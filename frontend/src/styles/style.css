@@ -1,42 +1,14 @@
-:root {
-  --app-font-stack: Inter, system-ui, Avenir, Helvetica, Arial; 
-
-  /* Sizes */
-  --common-border-radius: 8px;
-  --common-border-size: 2px;
-  --common-margin: 1rem;
-  --common-padding: 1rem;
-  --screen-width: 200px;
-
-  /* Base Colors */
-  --white: #efefef;
-
-  /* Brand Colors */
-  --stoup-cyan: #00AF9A;
-  --stoup-orange: #FF6C0E;
-  --stoup-yellow: #F7BE00;
-
-  /* Complimentary Colors */
-  --green-yellow: #ABFF4F;
-  --onyx: #393D3F;
-  --raspberry: #D81159;
-
-  /* Colors (Role) */
-  --background-color: var(--onyx);
-  --border-color: var(--white);
-  --button-background-color: transparent;
-  --button-border-color: var(--stoup-orange);
-  --button-hover-background-color: var(--stoup-orange);
-  --button-hover-border-color: var(--stoup-orange);
-  --button-hover-text-color: var(--onyx);
-  --button-text-color: var(--white);
-
-  --text-color: var(--white);
-
+* {
+  box-sizing: border-box;
+  color: var(--text-color);
   font-family: var(--app-font-stack);
 }
 
-* {
-  color: var(--text-color);
-  font-family: var(--app-font-stack);
+html {
+  background-color: var(--background-color);
+}
+
+body {
+  margin: 0rem;
+  padding: var(--common-padding);
 }

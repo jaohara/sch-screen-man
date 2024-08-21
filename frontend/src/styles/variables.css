@@ -1,0 +1,74 @@
+:root {
+  --app-font-stack: Inter, system-ui, Avenir, Helvetica, Arial; 
+
+  /* Misc */
+  --ratio-height-to-width-16-9: .5625;
+
+  /* Sizes */
+  --button-font-size: 1.2rem;
+  --button-min-height: 48px;
+  --button-min-width: 48px;
+  --button-padding: .6rem 1.2rem;
+  --button-icon-right-margin: .5em;
+  --common-bottom-margin: 3rem;
+  --common-border-radius: 8px;
+  --common-border-size: 2px;
+  --common-margin: 1rem;
+  --common-padding: 1rem;
+  --screen-group-header-font-size: 1.4rem;
+  --screen-margin: .25rem;
+  --screen-image-width: 200px;
+  --screen-image-height: calc(var(--screen-width) * var(--ratio-height-to-width-16-9));
+  --screen-status-size: 12px;
+  --title-bar-font-size: 2.4rem;
+
+  /* Times */
+  --fast-transition-time: 60ms;
+  --normal-transition-time: 100ms;
+  --slow-transition-time: 400ms;
+
+  /* Base Colors */
+  --white: #efefef;
+
+  /* Brand Colors */
+  --stoup-cyan: #00AF9A;
+  --stoup-orange: #FF6C0E;
+  --stoup-yellow: #F7BE00;
+
+  /* Other Colors */
+  --bright-green: #2fd648;
+  --onyx: #393D3F;
+  --onyx-med: #2d2e2e;
+  --onyx-dark: #222425;
+  --dark-gray: #1c1c1c;
+  --med-gray: #2d2d2d;
+  --light-gray: #3e3e3e;
+  --raspberry: #D81159;
+
+  /* Colors (Role) */
+  /* --background-color: var(--onyx-dark); */
+  --background-color: var(--dark-gray);
+  /* --border-color: var(--white); */
+  --border-color: var(--med-gray);
+  --button-background-color: transparent;
+  --button-border-color: var(--stoup-orange);
+  --button-hover-background-color: var(--stoup-orange);
+  --button-hover-border-color: var(--stoup-orange);
+  --button-hover-text-color: var(--onyx);
+  --button-text-color: var(--white);
+  /* --screen-background-color: var(--onyx); */
+  --screen-background-color: var(--med-gray);
+  /* --screen-group-background-color: var(--onyx); */
+  /* --screen-group-background-color: var(--onyx-med); */
+  --screen-group-background-color: transparent;
+  --screen-status-default-background-color: var(--stoup-yellow);
+  --screen-status-loaded-background-color: var(--bright-green);
+  --shadow-color: rgba(0,0,0,0.38);
+  --text-color: var(--white);
+
+  /* Common Values */
+  --small-box-shadow: 0px 2px 4px var(--shadow-color);
+  --small-box-shadow-raised: 0px 3px 6px var(--shadow-color);
+
+  font-family: var(--app-font-stack);
+}

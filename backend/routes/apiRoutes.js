@@ -1,32 +1,63 @@
 import express from "express";
 import { Client } from "ssh2";
 
+import { piConfig } from "../pi-conf.js";
+
+import { 
+  createErrorResponseObject,
+  parseAndCheckScreenIdFromRequest,
+  isValidPiConfigId,
+} from "./utils.js";
 import { connectAndReboot } from "../piController.js";
 
 const router = express.Router();
 
 // API routes
-router.get('/restart/:screenId', (req, res) => {
-  const { screenId } = req.params;
+router.get('/reboot/:screenId', (req, res) => {
+  /*
+    TODO: RETURN ALL RESPONSES AS JSON
+    - This will allow your server to receive responses without a reload
+    - You could also have more robust **error handling** this way
+  */
 
-  // hardcoded right coffee screen test
-  if (screenId === '420') {
-    // console.log("Testing left mez screen restart...");
-    console.log("Testing Right togo/coffee screen restart...");
-    // res.send("Route /api/restart/420 triggering reboot of left mez screen...");
-    res.send("Route /api/restart/420 triggering reboot of right coffee screen...");
+  // TODO: Remove dead code after refactor
+  // const { screenId } = req.params;
+  // const id = parseInt(screenId);
 
-    // connectAndReboot(420);
+  // if (id === NaN) {
+  //   const errorObject = createErrorResponseObject("Provided ID is not a number.");
+  //   res.json(errorObject);
+  //   return;
+  // }
+  const id = parseAndCheckScreenIdFromRequest(req, res);
 
+  if (id === null) {
     return;
   }
 
-  // TODO: Where do import my array of screens from? Should I have screens.js or something
-  //  similar, and then manually input the IPs?
+  if (!isValidPiConfigId(piConfig, id)) {
+    const errorObject = createErrorResponseObject("Provided ID doesn't correspond to a valid screen.");
+    console.error()
+    res.json(errorObject);
+    return;
+  }
 
-  // also, how do I use the SSH keys?
+  const USE_REBOOT_FUNCTION = true;
+  const configObject = piConfig[id];
 
-  res.send(`Route /api/restart/ reached with a screenId of ${screenId}.`);
+  if (USE_REBOOT_FUNCTION) {
+    console.log(`Attempting to reboot Screen ${id}:`, configObject);
+    res.send("Route /api/reboot/${id} triggering reboot of right coffee screen...");
+    connectAndReboot(id);
+    return;
+  }
+  // debug path, return corresponding object without reboot
+  else {
+    // for now, just return the corresponding object
+    console.log(`Received reboot request for Screen ${id}:`, configObject);
+    res.json(configObject);
+  }
+  return;
 });
 
 export default router;

@@ -1,19 +1,60 @@
 .screen {
+  background-color: var(--screen-background-color);
+  box-shadow: var(--small-box-shadow-raised);
   border: var(--common-border-size) solid var(--border-color);
   border-radius: var(--common-border-radius);
   margin: var(--screen-margin);
   padding: var(--common-padding);
 }
 
+.screen-info {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--common-margin);
+  
+  h1 {
+    margin: 0rem;
+    font-size: 1.2rem;
+  }
+
+  .status {
+    background-color: var(--screen-status-default-background-color);
+    box-shadow: var(--small-box-shadow);
+    border-radius: 1rem;
+    transition: background-color var(--fast-transition-time);
+
+    max-height: var(--screen-status-size);
+    max-width: var(--screen-status-size);
+    min-height: var(--screen-status-size);
+    min-width: var(--screen-status-size);
+
+    // TODO: Fix how this class is applied; currently not appearing
+    &.loaded {
+      background-color: var(--screen-status-loaded-background-color);
+    }
+  }
+  
+}
+
 .screen-image-wrapper { 
+  align-items: center;
+  box-shadow: var(--small-box-shadow);
+  display: flex;
+  justify-content: center;
   margin-bottom: var(--common-margin);
   max-height: var(--screen-image-height);
   max-width: var(--screen-image-width);
   min-height: var(--screen-image-height);
   min-width: var(--screen-image-width);
+  overflow: hidden;
   
   &, img {
     border-radius: var(--common-border-radius); 
+  }
+
+  img {
+    
   }
 }
 

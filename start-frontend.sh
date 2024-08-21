@@ -2,4 +2,5 @@
 
 FRONTEND_DIR="frontend"
 cd $FRONTEND_DIR
-npm run dev
+npm run dev -- --host
+

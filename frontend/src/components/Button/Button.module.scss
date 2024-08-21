@@ -1,17 +1,20 @@
 .button {
   --button-transition-time: var(--normal-transition-time);
 
+  align-items: center;
   background-color: var(--button-background-color);
   border: var(--common-border-size) solid black;
   border-color: var(--button-border-color);
   border-radius: var(--common-border-radius);
   border-width: var(--common-border-size);
   color: var(--button-text-color);
+  display: flex;
   font-size: var(--button-font-size);
   font-weight: bold;
   min-height: var(--button-min-height);
   // min-width: var(--button-min-width);
   min-width: 100%;
+  justify-content: center;
   padding: var(--button-padding);
   transition: 
     background-color var(--button-transition-time),
@@ -23,5 +26,9 @@
     border-color: var(--button-hover-border-color);
     color: var(--button-hover-text-color);
     cursor: pointer;
+  }
+
+  svg {
+    margin-right: var(--button-icon-right-margin);
   }
 }

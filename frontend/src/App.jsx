@@ -34,8 +34,11 @@ function App() {
     debugLog("UEF", "piConfig:", piConfig);
     debugLog("UEF", "groupMetaData:", groupMetaData);
     
-    piConfig.forEach((screen) => {
+    piConfig.forEach((screen, index) => {
       const screenGroup = screen.group ? screen.group : UNGROUPED_SCREEN_STRING;
+      
+      // append index to screen object to build reboot route
+      screen.rebootId = index;
       
       if (Object.hasOwn(newScreens, screenGroup)) {
         // Do any further processing of the screen config objects here

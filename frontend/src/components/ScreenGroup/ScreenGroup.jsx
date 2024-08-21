@@ -12,17 +12,21 @@ function ScreenGroup ({
 }) {
 
   useEffect(() => {
+
+    // TODO: Remove debug logging
     console.log("ScreenGroup::UEF::metaData:", metaData);
+
+    console.log("ScreenGroup::UEF::screens:", screens);
   }, []);
 
 
   const screenJSX = screens ? (
     <div className={styles.screens}> 
       {
-        Object.keys(screens).map((screen, index) => (
+        Object.keys(screens).map((screenIndex) => (
           <Screen
-            key={index}
-            screen={screen}
+            key={screenIndex}
+            screen={screens[screenIndex]}
           />
         ))
       }

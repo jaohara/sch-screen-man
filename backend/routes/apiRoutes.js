@@ -1,47 +1,48 @@
 import express from "express";
-import { Client } from "ssh2";
 
 import { piConfig } from "../pi-conf.js";
 
 import { 
   createErrorResponseObject,
-  parseAndCheckScreenIdFromRequest,
   isValidPiConfigId,
+  parseAndCheckScreenIdFromRequest,
 } from "./utils.js";
-import { connectAndReboot } from "../piController.js";
+
+// piController functions
+import {
+  checkIfHostIsUp, 
+  connectAndReboot,
+} from "../piController.js";
 
 const router = express.Router();
 
 // API routes
-router.get('/reboot/:screenId', (req, res) => {
+router.get('/reboot/:screenId', async (req, res) => {
   /*
     TODO: RETURN ALL RESPONSES AS JSON
     - This will allow your server to receive responses without a reload
-    - You could also have more robust **error handling** this way
   */
+  const id = parseAndCheckScreenIdFromRequest(req, res);
 
-  // TODO: Remove dead code after refactor
-  // const { screenId } = req.params;
-  // const id = parseInt(screenId);
-
-  // if (id === NaN) {
-  //   const errorObject = createErrorResponseObject("Provided ID is not a number.");
+  // TODO: remove this redundant code once refactored functions are tested
+  // if (id === null) {
+  //   const errorObject = createErrorResponseObject("No screen ID was provided.", "NULLID");
+  //   console.error(`Error with request:`, errorObject);
   //   res.json(errorObject);
   //   return;
   // }
-  const id = parseAndCheckScreenIdFromRequest(req, res);
 
-  if (id === null) {
-    return;
-  }
+  // if (!isValidPiConfigId(piConfig, id)) {
+  //   const errorObject = createErrorResponseObject("Provided ID doesn't correspond to a valid screen.");
+  //   console.error(`Error with request:`, errorObject);
+  //   res.json(errorObject);
+  //   return;
+  // }
 
-  if (!isValidPiConfigId(piConfig, id)) {
-    const errorObject = createErrorResponseObject("Provided ID doesn't correspond to a valid screen.");
-    console.error()
-    res.json(errorObject);
-    return;
-  }
+  if (!checkIfPiIdIsNull(id, res)) return;
+  if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
+  // TODO: remove this flag and debug path
   const USE_REBOOT_FUNCTION = true;
   const configObject = piConfig[id];
 
@@ -59,5 +60,60 @@ router.get('/reboot/:screenId', (req, res) => {
   }
   return;
 });
+
+router.get('/ping/:screenId', async (req, res) => {
+  // check id validity here, as piController::checkIfHostIsUp could be called as a helper
+  //  function by piController::connectAndReboot
+  const id = parseAndCheckScreenIdFromRequest(req, res);
+
+  if (!checkIfPiIdIsNull(id, res)) return;
+  if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
+
+  const hostIsUp = await checkIfHostIsUp(id);
+
+  const result = {
+    hostIsUp: hostIsUp,
+  }
+
+  return res.json(result);
+});
+
+
+// common helper code
+/**
+ * Checks whether a provided pi id is null and responds to the client with an 
+ * appropriate error message.
+ * @param {number|string} id the id to check 
+ * @param {*} res the express response object
+ * @returns boolean value fore whether or not the pi id is null
+ */
+function checkIfPiIdIsNull(id, res) {
+  if (id === null) {
+    const errorObject = createErrorResponseObject("No screen ID was provided.", "NULLID");
+    console.error(`Error with request:`, errorObject);
+    res.json(errorObject);
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Checks whether a provided pi id is valid for a provided pi config and responds
+ * to the client with an appropriate error message
+ * @param {number|string} id the id to check 
+ * @param {Array} piConfig the array of config objects  
+ * @param {*} res the express response object
+ */
+function checkIfPiIdIsValidForConfig(id, piConfig, res) {
+  if (!isValidPiConfigId(piConfig, id)) {
+    const errorObject = createErrorResponseObject("Provided ID doesn't correspond to a valid screen.");
+    console.error(`Error with request:`, errorObject);
+    res.json(errorObject);
+    return false;
+  }
+
+  return true;
+}
 
 export default router;

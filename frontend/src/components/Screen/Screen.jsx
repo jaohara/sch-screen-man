@@ -9,10 +9,11 @@ import Button from '../Button/Button';
 
 import {
   BACKEND_BASE_URL,
+  PING_ROUTE,
   REBOOT_ROUTE,
 } from "../../constants";
 
-// TODO: will this need to be hard-coded?
+const PING_URL = `${BACKEND_BASE_URL}${PING_ROUTE}`;
 const REBOOT_URL = `${BACKEND_BASE_URL}${REBOOT_ROUTE}`;
 
 function Screen ({
@@ -47,7 +48,8 @@ function Screen ({
         logScreenInfo();
 
         try {
-          const url = `${REBOOT_URL}/${rebootId}`;
+          // const url = `${REBOOT_URL}/${rebootId}`;
+          const url = `${PING_URL}/${rebootId}`;
 
           console.log(`Making request to ${url}...`)
 
@@ -60,11 +62,13 @@ function Screen ({
           const data = await response.json();
 
           // handle the response, for now just log:
-          console.log("Response received, was this the screen you wanted?", data);
+          console.log("Response received for this screen:", data);
+
+          // TODO: Use banner/badge notification instead
         }
         catch (error) {
           console.error("There was an error making the request:", error);
-          // TODO: better error handling here?
+          // TODO: Use banner/badge notification to display this 
         }
       };
     }

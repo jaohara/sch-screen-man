@@ -2,6 +2,7 @@
 //  issuing commands to the networked Pis. It is imported by the 
 //  appropriate modules in `./routes/`.
 import { Client } from "ssh2";
+import ping from "ping";
 import { piConfig } from "./pi-conf.js";
 
 import { 
@@ -14,36 +15,10 @@ import {
  * 
  * @param {number} piId the id of the pi in the array defined in pi-conf.js. 
  */
-export function connectAndReboot(piId) {
-  // TODO: Should this be a string for the host? Is there a better way? 
-  //  Unique indices in the config array?
+export async function connectAndReboot(piId) {
   console.log(`connectAndReboot: received piId of '${piId}'`);
 
-  // unnecessary path - reboot route function already checks if the id is valid
-  // if (!isValidPiConfigId(piId)) {
-  //   //bad path, log error and return null
-  //   console.error(`connectAndReboot:: '${piId}' is not a valid pi id.`);
-
-  //   const errorObject = createErrorResponseObject("Provided ID is not valid", "INVALID_ID");
-  //   // unfinished from this point
-  // }
-
   const sshConnection = new Client();
-
-  // TODO: Remove this and build from piConfig
-  //  - are the properties from the objs in pi-conf similarly named, or do i 
-  //    need to build the object here?
-  // hardcoded mez screen config
-  // const oldConnectionConfig = {
-  //   // host: 'mez-bar1',
-  //   host: 'togo2',
-  //   port: 22,
-  //   username: 'pi',
-  //   // password: 'voivod'
-  //   // password: 'voi42vod'
-  //   password: 'voivod'
-  // };
-
   const configObject = piConfig[piId];
 
   const connectionConfig = {
@@ -55,6 +30,25 @@ export function connectAndReboot(piId) {
   };
 
   // TODO: Handle errors so that server doesn't go down on an error response
+  sshConnection.on('error', (error) => {
+    // we want to handle: 
+    // - error.code === "EHOSTUNREACH"
+    //   - host was completely down
+    // - error.code === "ECONNREFUSED"
+    //   - host actively refused ssh (is in the process of rebooting) 
+
+    /*
+      In both cases, we want to have the server not crash, but return
+      an error object to the frontend client that explains a bit more.
+
+      We also want to have some failsafes before we reach these points -
+      the backend should ping the host in question (maybe via a "checkIfHostIsUp")
+    */
+
+    // TODO: create error objs with createErrorResponseObject and return with
+    //  return res.json(errorObject);
+  });
+
   sshConnection.on('ready', () => {
     console.log(`SSH Connection to '${connectionConfig.host}' established.`);
     // restart logic here
@@ -70,19 +64,24 @@ export function connectAndReboot(piId) {
       console.log(`SSH Connection to '${connectionConfig.host}' closed.`);
     });
     // close ssh connection
-  }).connect(connectionConfig);
+  }).connect(connectionConfig); // actual connection happens here
 }
 
-export function pingScreenHost(piId) {
-  // TODO: Build this function
+export async function checkIfHostIsUp(piId) {
+  const configObject = piConfig[piId];
+  const { mdnsHostname: host } = configObject;
 
-  // - grab the configObject for the specified pi from the piConfig 
-  // - do a ping operation and return the status to the caller
-  // - 
-
-  // considerations:
-  // - should this be able to be called by connectAndReboot() to prevent reboot
-  //   attempts while the host is down?
-  // - should the ping code itself be pulled out into another function that this 
-  //   one calls?
+  try {
+    const res = await ping.promise.probe(host);
+    
+    if (res && res.alive) {
+      return true;
+    }
+    
+    return false;
+  }
+  catch (error) {
+    console.error(`Error trying to ping host '${host}':`, error);
+    return false;
+  }
 }

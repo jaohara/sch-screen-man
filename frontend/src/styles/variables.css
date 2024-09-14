@@ -5,6 +5,7 @@
   --ratio-height-to-width-16-9: .5625;
 
   /* Sizes */
+  --button-disabled-opacity: .25;
   --button-font-size: 1.2rem;
   --button-min-height: 48px;
   --button-min-width: 48px;
@@ -25,6 +26,7 @@
   /* Times */
   --fast-transition-time: 60ms;
   --normal-transition-time: 100ms;
+  --screen-host-pip-transition-time: 250ms;
   --slow-transition-time: 400ms;
 
   /* Base Colors */
@@ -52,6 +54,7 @@
   --border-color: var(--med-gray);
   --button-background-color: transparent;
   --button-border-color: var(--stoup-orange);
+  --button-disabled-border-color: white;
   --button-hover-background-color: var(--stoup-orange);
   --button-hover-border-color: var(--stoup-orange);
   --button-hover-text-color: var(--onyx);
@@ -63,6 +66,10 @@
   --screen-group-background-color: transparent;
   --screen-status-default-background-color: var(--stoup-yellow);
   --screen-status-loaded-background-color: var(--bright-green);
+  /* --screen-status-loaded-background-color: var(--stoup-cyan); */
+  --screen-status-loading-background-color: var(--stoup-yellow);
+  --screen-status-offline-background-color: var(--raspberry);
+  --screen-status-reboot-background-color: var(--stoup-yellow);
   --shadow-color: rgba(0,0,0,0.38);
   --text-color: var(--white);
 

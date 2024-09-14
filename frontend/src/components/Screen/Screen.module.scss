@@ -17,22 +17,40 @@
     margin: 0rem;
     font-size: 1.2rem;
   }
-
+  
+  .status, .loaded, .loading, .offline, .reboot {
+    transition: background-color var(--screen-host-pip-transition-time);
+  }
+  
   .status {
-    background-color: var(--screen-status-default-background-color);
+    // background-color: var(--screen-status-default-background-color);
     box-shadow: var(--small-box-shadow);
     border-radius: 1rem;
-    transition: background-color var(--fast-transition-time);
-
+    transition: background-color var(--screen-host-pip-transition-time);
+    
     max-height: var(--screen-status-size);
     max-width: var(--screen-status-size);
     min-height: var(--screen-status-size);
     min-width: var(--screen-status-size);
-
+    
     // TODO: Fix how this class is applied; currently not appearing
-    &.loaded {
-      background-color: var(--screen-status-loaded-background-color);
-    }
+    
+  }
+  
+  .loaded {
+    background-color: var(--screen-status-loaded-background-color);
+  }
+  
+  .loading {
+    background-color: var(--screen-status-loading-background-color);
+  }
+  
+  .offline {
+    background-color: var(--screen-status-offline-background-color);
+  }
+
+  .reboot {
+    background-color: var(--screen-status-reboot-background-color);
   }
   
 }

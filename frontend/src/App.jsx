@@ -38,7 +38,7 @@ function App() {
       const screenGroup = screen.group ? screen.group : UNGROUPED_SCREEN_STRING;
       
       // append index to screen object to build reboot route
-      screen.rebootId = index;
+      screen.screenId = index;
       
       if (Object.hasOwn(newScreens, screenGroup)) {
         // Do any further processing of the screen config objects here

@@ -24,32 +24,46 @@ router.get('/reboot/:screenId', async (req, res) => {
   */
   const id = parseAndCheckScreenIdFromRequest(req, res);
 
-  // TODO: remove this redundant code once refactored functions are tested
-  // if (id === null) {
-  //   const errorObject = createErrorResponseObject("No screen ID was provided.", "NULLID");
-  //   console.error(`Error with request:`, errorObject);
-  //   res.json(errorObject);
-  //   return;
-  // }
-
-  // if (!isValidPiConfigId(piConfig, id)) {
-  //   const errorObject = createErrorResponseObject("Provided ID doesn't correspond to a valid screen.");
-  //   console.error(`Error with request:`, errorObject);
-  //   res.json(errorObject);
-  //   return;
-  // }
-
   if (!checkIfPiIdIsNull(id, res)) return;
   if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
   // TODO: remove this flag and debug path
   const USE_REBOOT_FUNCTION = true;
+
   const configObject = piConfig[id];
 
   if (USE_REBOOT_FUNCTION) {
+    console.log(`Checking if Screen ${id} is up before reboot...`);
+
+    const { hostIsUp } = await checkIfHostIsUp(id);
+
+    if (!hostIsUp) {
+      const errorObject = createErrorResponseObject("Host can't be reached via ping", "BADHOSTPING");
+      res.status(500).json(errorObject);
+      console.error(`Error rebooting Screen ${id}: host is not up.`);
+      return;
+    }
+
     console.log(`Attempting to reboot Screen ${id}:`, configObject);
-    res.send("Route /api/reboot/${id} triggering reboot of right coffee screen...");
-    connectAndReboot(id);
+    
+    // TODO: Activate this code branch
+    // const USE_PROMISE_BASED_REBOOT = false;
+    const USE_PROMISE_BASED_REBOOT = true;
+    
+    if (USE_PROMISE_BASED_REBOOT) {
+      try {
+        const sshResult = await connectAndReboot(id);
+        console.log(`Completed promise-based reboot, here is sshResult:`, sshResult);
+        res.json(sshResult);
+      }
+      catch (errorObject) {
+        res.status(500).json(errorObject);
+      }
+    }
+    else {
+      connectAndReboot(id);
+    }
+
     return;
   }
   // debug path, return corresponding object without reboot
@@ -69,12 +83,9 @@ router.get('/ping/:screenId', async (req, res) => {
   if (!checkIfPiIdIsNull(id, res)) return;
   if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
-  const hostIsUp = await checkIfHostIsUp(id);
+  console.log(`Received request to check if host ${id} is up...`)
 
-  const result = {
-    hostIsUp: hostIsUp,
-  }
-
+  const result = await checkIfHostIsUp(id);
   return res.json(result);
 });
 
@@ -91,7 +102,7 @@ function checkIfPiIdIsNull(id, res) {
   if (id === null) {
     const errorObject = createErrorResponseObject("No screen ID was provided.", "NULLID");
     console.error(`Error with request:`, errorObject);
-    res.json(errorObject);
+    res.status(500).json(errorObject);
     return false;
   }
 
@@ -107,9 +118,10 @@ function checkIfPiIdIsNull(id, res) {
  */
 function checkIfPiIdIsValidForConfig(id, piConfig, res) {
   if (!isValidPiConfigId(piConfig, id)) {
-    const errorObject = createErrorResponseObject("Provided ID doesn't correspond to a valid screen.");
+    const errorString = "Provided ID doesn't correspond to a valid screen.";
+    const errorObject = createErrorResponseObject(errorString, "INVALIDID");
     console.error(`Error with request:`, errorObject);
-    res.json(errorObject);
+    res.status(500).json(errorObject);
     return false;
   }
 

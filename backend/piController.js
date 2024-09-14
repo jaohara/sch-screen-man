@@ -2,6 +2,7 @@
 //  issuing commands to the networked Pis. It is imported by the 
 //  appropriate modules in `./routes/`.
 import { Client } from "ssh2";
+import ping from "ping";
 import { piConfig } from "./pi-conf.js";
 
 import { 
@@ -14,36 +15,10 @@ import {
  * 
  * @param {number} piId the id of the pi in the array defined in pi-conf.js. 
  */
-export function connectAndReboot(piId) {
-  // TODO: Should this be a string for the host? Is there a better way? 
-  //  Unique indices in the config array?
+export async function connectAndReboot(piId) {
   console.log(`connectAndReboot: received piId of '${piId}'`);
 
-  // unnecessary path - reboot route function already checks if the id is valid
-  // if (!isValidPiConfigId(piId)) {
-  //   //bad path, log error and return null
-  //   console.error(`connectAndReboot:: '${piId}' is not a valid pi id.`);
-
-  //   const errorObject = createErrorResponseObject("Provided ID is not valid", "INVALID_ID");
-  //   // unfinished from this point
-  // }
-
   const sshConnection = new Client();
-
-  // TODO: Remove this and build from piConfig
-  //  - are the properties from the objs in pi-conf similarly named, or do i 
-  //    need to build the object here?
-  // hardcoded mez screen config
-  // const oldConnectionConfig = {
-  //   // host: 'mez-bar1',
-  //   host: 'togo2',
-  //   port: 22,
-  //   username: 'pi',
-  //   // password: 'voivod'
-  //   // password: 'voi42vod'
-  //   password: 'voivod'
-  // };
-
   const configObject = piConfig[piId];
 
   const connectionConfig = {
@@ -54,35 +29,178 @@ export function connectAndReboot(piId) {
     password: configObject.password,
   };
 
-  // TODO: Handle errors so that server doesn't go down on an error response
-  sshConnection.on('ready', () => {
-    console.log(`SSH Connection to '${connectionConfig.host}' established.`);
-    // restart logic here
+  // const USE_PROMISE_BASED_REBOOT = false;
+  const USE_PROMISE_BASED_REBOOT = true;
 
-    sshConnection.exec('sudo reboot', (err, stream) => {
-      // TODO: Maybe use stream for something here? 
+  if (USE_PROMISE_BASED_REBOOT) {
+    return new Promise((resolve, reject) => {
+      console.log("Starting promise-based reboot...");
 
-      if (err) {
-        console.error(`Failed to reboot '${connectionConfig.host}':`, err);
+      sshConnection.on('error', (error) => {
+        let errorMessage;
+
+        if (error.code === "EHOSTUNREACH") {
+          // host is completely down
+          errorMessage = "Host is unreachable, device is offline.";
+        }
+        else if (error.code === "ECONNREFUSED") {
+          // host actively refused SSH
+          errorMessage = "Host refused SSH connection - is it already rebooting?";
+        }
+        else {
+          errorMessage = "There was an error connecting to the host.";
+        }
+
+        let errorObject = createErrorResponseObject(errorMessage, error.code);
+        sshConnection.end();
+        // reject wrapping promise with error object, to be handled as arg for  
+        //  the route handler's catch block 
+        reject(errorObject);
+      });
+
+      sshConnection.on('ready', () => {
+        console.log(`SSH Connection to '${connectionConfig.host}' established.`);
+        // restart logic here
+
+        sshConnection.exec('sudo reboot', (err, stream) => {
+          if (err) {
+            console.error(`Failed to reboot '${connectionConfig.host}':`, err);
+            const errorString = "Failure while attemping to reboot host.";
+            const errorObject = createErrorResponseObject(errorString, "REBOOTFAILURE");
+            reject(errorObject);
+          }
+          else {
+            console.log("Reached successful path on reboot");
+            const successObject = {
+              result: "success",
+              message: "Successfully began reboot of host.",
+            };
+
+            resolve(successObject);
+          }
+
+          stream.on('data', (data) => {
+            console.log(`Host STDOUT: ${data}`);
+          });
+  
+          stream.stderr.on('data', (data) => {
+            console.error(`Host STDERR: ${data}`);
+          });
+  
+          stream.on('close', (code, signal) => {
+            console.log(`Stream closed with code ${code}${signal ? `, signal ${signal}` : ""}.`);
+            sshConnection.end();
+            console.log(`SSH Connection to '${connectionConfig.host}' closed.`);
+          });
+
+          // sshConnection.end();
+          // console.log(`SSH Connection to '${connectionConfig.host}' closed.`);
+        });
+      }).connect(connectionConfig); // actual connection happens here
+    });
+  }
+  // original behavior, without promises
+  else {
+    // TODO: Handle errors so that server doesn't go down on an error response
+    sshConnection.on('error', (error) => {
+      // we want to handle: 
+      // - error.code === "EHOSTUNREACH"
+      //   - host was completely down
+      // - error.code === "ECONNREFUSED"
+      //   - host actively refused ssh (is in the process of rebooting) 
+      let errorMessage;
+
+      if (error.code === "EHOSTUNREACH") {
+        // host is completely down
+        errorMessage = "Host is unreachable, device is offline.";
+      }
+      else if (error.code === "ECONNREFUSED") {
+        // host actively refused SSH
+        errorMessage = "Host refused SSH connection - is it already rebooting?";
+      }
+      else {
+        errorMessage = "There was an error connecting to the host.";
       }
 
-      sshConnection.end();
-      console.log(`SSH Connection to '${connectionConfig.host}' closed.`);
+      let errorObject = createErrorResponseObject(errorMessage, error.code);
+
+      // How do I return this errorObject to the caller?
+
+      /*
+        In both cases, we want to  have the server not crash, but return
+        an error object to the frontend client that explains a bit more.
+
+        We also want to have some failsafes before we reach these points -
+        the backend should ping the host in question (maybe via a "checkIfHostIsUp")
+      */
+
+      // TODO: create error objs with createErrorResponseObject and return with
+      //  return res.json(errorObject);
     });
-    // close ssh connection
-  }).connect(connectionConfig);
+
+    sshConnection.on('ready', () => {
+      console.log(`SSH Connection to '${connectionConfig.host}' established.`);
+      // restart logic here
+
+      sshConnection.exec('sudo reboot', (err, stream) => {
+        // TODO: Maybe use stream for something here? 
+        console.log(`Attempting to reboot host at ${connectionConfig.host}...`);
+
+        if (err) {
+          console.error(`Failed to reboot '${connectionConfig.host}':`, err);
+        }
+
+        // TODO: Bring this to the promise-based code branch
+        // BEGIN CODE ==============================================
+        stream.on('data', (data) => {
+          console.log(`Host STDOUT: ${data}`);
+        });
+
+        stream.stderr.on('data', (data) => {
+          console.error(`Host STDERR: ${data}`);
+        });
+
+        stream.on('close', (code, signal) => {
+          console.log(`Stream closed with code ${code}${signal ? `, signal ${signal}` : ""}.`);
+          sshConnection.end();
+          console.log(`SSH Connection to '${connectionConfig.host}' closed.`);
+        });
+
+        // END =====================================================
+
+        // TODO: Remove this in the promise-based code branch
+        // sshConnection.end();
+        // console.log(`SSH Connection to '${connectionConfig.host}' closed.`);
+      });
+    }).connect(connectionConfig); // actual connection happens here
+  }
 }
 
-export function pingScreenHost(piId) {
-  // TODO: Build this function
+export async function checkIfHostIsUp(piId) {
+  const configObject = piConfig[piId];
+  const { mdnsHostname: host, name: screenName } = configObject;
 
-  // - grab the configObject for the specified pi from the piConfig 
-  // - do a ping operation and return the status to the caller
-  // - 
+  const resultObject = {
+    hostIsUp: false,
+    message: `Host #${piId} (${screenName}) is down.`,
+    name: screenName,
+    piId: piId,
+  };
 
-  // considerations:
-  // - should this be able to be called by connectAndReboot() to prevent reboot
-  //   attempts while the host is down?
-  // - should the ping code itself be pulled out into another function that this 
-  //   one calls?
+  try {
+    const res = await ping.promise.probe(host);
+    
+    if (res && res.alive) {
+      resultObject.hostIsUp = true;
+      resultObject.message = `Host #${piId} (${screenName}) is up`;
+    }
+    
+    return resultObject;
+  }
+  catch (error) {
+    console.error(`Error trying to ping host '${host}':`, error);
+    resultObject.message = "Error trying top ping host, see error object in response.";
+    resultObject.error = error;
+    return resultObject;
+  }
 }

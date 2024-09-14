@@ -19,9 +19,10 @@
   transition: 
     background-color var(--button-transition-time),
     border-color var(--button-transition-time),
-    color var(--button-transition-time);
+    color var(--button-transition-time),
+    opacity var(--button-transition-time);
 
-  &:hover {
+  &:hover:not(&:disabled) {
     background-color: var(--button-hover-background-color);
     border-color: var(--button-hover-border-color);
     color: var(--button-hover-text-color);
@@ -30,5 +31,14 @@
 
   svg {
     margin-right: var(--button-icon-right-margin);
+  }
+
+  &:disabled {
+    border-color: var(--button-disabled-border-color);
+    opacity: var(--button-disabled-opacity);
+
+    &:hover {
+      cursor: default;
+    }
   }
 }

@@ -1,7 +1,9 @@
 export function createErrorResponseObject(errorString, errorType = null) {
+  // TODO: Unify failure/success object structure 
   const errorResponseObject = {
       error: true,
       message: `ERROR: ${errorString}`,
+      result: "failure",
       timestamp: Date.now(),
   };
 

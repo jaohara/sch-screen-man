@@ -83,7 +83,7 @@
   --screen-status-reboot-background-color: var(--stoup-yellow);
   --shadow-color: rgba(0,0,0,0.2);
   --text-color: var(--onyx);
-
+  
   /* Common Values */
   --small-box-shadow: 0px 2px 4px var(--shadow-color);
   --small-box-shadow-raised: 0px 3px 6px var(--shadow-color);
@@ -99,11 +99,12 @@
     --button-background-color: var(--light-gray);
   /* --button-border-color: var(--blue); */
     --button-border-color: var(--light-gray);
-    --button-hover-text-color: var(--onyx);
+    --button-hover-text-color: var(--light-100);
     --button-text-color: var(--light-100);
     --menu-bar-background-color: var(--med-gray);
     --menu-button-active-background-color: var(--light-gray);
     --screen-background-color: var(--med-gray);
+    --screen-info-hostname-background-color: var(--dark-gray);
     --text-color: var(--light-100);
   }
 }

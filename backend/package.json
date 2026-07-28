@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   },
   "keywords": [
     "express",
@@ -18,7 +22,12 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "ping": "^0.4.4",
-    "puppeteer": "^23.0.2",
+    "puppeteer": "^25.4.0",
     "ssh2": "^1.15.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "globals": "^17.8.0"
   }
 }

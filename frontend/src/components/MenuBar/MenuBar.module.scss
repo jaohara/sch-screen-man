@@ -25,7 +25,7 @@
   
   .menu-bar-button {
     background-color: transparent;
-    border: 0px solid;
+    border: 1px solid transparent;
     border-radius: var(--common-border-radius);
     // padding: var(--menu-button-padding-vertical) 0rem;
     padding: 1rem 0rem;
@@ -33,7 +33,9 @@
   }
 
   .menu-bar-button.active { 
-    background-color: red;
+    // border-color: var(--menu-button-active-border-color);
+    box-shadow: 0px 0px 12px inset rgba(0,0,0,0.05);
+    background-color: var(--menu-button-active-background-color);
   }
 
   .menu-bar-button:hover {

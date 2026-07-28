@@ -85,6 +85,18 @@ function App() {
         />
     )});
 
+  const currentScreenGroupJSX = activeScreenGroup ? (
+    // <p className={styles["main-container-message"]}>activeScreenGroup selected; replace me with the screenGroup JSX.</p>
+    <ScreenGroup
+      metaData={screens[activeScreenGroup].metaData}
+      screens={screens[activeScreenGroup].screens}
+    />
+  ) : (
+    <p className={styles["main-container-message"]}>
+      Select a group of screens from the menu.
+    </p>
+  )
+
   return (
     <div className={styles.app}>
       {/* <div className={styles.header}>
@@ -96,7 +108,11 @@ function App() {
         setActiveScreenGroup={setActiveScreenGroup}
       />
 
-      {screenGroupsJSX}
+      <div className={styles["main-container"]}>
+        {/* {screenGroupsJSX} */}
+        {currentScreenGroupJSX}
+      </div>
+
     </div>
   );
 }

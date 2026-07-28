@@ -36,11 +36,11 @@ function ScreenGroup ({
       </div>
     );
 
-  const groupName = metaData ? metaData.name : null;
+  // const groupName = metaData ? metaData.name : null;
 
-  const groupNameJSX = groupName ? (
-    <h1 className={styles.header}>{groupName} Screens</h1>
-  ) : null;
+  // const groupNameJSX = groupName ? (
+  //   <h1 className={styles.header}>{groupName} Screens</h1>
+  // ) : null;
 
   return (
     <div className={styles.group}>

@@ -31,14 +31,18 @@
   --slow-transition-time: 400ms;
 
   /* Base Colors */
-  --white: #efefef;
+  --light-100: #efefef;
+  --light-200: #deddda;
+  --light-300: #c0bfbc;
+  --light-400: #9a9996;
 
   /* Brand Colors */
   --stoup-cyan: #00AF9A;
   --stoup-orange: #FF6C0E;
   --stoup-yellow: #F7BE00;
-
+  
   /* Other Colors */
+  --blue: #1daefccf;
   --bright-green: #2fd648;
   --onyx: #393D3F;
   --onyx-med: #2d2e2e;
@@ -50,34 +54,56 @@
 
   /* Colors (Role) */
   /* --background-color: var(--onyx-dark); */
-  --background-color: var(--dark-gray);
+  --background-color: var(--light-100);
   /* --border-color: var(--white); */
   --border-color: var(--med-gray);
-  --button-background-color: transparent;
-  --button-border-color: var(--stoup-orange);
+  /* --button-background-color: var(--blue); */
+  --button-background-color: var(--light-300);
+  /* --button-border-color: var(--blue); */
+  --button-border-color: var(--light-300);
   --button-disabled-border-color: white;
-  --button-hover-background-color: var(--stoup-orange);
-  --button-hover-border-color: var(--stoup-orange);
+  --button-hover-background-color: var(--blue);
+  --button-hover-border-color: var(--blue);
   --button-hover-text-color: var(--onyx);
-  --button-text-color: var(--white);
-  --menu-bar-background-color: var(--med-gray);
+  --button-text-color: var(--onyx);
+  --menu-bar-background-color: var(--light-200);
+  --menu-button-active-background-color: var(--light-300);
+  --menu-button-active-border-color: var(--light-400);
   /* --screen-background-color: var(--onyx); */
-  --screen-background-color: var(--med-gray);
+  --screen-background-color: var(--light-200);
   /* --screen-group-background-color: var(--onyx); */
   /* --screen-group-background-color: var(--onyx-med); */
   --screen-group-background-color: transparent;
+  --screen-info-hostname-background-color: var(--light-100);
   --screen-status-default-background-color: var(--stoup-yellow);
   --screen-status-loaded-background-color: var(--bright-green);
   /* --screen-status-loaded-background-color: var(--stoup-cyan); */
   --screen-status-loading-background-color: var(--stoup-yellow);
   --screen-status-offline-background-color: var(--raspberry);
   --screen-status-reboot-background-color: var(--stoup-yellow);
-  --shadow-color: rgba(0,0,0,0.38);
-  --text-color: var(--white);
+  --shadow-color: rgba(0,0,0,0.2);
+  --text-color: var(--onyx);
 
   /* Common Values */
   --small-box-shadow: 0px 2px 4px var(--shadow-color);
   --small-box-shadow-raised: 0px 3px 6px var(--shadow-color);
 
   font-family: var(--app-font-stack);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: var(--dark-gray);
+    /* --border-color: var(--white); */
+    --border-color: var(--med-gray);
+    --button-background-color: var(--light-gray);
+  /* --button-border-color: var(--blue); */
+    --button-border-color: var(--light-gray);
+    --button-hover-text-color: var(--onyx);
+    --button-text-color: var(--light-100);
+    --menu-bar-background-color: var(--med-gray);
+    --menu-button-active-background-color: var(--light-gray);
+    --screen-background-color: var(--med-gray);
+    --text-color: var(--light-100);
+  }
 }

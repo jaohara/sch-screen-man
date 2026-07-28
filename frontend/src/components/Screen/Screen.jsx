@@ -281,7 +281,8 @@ function Screen ({
     };
   })();
 
-  const rebootButtonIsDisabled = !screenIsOnline || rebootInProgress;
+  // const rebootButtonIsDisabled = !screenIsOnline || rebootInProgress;
+  const rebootButtonIsDisabled = false;
 
   const hostIndicatorPipClassNames = (() => {
     let className = `${styles.status}`;
@@ -313,22 +314,37 @@ function Screen ({
     return (<span style={styles["uptime"]}>{uptimeString}</span>);
   })();
 
+  const screenDebugTextJSX = (
+    <>
+      <p><strong>Screen Online?</strong> {screenIsOnline.toString()}</p>
+      <p><strong>Uptime?</strong> {uptimeJSX}</p>
+      <p><strong>Reboot in Progress?</strong> {rebootInProgress.toString()}</p>
+      <p><strong>Status Loaded?</strong> {screenStatusIsLoaded.toString()}</p>
+      <p><strong>Reboot time?</strong> {lastRebootTime ? lastRebootTime.toString() : "0"}</p>
+    </>
+  );
+
+  // const SCREEN_DEBUG_TEXT_ENABLED = true;
+  const SCREEN_DEBUG_TEXT_ENABLED = false;
+
   return (
     <div className={styles.screen}>
       <div className={styles["screen-info"]}>
-        <h1>{screen.name}</h1>
-        {/* TODO: Add more complex logic for appending classNames to handle more states */}
-        {/* <div className={`${styles.status} ${styles.loaded}`}>&nbsp;</div> */}
-        <div className={hostIndicatorPipClassNames}>&nbsp;</div>
+          <div className={styles["screen-info-header"]}>
+            <h1>{screen.name}</h1>
+            {/* TODO: Add more complex logic for appending classNames to handle more states */}
+            {/* <div className={`${styles.status} ${styles.loaded}`}>&nbsp;</div> */}
+            <div className={hostIndicatorPipClassNames}>&nbsp;</div>
+          </div>
+          <span className={styles["screen-info-hostname"]}>Hostname: {screen.mdnsHostname}</span>
       </div>
 
-      <div className={styles["screen-description"]}>
-        <p>{screen.positionDescription}</p>
-        <p><strong>Screen Online?</strong> {screenIsOnline.toString()}</p>
-        <p><strong>Uptime?</strong> {uptimeJSX}</p>
-        <p><strong>Reboot in Progress?</strong> {rebootInProgress.toString()}</p>
-        <p><strong>Status Loaded?</strong> {screenStatusIsLoaded.toString()}</p>
-        <p><strong>Reboot time?</strong> {lastRebootTime ? lastRebootTime.toString() : "0"}</p>
+      <div className={styles["screen-description-container"]}>
+        <p className={styles["screen-description"]}>{screen.positionDescription}</p>
+        {
+          SCREEN_DEBUG_TEXT_ENABLED && screenDebugTextJSX
+        }
+
         
       </div>
 

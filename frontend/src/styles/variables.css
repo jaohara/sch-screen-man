@@ -16,6 +16,7 @@
   --common-border-size: 2px;
   --common-margin: 1rem;
   --common-padding: 1rem;
+  --menu-button-padding-vertical: var(--common-padding);
   --screen-group-header-font-size: 1.4rem;
   --screen-margin: .25rem;
   --screen-image-width: 200px;
@@ -59,6 +60,7 @@
   --button-hover-border-color: var(--stoup-orange);
   --button-hover-text-color: var(--onyx);
   --button-text-color: var(--white);
+  --menu-bar-background-color: var(--med-gray);
   /* --screen-background-color: var(--onyx); */
   --screen-background-color: var(--med-gray);
   /* --screen-group-background-color: var(--onyx); */

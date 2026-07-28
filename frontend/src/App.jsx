@@ -4,10 +4,11 @@ import {
 } from 'react'
 import styles from './App.module.scss';
 
-import TitleBar from './components/TitleBar/TitleBar.jsx';
+// import TitleBar from './components/TitleBar/TitleBar.jsx';
+import MenuBar from './components/MenuBar/MenuBar.jsx';
 import ScreenGroup from './components/ScreenGroup/ScreenGroup';
 
-import { groupMetaData, piConfig } from '../pi-conf.js';
+import { groupMetaData as screenGroupMetaData, piConfig } from '../pi-conf.js';
 
 import { UNGROUPED_SCREEN_STRING } from './constants.js';
 
@@ -20,7 +21,10 @@ function debugLog(location, message, loggedData) {
 }
 
 function App() {
+  const [ activeScreenGroup, setActiveScreenGroup ] = useState(null);
   const [ screens, setScreens ] = useState(null);
+  const [ screenGroups, setScreenGroups ] = useState(null);
+
   /*
     - load pi-conf.js
     - parse screen config object into groups of screens
@@ -32,7 +36,7 @@ function App() {
     const newScreens = {};
 
     debugLog("UEF", "piConfig:", piConfig);
-    debugLog("UEF", "groupMetaData:", groupMetaData);
+    debugLog("UEF", "groupMetaData:", screenGroupMetaData);
     
     piConfig.forEach((screen, index) => {
       const screenGroup = screen.group ? screen.group : UNGROUPED_SCREEN_STRING;
@@ -55,8 +59,8 @@ function App() {
         const metaDataKey = screen.group;
 
         // append metadata 
-        if (Object.keys(groupMetaData).includes(metaDataKey)){
-          newScreens[screenGroup].metaData = groupMetaData[metaDataKey];
+        if (Object.keys(screenGroupMetaData).includes(metaDataKey)){
+          newScreens[screenGroup].metaData = screenGroupMetaData[metaDataKey];
         }
       }
     });
@@ -64,6 +68,7 @@ function App() {
     debugLog("UEF", "Finished making newScreens, setting screen in state to:", newScreens);
 
     setScreens(newScreens);
+    setActiveScreenGroup(Object.keys(screenGroupMetaData)[0]);
   }, []);
 
   const screenGroupsJSX = !screens ? null : 
@@ -85,7 +90,11 @@ function App() {
       {/* <div className={styles.header}>
         <h1>Stoup Screen Manager</h1>
       </div> */}
-      <TitleBar />
+      <MenuBar 
+        activeScreenGroup={activeScreenGroup}
+        screenGroupMetaData={screenGroupMetaData}
+        setActiveScreenGroup={setActiveScreenGroup}
+      />
 
       {screenGroupsJSX}
     </div>

@@ -44,7 +44,7 @@ function ScreenGroup ({
 
   return (
     <div className={styles.group}>
-      {groupNameJSX}
+      {/* {groupNameJSX} */}
       {screenJSX}
     </div>
   ); 

@@ -1,5 +1,8 @@
 {
-  "dependencies": {
-    "react-icons": "^5.2.1"
-  }
+  "name": "sch-screen-man-monorepo",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
 }

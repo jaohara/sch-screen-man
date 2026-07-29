@@ -212,7 +212,7 @@ function Screen ({
     }
   };
 
-  // on initial load
+  // on initial load, and whenever the underlying screen data changes
   useEffect(() => {
     console.log("Screen Object received: ", screen);
 
@@ -220,7 +220,7 @@ function Screen ({
     startPing();
 
     return () => clearPingIntervalRef();
-  }, []);
+  }, [screen.screenId]);
 
   // when screen is online 
   useEffect(() => {
@@ -324,6 +324,33 @@ function Screen ({
     </>
   );
 
+  const formatRebootTime = (rebootTime) => `${rebootTime / 1000}s`;
+
+  const newScreenDebugTextJSX = (
+    <table className={styles["screen-debug-table"]}>
+      <tr>
+        <td>Online?</td>
+        <td>{screenIsOnline.toString()}</td>
+      </tr>
+      <tr>
+        <td>Uptime?</td> 
+        <td>{uptimeJSX}</td>
+      </tr>
+      <tr>
+        <td>Rebooting?</td> 
+        <td>{rebootInProgress.toString()}</td>
+      </tr>
+      <tr>
+        <td>Status Loaded?</td> 
+        <td>{screenStatusIsLoaded.toString()}</td>
+      </tr>
+      <tr>
+        <td>Reboot time?</td> 
+        <td>{lastRebootTime ? formatRebootTime(lastRebootTime) : "0"}</td>
+      </tr>
+    </table>
+  );
+
   const SCREEN_DEBUG_TEXT_ENABLED = true;
   // const SCREEN_DEBUG_TEXT_ENABLED = false;
 
@@ -342,7 +369,8 @@ function Screen ({
       <div className={styles["screen-description-container"]}>
         <p className={styles["screen-description"]}>{screen.positionDescription}</p>
         {
-          SCREEN_DEBUG_TEXT_ENABLED && screenDebugTextJSX
+          // SCREEN_DEBUG_TEXT_ENABLED && screenDebugTextJSX
+          SCREEN_DEBUG_TEXT_ENABLED && newScreenDebugTextJSX
         }
 
         

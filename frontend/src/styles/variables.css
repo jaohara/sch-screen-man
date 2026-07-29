@@ -71,6 +71,7 @@
   --menu-button-active-border-color: var(--light-400);
   /* --screen-background-color: var(--onyx); */
   --screen-background-color: var(--light-200);
+  --screen-debug-table-background-color: var(--light-100);
   /* --screen-group-background-color: var(--onyx); */
   /* --screen-group-background-color: var(--onyx-med); */
   --screen-group-background-color: transparent;
@@ -103,6 +104,7 @@
     --button-text-color: var(--light-100);
     --menu-bar-background-color: var(--med-gray);
     --menu-button-active-background-color: var(--light-gray);
+    --screen-debug-table-background-color: var(--dark-gray);
     --screen-background-color: var(--med-gray);
     --screen-info-hostname-background-color: var(--dark-gray);
     --text-color: var(--light-100);

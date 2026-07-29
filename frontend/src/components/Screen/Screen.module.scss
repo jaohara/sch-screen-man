@@ -1,13 +1,18 @@
 .screen {
   background-color: var(--screen-background-color);
-  box-shadow: var(--small-box-shadow-raised);
-  border: var(--common-border-size) solid var(--border-color);
+  // box-shadow: var(--small-box-shadow-raised);
+  // border: var(--common-border-size) solid var(--border-color);
   border-radius: var(--common-border-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 33vh;
   margin: var(--screen-margin);
   padding: var(--common-padding);
+  width: 20%;
 }
 
-.screen-info {
+.screen-info-header {
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -53,6 +58,25 @@
     background-color: var(--screen-status-reboot-background-color);
   }
   
+}
+
+.screen-info-hostname {
+  font-size: .8rem;
+  background-color: var(--screen-info-hostname-background-color);
+  border-radius: var(--common-border-radius);
+  // font-weight: bold;
+  font-family: monospace;
+  padding: .4rem .6rem;
+}
+
+.screen-description-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.screen-description {
+  text-align: center;
 }
 
 .screen-image-wrapper { 

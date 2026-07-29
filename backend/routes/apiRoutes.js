@@ -12,6 +12,7 @@ import {
 import {
   checkIfHostIsUp, 
   connectAndReboot,
+  getHostUptime,
 } from "../piController.js";
 
 const router = express.Router();
@@ -46,22 +47,13 @@ router.get('/reboot/:screenId', async (req, res) => {
 
     console.log(`Attempting to reboot Screen ${id}:`, configObject);
     
-    // TODO: Activate this code branch
-    // const USE_PROMISE_BASED_REBOOT = false;
-    const USE_PROMISE_BASED_REBOOT = true;
-    
-    if (USE_PROMISE_BASED_REBOOT) {
-      try {
-        const sshResult = await connectAndReboot(id);
-        console.log(`Completed promise-based reboot, here is sshResult:`, sshResult);
-        res.json(sshResult);
-      }
-      catch (errorObject) {
-        res.status(500).json(errorObject);
-      }
+    try {
+      const sshResult = await connectAndReboot(id);
+      console.log(`Completed reboot, here is sshResult:`, sshResult);
+      res.json(sshResult);
     }
-    else {
-      connectAndReboot(id);
+    catch (errorObject) {
+      res.status(500).json(errorObject);
     }
 
     return;
@@ -87,6 +79,36 @@ router.get('/ping/:screenId', async (req, res) => {
 
   const result = await checkIfHostIsUp(id);
   return res.json(result);
+});
+
+router.get('/uptime/:screenId', async (req, res) => {
+  const id = parseAndCheckScreenIdFromRequest(req, res);
+
+  if (!checkIfPiIdIsNull(id, res)) return;
+  if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
+
+  console.log(`Received request for host ${id} uptime...`);
+
+  const { hostIsUp } = await checkIfHostIsUp(id);
+
+  // TODO: Make function for this shared code?
+  if (!hostIsUp) {
+    const errorObject = createErrorResponseObject("Host can't be reached via ping", "BADHOSTPING");
+    res.status(500).json(errorObject);
+    console.error(`Error getting uptime for Screen ${id}: host is not up.`);
+    return;
+  }
+
+  try {
+    const sshResult = await getHostUptime(id);
+    console.log(`Completed uptime request, here is the result:`, sshResult);
+    res.json(sshResult);
+  }
+  catch (errorObject) {
+    res.status(500).json(errorObject);
+  }
+
+  return;
 });
 
 

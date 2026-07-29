@@ -6,10 +6,17 @@ import apiRoutes from './routes/apiRoutes.js';
 const app = express();
 const port = 3000;
 
+// TODO: Add local test IPs as necessary
+const corsOriginArray = [
+  "http://localhost:5173",
+  "http://192.168.1.46:5173",
+];
+
+
 // configure CORS 
 app.use(cors({
   // TODO: REPLACE WHEN BACKEND SERVES BUILT FRONTEND WITHOUT VITE
-  origin: 'http://localhost:5173'
+  origin: corsOriginArray,
 }))
 
 // use the router defined in ./routes/apiRoutes.js to handle api-relevant routes

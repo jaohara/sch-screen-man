@@ -16,10 +16,15 @@ import {
   REBOOT_PING_DELAY,
   REBOOT_ROUTE,
   REBOOT_TIMEOUT,
+  UPTIME_ROUTE,
+  // Does uptime need a timeout as well?
 } from "../../constants";
 
 const PING_URL = `${BACKEND_BASE_URL}${PING_ROUTE}`;
 const REBOOT_URL = `${BACKEND_BASE_URL}${REBOOT_ROUTE}`;
+const UPTIME_URL = `${BACKEND_BASE_URL}${UPTIME_ROUTE}`;
+
+const EMPTY_UPTIME_OBJECT = { empty: true, };
 
 function Screen ({
   screen,
@@ -28,6 +33,7 @@ function Screen ({
   const [ screenStatusIsLoaded, setScreenStatusIsLoaded ] = useState(false);
   const [ rebootInProgress, setRebootInProgress ] = useState(false);
   const [ lastRebootTime, setLastRebootTime ] = useState(null);
+  const [ uptime, setUptime ] = useState(EMPTY_UPTIME_OBJECT);
 
   // ping-related refs
   const pingIntervalRef = useRef(null);
@@ -42,6 +48,17 @@ function Screen ({
       pingIntervalRef.current = null;
       pingStartTimeRef.current = null;
     }
+  }
+
+  const resetUptime = () => setUptime(EMPTY_UPTIME_OBJECT);
+
+  const checkIfScreenIdIsANumberAndLogError = (screenId, requestType) => {
+    if (isNaN(screenId)) {
+      console.error(`screen.screenId '${screenId}' is not a number, aborting ${requestType} request.`);
+      return false;
+    }
+
+    return true;
   }
 
   //TODO: Remove debug function
@@ -72,7 +89,8 @@ function Screen ({
   const pingScreen = async () => {
     const { screenId } = screen;
 
-    if (!isNaN(screen.screenId)) {
+    // if (!isNaN(screen.screenId)) {
+    if (!isNaN(screenId)) {
       const url = `${PING_URL}/${screenId}`;
 
       try {
@@ -89,6 +107,54 @@ function Screen ({
         console.error("There was an error making the request:", error);
         return false;
       }
+    }
+  };
+
+  const formatTimePart = (timePart, isFixed = false) => {
+    // assumes timePart can be parsed as number
+    let formattedTimePart = Number(timePart);
+    formattedTimePart = isFixed ? formattedTimePart.toFixed(2) : formattedTimePart;
+    // return String(Number(timePart).toFixed(2)).padStart(2, "0");
+    return String(formattedTimePart).padStart(2, "0");
+  }
+
+  const getScreenUptime = async () => {
+    const { screenId } = screen;
+
+    if (!checkIfScreenIdIsANumberAndLogError(screenId, "uptime")) return;
+
+    const url = `${UPTIME_URL}/${screenId}`;
+
+    try {
+      console.log(`Making uptime request to ${url}`);
+
+      const response = await fetch(url);
+
+      const data = await handleFetchResponse(response);
+      console.log("Data from uptime fetch received:", data);
+
+      // assumes data can be parsed as number
+      const uptime = Number(data);
+
+      const uptimeObject = {
+        rawUptime: uptime,
+      };
+
+      // uptime is in seconds
+
+      uptimeObject.seconds = formatTimePart(uptime % 60, true); 
+      uptimeObject.minutes = formatTimePart(Math.floor(uptime / 60) % 60);
+      uptimeObject.hours = formatTimePart(Math.floor(uptime / 3600 % 24));
+      uptimeObject.days = String(Math.floor(uptime / 3600 / 24));
+
+      console.log("Created uptime Object for screen:", uptimeObject);
+
+      setUptime(uptimeObject);
+      return true;
+    }
+    catch (error) {
+      console.error("There was an error making the request:", error);
+      return false;
     }
   };
 
@@ -156,6 +222,14 @@ function Screen ({
     return () => clearPingIntervalRef();
   }, []);
 
+  // when screen is online 
+  useEffect(() => {
+    if (screenIsOnline) {
+      // this is an sync function
+      getScreenUptime();
+    }
+  }, [screenIsOnline]);
+
   // when screen reboots
   useEffect(() => {
     if (rebootInProgress) {
@@ -171,43 +245,44 @@ function Screen ({
   const rebootOnClickHandler = (() => {
     const { name, screenId } = screen;
 
-    if (!isNaN(screen.screenId)) {
-      return async () => {
-        // TODO: Remove debug code
+    if (!checkIfScreenIdIsANumberAndLogError(screenId, "reboot")) {
+      return () => {
         logScreenInfo();
-
-        try {
-          const url = `${REBOOT_URL}/${screenId}`;
-
-          console.log(`Making request to ${url}...`);
-          
-          rebootStartTimeRef.current = Date.now();
-          // setScreenIsOnline(false);
-          setRebootInProgress(true);
-          const response = await fetch(url);
-          const data = await handleFetchResponse(response);
-          
-          // TODO: Remove log
-          // TODO: Use banner/badge notification instead
-          // handle the response, for now just log:
-          console.log("Response received for this screen:", data);
-          
-        }
-        catch (error) {
-          // TODO: Use banner/badge notification to display this 
-          console.error("There was an error making the request:", error);
-          setRebootInProgress(false);
-        }
+        console.error(`Screen "${name}" does not have an associated screenId.`);
       };
     }
 
-    return () => {
+    return async () => {
+      // TODO: Remove debug code
       logScreenInfo();
-      console.error(`Screen "${name}" does not have an associated screenId.`);
+
+      try {
+        const url = `${REBOOT_URL}/${screenId}`;
+
+        console.log(`Making request to ${url}...`);
+        
+        rebootStartTimeRef.current = Date.now();
+        // setScreenIsOnline(false);
+        setRebootInProgress(true);
+        const response = await fetch(url);
+        const data = await handleFetchResponse(response);
+        
+        // TODO: Remove log
+        // TODO: Use banner/badge notification instead
+        // handle the response, for now just log:
+        console.log("Response received for this screen:", data);
+        
+      }
+      catch (error) {
+        // TODO: Use banner/badge notification to display this 
+        console.error("There was an error making the request:", error);
+        setRebootInProgress(false);
+      }
     };
   })();
 
-  const rebootButtonIsDisabled = !screenIsOnline || rebootInProgress;
+  // const rebootButtonIsDisabled = !screenIsOnline || rebootInProgress;
+  const rebootButtonIsDisabled = false;
 
   const hostIndicatorPipClassNames = (() => {
     let className = `${styles.status}`;
@@ -228,21 +303,48 @@ function Screen ({
     return className;
   })();
 
+  const uptimeJSX = (() => {
+    let uptimeString = "0 days 00:00:00";
+
+    if (uptime && !uptime.empty) {
+      const { days, hours, minutes, seconds } = uptime;
+      uptimeString = `${days} day${days === 1 ? "" : "s"} ${hours}:${minutes}:${seconds}`
+    }
+
+    return (<span style={styles["uptime"]}>{uptimeString}</span>);
+  })();
+
+  const screenDebugTextJSX = (
+    <>
+      <p><strong>Screen Online?</strong> {screenIsOnline.toString()}</p>
+      <p><strong>Uptime?</strong> {uptimeJSX}</p>
+      <p><strong>Reboot in Progress?</strong> {rebootInProgress.toString()}</p>
+      <p><strong>Status Loaded?</strong> {screenStatusIsLoaded.toString()}</p>
+      <p><strong>Reboot time?</strong> {lastRebootTime ? lastRebootTime.toString() : "0"}</p>
+    </>
+  );
+
+  // const SCREEN_DEBUG_TEXT_ENABLED = true;
+  const SCREEN_DEBUG_TEXT_ENABLED = false;
+
   return (
     <div className={styles.screen}>
       <div className={styles["screen-info"]}>
-        <h1>{screen.name}</h1>
-        {/* TODO: Add more complex logic for appending classNames to handle more states */}
-        {/* <div className={`${styles.status} ${styles.loaded}`}>&nbsp;</div> */}
-        <div className={hostIndicatorPipClassNames}>&nbsp;</div>
+          <div className={styles["screen-info-header"]}>
+            <h1>{screen.name}</h1>
+            {/* TODO: Add more complex logic for appending classNames to handle more states */}
+            {/* <div className={`${styles.status} ${styles.loaded}`}>&nbsp;</div> */}
+            <div className={hostIndicatorPipClassNames}>&nbsp;</div>
+          </div>
+          <span className={styles["screen-info-hostname"]}>Hostname: {screen.mdnsHostname}</span>
       </div>
 
-      <div className={styles["screen-description"]}>
-        <p>{screen.positionDescription}</p>
-        <p><strong>Screen Online?</strong> {screenIsOnline.toString()}</p>
-        <p><strong>Reboot in Progress?</strong> {rebootInProgress.toString()}</p>
-        <p><strong>Status Loaded?</strong> {screenStatusIsLoaded.toString()}</p>
-        <p><strong>Reboot time?</strong> {lastRebootTime ? lastRebootTime.toString() : "0"}</p>
+      <div className={styles["screen-description-container"]}>
+        <p className={styles["screen-description"]}>{screen.positionDescription}</p>
+        {
+          SCREEN_DEBUG_TEXT_ENABLED && screenDebugTextJSX
+        }
+
         
       </div>
 

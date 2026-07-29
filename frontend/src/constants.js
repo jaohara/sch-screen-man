@@ -1,8 +1,8 @@
 export const APP_TITLE = "Stoup Capitol Hill Screen Manager";
 // TODO: Change to production URL
-// export const BACKEND_BASE_URL = "http://localhost:3000";
+export const BACKEND_BASE_URL = "http://localhost:3000";
 // TODO: Change to static server ip on LAN
-export const BACKEND_BASE_URL = "http://192.168.1.46:3000";
+// export const BACKEND_BASE_URL = "http://192.168.1.46:3000";
 export const PING_INTERVAL_TIME = 3000;
 export const PING_ROUTE = "/api/ping";
 // TODO: Increase timeout to 

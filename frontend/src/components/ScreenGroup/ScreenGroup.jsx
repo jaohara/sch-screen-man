@@ -25,7 +25,7 @@ function ScreenGroup ({
       {
         Object.keys(screens).map((screenIndex) => (
           <Screen
-            key={screenIndex}
+            key={screens[screenIndex].screenId}
             screen={screens[screenIndex]}
           />
         ))

@@ -10,6 +10,7 @@ const port = 3000;
 const corsOriginArray = [
   "http://localhost:5173",
   "http://192.168.1.46:5173",
+  /^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/,
 ];
 
 

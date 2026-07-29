@@ -281,8 +281,8 @@ function Screen ({
     };
   })();
 
-  // const rebootButtonIsDisabled = !screenIsOnline || rebootInProgress;
-  const rebootButtonIsDisabled = false;
+  const rebootButtonIsDisabled = !screenIsOnline || rebootInProgress;
+  // const rebootButtonIsDisabled = false;
 
   const hostIndicatorPipClassNames = (() => {
     let className = `${styles.status}`;
@@ -324,8 +324,8 @@ function Screen ({
     </>
   );
 
-  // const SCREEN_DEBUG_TEXT_ENABLED = true;
-  const SCREEN_DEBUG_TEXT_ENABLED = false;
+  const SCREEN_DEBUG_TEXT_ENABLED = true;
+  // const SCREEN_DEBUG_TEXT_ENABLED = false;
 
   return (
     <div className={styles.screen}>

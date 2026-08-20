@@ -303,6 +303,7 @@ function Screen ({
     return className;
   })();
 
+
   const uptimeJSX = (() => {
     let uptimeString = "0 days 00:00:00";
 

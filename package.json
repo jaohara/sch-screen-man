@@ -4,5 +4,11 @@
   "workspaces": [
     "frontend",
     "backend"
-  ]
+  ],
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true,
+    "cpu-features@0.0.10": true,
+    "puppeteer@25.4.0": true,
+    "ssh2@1.17.0": true
+  }
 }

@@ -136,3 +136,5 @@ pi-conf.js
 backend/pi-conf.js
 backend/ssh-keys/
 backend/public/
+route-config.js
+route-config.js.*

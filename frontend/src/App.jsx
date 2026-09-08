@@ -23,20 +23,13 @@ function debugLog(location, message, loggedData) {
 function App() {
   const [ activeScreenGroup, setActiveScreenGroup ] = useState(null);
   const [ screens, setScreens ] = useState(null);
-  const [ screenGroups, setScreenGroups ] = useState(null);
-
-  /*
-    - load pi-conf.js
-    - parse screen config object into groups of screens
-    - pass each group of screens into a ScreenGroup component
-  */
 
   useEffect(() => {
     // parse piConfig into groups of screens and save as screens
     const newScreens = {};
 
     debugLog("UEF", "piConfig:", piConfig);
-    debugLog("UEF", "groupMetaData:", screenGroupMetaData);
+    debugLog("UEF", "groupMetaData:", screenGroupMetaData);e
     
     piConfig.forEach((screen, index) => {
       const screenGroup = screen.group ? screen.group : UNGROUPED_SCREEN_STRING;
@@ -50,15 +43,15 @@ function App() {
         return;
       }
       else {
-        // create the group
+        // create the group object
         newScreens[screenGroup] = {};
 
-        // append the screens
+        // create the array for the screens in the group with the current screen added
         newScreens[screenGroup].screens = [screen];
 
         const metaDataKey = screen.group;
 
-        // append metadata 
+        // append metadata to the screen group
         if (Object.keys(screenGroupMetaData).includes(metaDataKey)){
           newScreens[screenGroup].metaData = screenGroupMetaData[metaDataKey];
         }
@@ -71,22 +64,7 @@ function App() {
     setActiveScreenGroup(Object.keys(screenGroupMetaData)[0]);
   }, []);
 
-  const screenGroupsJSX = !screens ? null : 
-    Object.keys(screens).map((screenGroupName, index) => {
-      const currentGroup = screens[screenGroupName];
-      console.log("App::screenGroupsJSXMap::currentGroup:", currentGroup);
-
-      return (
-        <ScreenGroup
-          key={index}
-          metaData={currentGroup.metaData}
-          // screens={screenGroup}
-          screens={currentGroup.screens}
-        />
-    )});
-
   const currentScreenGroupJSX = activeScreenGroup ? (
-    // <p className={styles["main-container-message"]}>activeScreenGroup selected; replace me with the screenGroup JSX.</p>
     <ScreenGroup
       metaData={screens[activeScreenGroup].metaData}
       screens={screens[activeScreenGroup].screens}
@@ -95,13 +73,10 @@ function App() {
     <p className={styles["main-container-message"]}>
       Select a group of screens from the menu.
     </p>
-  )
+  );
 
   return (
     <div className={styles.app}>
-      {/* <div className={styles.header}>
-        <h1>Stoup Screen Manager</h1>
-      </div> */}
       <MenuBar 
         activeScreenGroup={activeScreenGroup}
         screenGroupMetaData={screenGroupMetaData}
@@ -109,7 +84,6 @@ function App() {
       />
 
       <div className={styles["main-container"]}>
-        {/* {screenGroupsJSX} */}
         {currentScreenGroupJSX}
       </div>
 

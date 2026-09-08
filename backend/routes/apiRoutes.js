@@ -111,6 +111,11 @@ router.get('/uptime/:screenId', async (req, res) => {
   return;
 });
 
+// TODO: Implement - route for getting host stats like memory usage
+router.get('/stats/:screenId', async (req, res => {
+  return;
+}));
+
 
 // common helper code
 /**

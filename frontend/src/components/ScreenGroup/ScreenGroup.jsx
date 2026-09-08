@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import styles from "./ScreenGroup.module.scss";
 
@@ -12,10 +12,8 @@ function ScreenGroup ({
 }) {
 
   useEffect(() => {
-
     // TODO: Remove debug logging
     console.log("ScreenGroup::UEF::metaData:", metaData);
-
     console.log("ScreenGroup::UEF::screens:", screens);
   }, []);
 
@@ -36,15 +34,8 @@ function ScreenGroup ({
       </div>
     );
 
-  // const groupName = metaData ? metaData.name : null;
-
-  // const groupNameJSX = groupName ? (
-  //   <h1 className={styles.header}>{groupName} Screens</h1>
-  // ) : null;
-
   return (
     <div className={styles.group}>
-      {/* {groupNameJSX} */}
       {screenJSX}
     </div>
   ); 

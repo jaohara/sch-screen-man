@@ -31,3 +31,20 @@ export function parseAndCheckScreenIdFromRequest(req, res) {
 
 export const isValidPiConfigId = (piConfig, id) => 
   id !== null && !isNaN(id) && id >= 0 && id < piConfig.length;
+
+// Gets the numerical screen id from a hostname string
+export const getPiConfigIdFromHostname = (piConfig, hostname) => {
+  if (!Array.isArray(piConfig)) {
+    throw new Error("piConfig isn't valid");
+  }
+
+  for (let i = 0; i < piConfig.length; i++) {
+    const screen = piConfig[i];
+
+    if (screen.mdnsHostname === hostname) {
+      return i;
+    }
+  }
+
+  return null;
+}

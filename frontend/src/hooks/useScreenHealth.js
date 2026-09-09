@@ -45,9 +45,7 @@ const initialState = {
 };
 
 /*
-  This hook is the new way of handling screen state - the entire state machine lives here.
-
-  Every transition is one place you can read, log, or write a test against.
+  Called by React's useReducer hook. dipatch(action) calls reducer(currentState, action)
 */
 function reducer(state, action) {
   switch(action.type) {

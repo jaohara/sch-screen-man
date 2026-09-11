@@ -1,7 +1,7 @@
 # sch-screen-manager
 A Web dashboard for managing the Raspberry Pi-powered menu displays at Stoup Brewing Capitol Hill. Staff can check the status of the menu hosts and trigger remote reboots without needing to find someone technical. 
 
-***(Include primary image - show primary dashboard with almost all being green, showing one with a crashed browser and one with an unreachable host.)***
+![Dashboard showing a subset of menu screens and a reboot in progress.](docs/images/dashboard-example-9-2-26.png)
 
 ## The Problem
 The venue runs 13 screens showing product lists, brewery hours, and advertisements for upcoming promotions or collaborations. Each screen is driven by a Raspberry Pi running a web browser, which can sometimes crash or hang on outdated information. 
@@ -34,8 +34,6 @@ cd sch-screen-manager
 npm install
 npm run dev
 ```
-
-***RETURN TO HERE TO CONFIRM AND NOTE ANY OTHER STEPS***
 
 ### Project Structure
 The backend is handled via an express server and lives in `./backend`, and the frontend is built with React and lives in `./frontend`.

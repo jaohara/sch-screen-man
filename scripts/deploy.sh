@@ -13,9 +13,19 @@ fi
 cp "$PI_CONF_SRC" ./pi-conf.js
 
 export NVM_DIR="$HOME/.nvm"
+# nvm.sh's internal helpers return non-zero as normal control flow, which
+# set -e treats as fatal, so errexit has to be off while it's loaded and
+# while nvm commands run.
+set +e
 # shellcheck disable=SC1091
 . "$NVM_DIR/nvm.sh"
 nvm use
+NVM_USE_STATUS=$?
+set -e
+if [ "$NVM_USE_STATUS" -ne 0 ]; then
+  echo "nvm use failed" >&2
+  exit 1
+fi
 
 npm ci
 

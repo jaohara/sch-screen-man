@@ -27,12 +27,21 @@ if [ ! -s "$NVM_DIR/nvm.sh" ]; then
   # for something newer if you want it.
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 fi
+echo "==> Installing Node version from .nvmrc"
+# nvm.sh's internal helpers return non-zero as normal control flow (e.g. "is
+# this version installed yet?" -> no), which set -e treats as fatal, so
+# errexit has to be off while it's loaded and while nvm commands run.
+set +e
 # shellcheck disable=SC1091
 . "$NVM_DIR/nvm.sh"
-
-echo "==> Installing Node version from .nvmrc"
 nvm install
+NVM_INSTALL_STATUS=$?
 nvm alias default "$(cat .nvmrc)"
+set -e
+if [ "$NVM_INSTALL_STATUS" -ne 0 ]; then
+  echo "nvm install failed" >&2
+  exit 1
+fi
 
 echo "==> Installing systemd unit"
 sed -e "s|__APP_USER__|$APP_USER|g" -e "s|__APP_DIR__|$REPO_DIR|g" \

@@ -1,0 +1,17 @@
+name: Deploy to home test Pi
+
+on:
+  push:
+    branches:
+      - deploy-test
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, home-pi]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: false
+
+      - name: Deploy
+        run: ./scripts/deploy.sh

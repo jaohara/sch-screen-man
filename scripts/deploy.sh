@@ -27,7 +27,10 @@ if [ "$NVM_USE_STATUS" -ne 0 ]; then
   exit 1
 fi
 
-npm ci
+# backend keeps puppeteer as a devDependency for future browser-based tests,
+# but tests don't run on this host and its Chromium download is the single
+# heaviest, slowest part of every deploy on Pi-class hardware.
+PUPPETEER_SKIP_DOWNLOAD=true npm ci
 
 ./update-configs.sh
 ./build-frontend.sh

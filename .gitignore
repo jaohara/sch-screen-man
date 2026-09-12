@@ -138,7 +138,7 @@ backend/ssh-keys/
 backend/public/
 
 # Claude Code
-.claude/settings.local.json
+.claude/
 CLAUDE.local.md
 CLAUDE.local.old
 

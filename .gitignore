@@ -138,3 +138,9 @@ backend/ssh-keys/
 backend/public/
 route-config.js
 route-config.js.*
+
+# Claude Code
+.claude/settings.local.json
+CLAUDE.local.md
+CLAUDE.local.old
+

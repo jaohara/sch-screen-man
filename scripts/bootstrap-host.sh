@@ -6,6 +6,13 @@
 # Prerequisites this script assumes are already done (per the project's own setup):
 #   - gh is installed and authenticated (`gh auth status`)
 #   - you can sudo on this host
+
+if [ -z "${BASH_VERSION:-}" ]; then
+  echo "This script needs bash (nvm.sh isn't POSIX sh compatible)." >&2
+  echo "Run it as ./scripts/bootstrap-host.sh or 'bash scripts/bootstrap-host.sh', not 'sh scripts/bootstrap-host.sh'." >&2
+  exit 1
+fi
+
 set -euo pipefail
 
 cd "$(dirname "$0")/.."

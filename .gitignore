@@ -136,3 +136,9 @@ pi-conf.js
 backend/pi-conf.js
 backend/ssh-keys/
 backend/public/
+
+# Claude Code
+.claude/settings.local.json
+CLAUDE.local.md
+CLADUE.local.old
+

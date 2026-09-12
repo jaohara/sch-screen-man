@@ -1,0 +1,1 @@
+__APP_USER__ ALL=(root) NOPASSWD: /usr/bin/systemctl restart sch-screen-man.service, /usr/bin/systemctl status sch-screen-man.service

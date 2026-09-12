@@ -140,5 +140,5 @@ backend/public/
 # Claude Code
 .claude/settings.local.json
 CLAUDE.local.md
-CLADUE.local.old
+CLAUDE.local.old
 

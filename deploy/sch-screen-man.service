@@ -1,0 +1,16 @@
+[Unit]
+Description=Stoup Screen Manager backend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__APP_USER__
+WorkingDirectory=__APP_DIR__/backend
+ExecStart=__APP_DIR__/scripts/run-backend.sh
+Restart=on-failure
+RestartSec=5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

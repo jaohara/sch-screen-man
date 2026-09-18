@@ -21,6 +21,14 @@ npm install          # from repo root, installs both workspaces
 
 Standard `lint` scripts exist in both workspaces (`eslint . --report-unused-disable-directives --max-warnings 0`). No test suite currently.
 
+## Deployment
+
+Pushing to the `deploy-test` branch triggers `.github/workflows/deploy.yml` on a
+self-hosted runner (currently a home-network Pi used for testing feature
+branches before they go to the production venue Pi). See `deploy/README.md`
+for the one-time host bootstrap (`scripts/bootstrap-host.sh`) and the deploy
+runbook — `scripts/deploy.sh` is what actually runs on push.
+
 ## Architecture
 
 **Two workspaces, one shared config file.** `frontend/` and `backend/` each hold their own copy of `pi-conf.js` — these are *not* symlinks, `update-configs.sh` copies between them, so edit the root copy and re-run that script.

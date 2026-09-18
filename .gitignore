@@ -139,7 +139,7 @@ route-config.js
 route-config.js.*
 
 # Claude Code
-.claude/settings.local.json
+.claude/
 CLAUDE.local.md
 CLAUDE.local.old
 

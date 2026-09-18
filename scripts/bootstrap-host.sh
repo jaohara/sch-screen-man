@@ -59,17 +59,35 @@ rm -f "$RENDERED_SUDOERS"
 
 echo "==> Setting up GitHub Actions self-hosted runner"
 RUNNER_DIR="$HOME/actions-runner"
+
+# actions/runner ships separate tarballs per CPU architecture; detect it
+# instead of assuming the original arm64 Raspberry Pi target, so this also
+# works on x86_64 hosts (e.g. a cloud VM).
+case "$(uname -m)" in
+  x86_64) RUNNER_ARCH="x64" ;;
+  aarch64|arm64) RUNNER_ARCH="arm64" ;;
+  *)
+    echo "Unsupported architecture: $(uname -m)" >&2
+    exit 1
+    ;;
+esac
+
+# Default labels preserve prior behavior on the home Pi; override per-host
+# (e.g. RUNNER_LABELS="self-hosted,cloud,gcp" for a cloud runner) so deploy
+# workflows can target one host or the other via runs-on.
+RUNNER_LABELS="${RUNNER_LABELS:-self-hosted,home-pi,$RUNNER_ARCH}"
+
 if [ ! -f "$RUNNER_DIR/config.sh" ]; then
   mkdir -p "$RUNNER_DIR"
   (
     cd "$RUNNER_DIR"
-    gh release download --repo actions/runner --pattern 'actions-runner-linux-arm64-*.tar.gz' --output runner.tar.gz --clobber
+    gh release download --repo actions/runner --pattern "actions-runner-linux-${RUNNER_ARCH}-*.tar.gz" --output runner.tar.gz --clobber
     tar xzf runner.tar.gz
     rm runner.tar.gz
     REG_TOKEN="$(gh api --method POST -H "Accept: application/vnd.github+json" \
       "repos/$REPO_SLUG/actions/runners/registration-token" --jq .token)"
     ./config.sh --url "https://github.com/$REPO_SLUG" --token "$REG_TOKEN" \
-      --name "$(hostname)" --labels self-hosted,home-pi,arm64 --work _work --unattended --replace
+      --name "$(hostname)" --labels "$RUNNER_LABELS" --work _work --unattended --replace
     sudo ./svc.sh install
     sudo ./svc.sh start
   )

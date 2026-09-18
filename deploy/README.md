@@ -4,6 +4,13 @@ The home test Pi runs a self-hosted GitHub Actions runner. Pushing to the
 `deploy-test` branch triggers `.github/workflows/deploy.yml`, which runs
 `scripts/deploy.sh` directly on that host.
 
+A second self-hosted runner (a GCP `e2-micro`, labeled `cloud` instead of
+`home-pi`) runs the same way off the `deploy-cloud` branch, via
+`.github/workflows/deploy-cloud.yml`. That host's `pi-conf.js` is the
+`home-network` config, targeting only `test-host` on the home network —
+it's a sandbox for testing against real hardware without touching the
+venue's production Pis.
+
 ## Testing a feature branch
 
 ```bash
@@ -14,7 +21,8 @@ git push origin deploy-test
 
 Watch the run under the repo's Actions tab. `deploy-test` is just a landing
 branch for whatever you want tested — merge into it, don't commit to it
-directly.
+directly. `deploy-cloud` works the same way, substituting its own branch
+name, for testing against the cloud host instead.
 
 ## One-time host setup
 

@@ -1,0 +1,23 @@
+name: Deploy to cloud test host
+
+on:
+  push:
+    branches:
+      - deploy-cloud
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, cloud]
+    steps:
+      # Deliberately not using actions/checkout: it checks out into the
+      # runner's own _work directory, but the systemd unit (installed by
+      # scripts/bootstrap-host.sh) points at the fixed ~/sch-screen-man
+      # clone. Sync that same directory instead so the service actually
+      # serves what this job builds.
+      - name: Sync repo and deploy
+        run: |
+          cd "$HOME/sch-screen-man"
+          git fetch origin deploy-cloud
+          git checkout deploy-cloud
+          git reset --hard origin/deploy-cloud
+          ./scripts/deploy.sh

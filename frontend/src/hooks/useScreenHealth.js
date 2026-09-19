@@ -57,6 +57,13 @@ function reducer(state, action) {
     // pinging a host that is online 
     case 'PING_UP': {
       if (state.status === STATUS.REBOOTING) {
+        const elapsed = action.at - (state.rebootStartedAt);
+
+        // too soon for the host to have actually dropped, false positive
+        if (elapsed < PING_INTERVAL_REBOOT_INITIAL) {
+          return state;
+        }
+
         return {
           ...state,
           status: STATUS.ONLINE,

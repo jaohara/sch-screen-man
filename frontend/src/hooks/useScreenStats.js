@@ -71,8 +71,8 @@ export default function useScreenStats(screenId, { enabled }) {
 
         // Keep a stats failure seperate from a health signal - leave status alone
         //  and keep showing the last good reading
-        console.warn(`Stats fetch failed for screen ${screenId}:`, err);
-        setError(err);
+        console.warn(`Stats fetch failed for screen ${screenId}:`, error);
+        setError(error);
       }
 
       if (!cancelled) {

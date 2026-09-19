@@ -10,23 +10,38 @@ import {
   isValidPiConfigId,
 } from "./routes/utils.js";
 
+const CONNECTION_ERROR_MESSAGES = {
+  EHOSTUNREACH: "Host is unreachable, device is offline.",
+  ECONNREFUSED: "Host refused SSH connection - is it already rebooting?",
+};
+
 /**
- * Connects to a Pi via SSH and triggers a reboot.
- * 
- * @param {number} piId the id of the pi in the array defined in pi-conf.js. 
+ * Runs a single command over a fresh SSH connection to the given Pi.
+ *
+ * @param {number} piId the id of the pi in the array defined in pi-conf.js.
+ * @param {string} command the shell command to execute on the host.
+ * @param {object} [options]
+ * @param {boolean} [options.waitForClose] when true (default), resolves with the
+ *   accumulated stdout once the stream closes. Set false for commands that may
+ *   sever the connection themselves (e.g. `sudo reboot`), where waiting for a
+ *   clean close is unreliable - resolves as soon as exec() accepts the command instead.
+ * @param {() => object} [options.onAccepted] builds the resolved value when
+ *   waitForClose is false.
+ * @param {string} [options.execFailureMessage]
+ * @param {string} [options.execFailureErrorType]
+ * @returns {Promise<string|object>}
  */
-export async function connectAndReboot(piId) {
-  console.log(`connectAndReboot: received piId of '${piId}'`);
-
-  // TODO: Could I take out this SSH code to avoid reuse with other SSH functions (getUptime)?
-  //   - is this worth it? The usage is trivial and doing this doesn't offer much for me
-
+function runSshCommand(piId, command, {
+  waitForClose = true,
+  onAccepted = () => ({ result: "success" }),
+  execFailureMessage = "Failure while executing command on host.",
+  execFailureErrorType = "SSHEXECFAILURE",
+} = {}) {
   const sshConnection = new Client();
   const configObject = piConfig[piId];
 
   const connectionConfig = {
     host: configObject.mdnsHostname,
-    // TODO: Should this be put in a top-level constants file?
     port: 22,
     username: configObject.username,
     password: configObject.password,
@@ -34,49 +49,32 @@ export async function connectAndReboot(piId) {
 
   return new Promise((resolve, reject) => {
     sshConnection.on('error', (error) => {
-      let errorMessage;
-
-      if (error.code === "EHOSTUNREACH") {
-        // host is completely down
-        errorMessage = "Host is unreachable, device is offline.";
-      }
-      else if (error.code === "ECONNREFUSED") {
-        // host actively refused SSH
-        errorMessage = "Host refused SSH connection - is it already rebooting?";
-      }
-      else {
-        errorMessage = "There was an error connecting to the host.";
-      }
-
-      let errorObject = createErrorResponseObject(errorMessage, error.code);
+      const errorMessage = CONNECTION_ERROR_MESSAGES[error.code] ?? "There was an error connecting to the host.";
+      const errorObject = createErrorResponseObject(errorMessage, error.code);
       sshConnection.end();
-      // reject wrapping promise with error object, to be handled as arg for  
-      //  the route handler's catch block 
+      // reject wrapping promise with error object, to be handled as arg for
+      //  the route handler's catch block
       reject(errorObject);
     });
 
     sshConnection.on('ready', () => {
       console.log(`SSH Connection to '${connectionConfig.host}' established.`);
-      // restart logic here
 
-      sshConnection.exec('sudo reboot', (err, stream) => {
+      sshConnection.exec(command, (err, stream) => {
         if (err) {
-          console.error(`Failed to reboot '${connectionConfig.host}':`, err);
-          const errorString = "Failure while attemping to reboot host.";
-          const errorObject = createErrorResponseObject(errorString, "REBOOTFAILURE");
-          reject(errorObject);
+          console.error(`Failed to run command on '${connectionConfig.host}':`, err);
+          reject(createErrorResponseObject(execFailureMessage, execFailureErrorType));
+          return;
         }
-        else {
-          const successObject = {
-            result: "success",
-            message: "Successfully began reboot of host.",
-          };
 
-          resolve(successObject);
+        if (!waitForClose) {
+          resolve(onAccepted());
         }
+
+        let commandOutput = "";
 
         stream.on('data', (data) => {
-          console.log(`Host STDOUT: ${data}`);
+          commandOutput += data.toString();
         });
 
         stream.stderr.on('data', (data) => {
@@ -87,67 +85,102 @@ export async function connectAndReboot(piId) {
           console.log(`Stream closed with code ${code}${signal ? `, signal ${signal}` : ""}.`);
           sshConnection.end();
           console.log(`SSH Connection to '${connectionConfig.host}' closed.`);
+
+          if (waitForClose) {
+            resolve(commandOutput);
+          }
         });
       });
     }).connect(connectionConfig); // actual connection happens here
   });
 }
 
+/**
+ * Connects to a Pi via SSH and triggers a reboot.
+ *
+ * @param {number} piId the id of the pi in the array defined in pi-conf.js.
+ */
+export function connectAndReboot(piId) {
+  console.log(`connectAndReboot: received piId of '${piId}'`);
+
+  return runSshCommand(piId, 'sudo reboot', {
+    waitForClose: false,
+    onAccepted: () => ({ result: "success", message: "Successfully began reboot of host." }),
+    execFailureMessage: "Failure while attemping to reboot host.",
+    execFailureErrorType: "REBOOTFAILURE",
+  });
+}
 
 export async function getHostUptime(piId) {
-  const sshConnection = new Client();
-  const configObject = piConfig[piId];
+  const rawOutput = await runSshCommand(piId, 'cat /proc/uptime', {
+    execFailureMessage: "Failure while trying to get uptime from host.",
+    execFailureErrorType: "UPTIMEFAILURE",
+  });
 
-  // const hostCommand = 'uptime';
-  const hostCommand = 'cat /proc/uptime';
+  // data is space-separated; the first field is uptime in seconds
+  return rawOutput.trim().split(" ")[0];
+}
 
-  const connectionConfig = {
-    host: configObject.mdnsHostname,
-    port: 22,
-    username: configObject.username,
-    password: configObject.password,
+const STATS_COMMAND = [
+  "echo '<<<UPTIME>>>'", "cat /proc/uptime",
+  "echo '<<<MEMINFO>>>'", "cat /proc/meminfo",
+  "echo '<<<LOADAVG>>>'", "cat /proc/loadavg",
+  "echo '<<<DISK>>>'", "df -k -P / | tail -n +2",
+  "echo '<<<TEMP>>>'", "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null",
+].join(" ; ");
+
+function splitStatsSections(rawOutput) {
+  const parts = rawOutput.split(/<<<(\w+)>>>\n?/);
+  const sections = {};
+
+  for (let i = 1; i < parts.length; i += 2) {
+    sections[parts[i]] = parts[i + 1] ?? "";
+  }
+
+  return sections;
+}
+
+function extractMeminfoKb(meminfoText, fieldName) {
+  const match = meminfoText.match(new RegExp(`^${fieldName}:\\s+(\\d+)`, "m"));
+  return match ? Number(match[1]) : null;
+}
+
+function parseStatsOutput(rawOutput) {
+  const sections = splitStatsSections(rawOutput);
+
+  const uptimeSeconds = parseFloat(sections.UPTIME?.trim().split(" ")[0]);
+
+  if (!Number.isFinite(uptimeSeconds)) {
+    throw createErrorResponseObject("Could not parse uptime from host.", "STATSPARSEFAILURE");
+  }
+
+  const memory = {
+    totalKb: extractMeminfoKb(sections.MEMINFO ?? "", "MemTotal"),
+    availableKb: extractMeminfoKb(sections.MEMINFO ?? "", "MemAvailable"),
   };
 
-  return new Promise((resolve, reject) => {
-    sshConnection.on('error', (error) => {
-      console.error(`SSH Connection error: `, error);
-      const errorString = "SSH Connection error";
-      const errorObject = createErrorResponseObject(errorString, "SSHCONNERROR");
-      reject(errorObject);
-    });
+  const loadAvg = (sections.LOADAVG ?? "").trim().split(/\s+/).slice(0, 3).map(Number);
 
-    sshConnection.on('ready', () => {
-      sshConnection.exec(hostCommand, (err, stream) => {
-        if (err) {
-          console.error(`Failed to get uptime for '${connectionConfig.host}:`, err);
-          const errorString = "Failure while trying to get uptime from host.";
-          const errorObject = createErrorResponseObject(errorString, "UPTIMEFAILURE");
-          reject(errorObject);
-        }
+  // df -k -P /: Filesystem 1024-blocks Used Available Capacity Mounted-on
+  const diskFields = (sections.DISK ?? "").trim().split(/\s+/);
+  const disk = {
+    totalKb: Number(diskFields[1]) || null,
+    availableKb: Number(diskFields[3]) || null,
+  };
 
-        let commandOutput = "";
+  const tempRaw = (sections.TEMP ?? "").trim();
+  const tempC = tempRaw ? Number(tempRaw) / 1000 : null;
 
-        stream.on('data', (data) => {
-          // data is passed in as an ssh2 buffer, which is the binary data output of the command
-          const uptimeResult = data.toString().split(" ")[0];
-          commandOutput += uptimeResult;
-        });
+  return { uptimeSeconds, memory, disk, loadAvg, tempC, collectedAt: Date.now() };
+}
 
-        stream.stderr.on('data', (data) => {
-          console.error(`Host STDERR: ${data}`);
-          // TODO: Maybe don't reject here? No guarantee output to STDERR is an outright error
-          // reject(data.toString());
-        });
-
-        stream.on('close', (code, signal) => {
-          console.log(`Stream closed with code ${code}${signal ? `, signal ${signal}` : ""}.`);
-          sshConnection.end();
-          console.log(`SSH Connection to '${connectionConfig.host}' closed.`);
-          resolve(commandOutput.trim());
-        });
-      });
-    }).connect(connectionConfig);
+export async function getHostStats(piId) {
+  const rawOutput = await runSshCommand(piId, STATS_COMMAND, {
+    execFailureMessage: "Failure while trying to get stats from host.",
+    execFailureErrorType: "STATSFAILURE",
   });
+
+  return parseStatsOutput(rawOutput);
 }
 
 export async function checkIfHostIsUp(piId) {

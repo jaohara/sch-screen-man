@@ -4,7 +4,7 @@ export const APP_TITLE = "Stoup Capitol Hill Screen Manager";
 // TODO: Change to static server ip on LAN
 export const BACKEND_BASE_URL = `http://${window.location.hostname}:3000`;
 // ping interval for live hosts after initial confirmation
-export const PING_INTVERVAL_ONLINE = 20000;
+export const PING_INTERVAL_ONLINE = 20000;
 // ping interval for dead hosts
 export const PING_INTERVAL_OFFLINE = 10000;
 // ping interval for actively rebooting hosts

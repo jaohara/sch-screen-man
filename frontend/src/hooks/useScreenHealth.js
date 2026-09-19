@@ -13,6 +13,7 @@ import {
   PING_INTERVAL_ONLINE,   // new: e.g. 30000 — healthy screens don't need 2s polling
   PING_INTERVAL_OFFLINE,  // new: e.g. 10000
   PING_INTERVAL_REBOOT,   // new: e.g. 2000 — tight only while we're waiting on a boot
+  PING_INTERVAL_REBOOT_INITIAL, // initial reboot delay to ensure host's network drops
   REBOOT_TIMEOUT,
 } from '../constants';
 
@@ -103,9 +104,18 @@ function reducer(state, action) {
       return {
         ...state,
         status: STATUS.REBOOTING, 
-        rebootStartedAt: null,
+        rebootStartedAt: action.at,
         error: action.error,
       };
+    }
+
+    case 'REBOOT_FAILED': {
+      return {
+        ...state,
+        status: STATUS.OFFLINE,
+        rebootStartedAt: null,
+        error: action.error,
+      }
     }
 
     default: {
@@ -149,6 +159,8 @@ export default function useScreenHealth(screenId) {
   useEffect(() => { stateRef.current = state; }, [state]);
 
   const abortRef = useRef(null);
+  const timerRef = useRef(null);
+  const tickRef = useRef(null);
 
   useEffect(() => {
     if (!Number.isInteger(screenId)) {
@@ -161,7 +173,6 @@ export default function useScreenHealth(screenId) {
     abortRef.current = controller;
 
     let cancelled = false;
-    let timerId = null;
 
     const tick = async () => {
       let hostIsUp = false;
@@ -198,16 +209,19 @@ export default function useScreenHealth(screenId) {
       dispatch(action);
 
       // set recursive timeout call to continually poll
-      timerId = setTimeout(tick, POLL_DELAY[next.status]);
+      timerRef.current = setTimeout(tick, POLL_DELAY[next.status]);
     };
+
+    tickRef.current = tick;
 
     tick();
 
     return () => {
       cancelled = true;
       controller.abort();
-      clearTimeout(timerId);
+      clearTimeout(timerRef.current);
       abortRef.current = null;
+      tickRef.current = null;
     };
   }, [screenId]);
 
@@ -219,6 +233,9 @@ export default function useScreenHealth(screenId) {
     const at = Date.now();
     dispatch({ type: 'REBOOT_REQUESTED', at });
 
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => tickRef.current?.(), PING_INTERVAL_REBOOT_INITIAL);
+
     try {
       await fetchJson(`${REBOOT_URL}/${screenId}`, {
         signal: abortRef.current?.signal ?? new AbortController().signal,
@@ -226,6 +243,11 @@ export default function useScreenHealth(screenId) {
       });
     }
     catch (error) {
+      if (abortRef.current?.signal.aborted) {
+        // screenId changed or component was unmounted, not a REBOOT_FAILED event
+        return;
+      }
+
       console.error(`Reboot request failed for screen ${screenId}:`, error);
       dispatch({ type: 'REBOOT_FAILED', error });
     }

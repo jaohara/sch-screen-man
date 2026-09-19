@@ -9,13 +9,14 @@ export const PING_INTERVAL_ONLINE = 20000;
 export const PING_INTERVAL_OFFLINE = 10000;
 // ping interval for actively rebooting hosts
 export const PING_INTERVAL_REBOOT = 2000;
+export const PING_INTERVAL_REBOOT_INITIAL = 8000;
 export const PING_INTERVAL_TIME = 3000;
 export const PING_ROUTE = "/api/ping";
 // TODO: Increase timeout to 
 // export const PING_TIMEOUT = 30000;
 export const PING_TIMEOUT = 9000;
 export const REBOOT_ROUTE = "/api/reboot";
-export const REBOOT_PING_DELAY = 5000;
+export const REBOOT_PING_DELAY = 8000;
 export const REBOOT_TIMEOUT = 120000;
 // per-request waiting ceiling in ms
 export const REQUEST_TIMEOUT = 5000; 

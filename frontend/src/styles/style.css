@@ -10,5 +10,5 @@ html {
 
 body {
   margin: 0rem;
-  padding: var(--common-padding);
+  padding: 0rem var(--common-padding);
 }

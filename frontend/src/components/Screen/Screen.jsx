@@ -1,4 +1,4 @@
-import React, {
+import {
   useEffect,
   useRef,
   useState,
@@ -49,8 +49,6 @@ function Screen ({
       pingStartTimeRef.current = null;
     }
   }
-
-  const resetUptime = () => setUptime(EMPTY_UPTIME_OBJECT);
 
   const checkIfScreenIdIsANumberAndLogError = (screenId, requestType) => {
     if (isNaN(screenId)) {
@@ -187,7 +185,7 @@ function Screen ({
         setScreenStatusIsLoaded(true);
         clearPingIntervalRef();
         rebootInProgress && cleanupAfterReboot();
-        return;
+        return true;
       }
 
       if (!limitToTimeout) return;
@@ -205,7 +203,7 @@ function Screen ({
       }
     };
 
-    const hostIsUp = await pingHost(true);
+    const hostIsUp = await pingHost();
 
     if (!hostIsUp && !pingIntervalRef.current) {
       pingIntervalRef.current = setInterval(pingHost, PING_INTERVAL_TIME);
@@ -225,7 +223,7 @@ function Screen ({
   // when screen is online 
   useEffect(() => {
     if (screenIsOnline) {
-      // this is an sync function
+      // this is a sync function
       getScreenUptime();
     }
   }, [screenIsOnline]);
@@ -312,43 +310,35 @@ function Screen ({
       uptimeString = `${days} day${days === 1 ? "" : "s"} ${hours}:${minutes}:${seconds}`
     }
 
-    return (<span style={styles["uptime"]}>{uptimeString}</span>);
+    return (<span className={styles["uptime"]}>{uptimeString}</span>);
   })();
-
-  const screenDebugTextJSX = (
-    <>
-      <p><strong>Screen Online?</strong> {screenIsOnline.toString()}</p>
-      <p><strong>Uptime?</strong> {uptimeJSX}</p>
-      <p><strong>Reboot in Progress?</strong> {rebootInProgress.toString()}</p>
-      <p><strong>Status Loaded?</strong> {screenStatusIsLoaded.toString()}</p>
-      <p><strong>Reboot time?</strong> {lastRebootTime ? lastRebootTime.toString() : "0"}</p>
-    </>
-  );
 
   const formatRebootTime = (rebootTime) => `${rebootTime / 1000}s`;
 
-  const newScreenDebugTextJSX = (
+  const screenDebugTextJSX = (
     <table className={styles["screen-debug-table"]}>
-      <tr>
-        <td>Online?</td>
-        <td>{screenIsOnline.toString()}</td>
-      </tr>
-      <tr>
-        <td>Uptime?</td> 
-        <td>{uptimeJSX}</td>
-      </tr>
-      <tr>
-        <td>Rebooting?</td> 
-        <td>{rebootInProgress.toString()}</td>
-      </tr>
-      <tr>
-        <td>Status Loaded?</td> 
-        <td>{screenStatusIsLoaded.toString()}</td>
-      </tr>
-      <tr>
-        <td>Reboot time?</td> 
-        <td>{lastRebootTime ? formatRebootTime(lastRebootTime) : "0"}</td>
-      </tr>
+      <tbody>
+        <tr>
+          <td>Online?</td>
+          <td>{screenIsOnline.toString()}</td>
+        </tr>
+        <tr>
+          <td>Uptime?</td> 
+          <td>{uptimeJSX}</td>
+        </tr>
+        <tr>
+          <td>Rebooting?</td> 
+          <td>{rebootInProgress.toString()}</td>
+        </tr>
+        <tr>
+          <td>Status Loaded?</td> 
+          <td>{screenStatusIsLoaded.toString()}</td>
+        </tr>
+        <tr>
+          <td>Reboot time?</td> 
+          <td>{lastRebootTime ? formatRebootTime(lastRebootTime) : "0"}</td>
+        </tr>
+      </tbody>
     </table>
   );
 
@@ -360,8 +350,6 @@ function Screen ({
       <div className={styles["screen-info"]}>
           <div className={styles["screen-info-header"]}>
             <h1>{screen.name}</h1>
-            {/* TODO: Add more complex logic for appending classNames to handle more states */}
-            {/* <div className={`${styles.status} ${styles.loaded}`}>&nbsp;</div> */}
             <div className={hostIndicatorPipClassNames}>&nbsp;</div>
           </div>
           <span className={styles["screen-info-hostname"]}>Hostname: {screen.mdnsHostname}</span>
@@ -370,11 +358,8 @@ function Screen ({
       <div className={styles["screen-description-container"]}>
         <p className={styles["screen-description"]}>{screen.positionDescription}</p>
         {
-          // SCREEN_DEBUG_TEXT_ENABLED && screenDebugTextJSX
-          SCREEN_DEBUG_TEXT_ENABLED && newScreenDebugTextJSX
+          SCREEN_DEBUG_TEXT_ENABLED && screenDebugTextJSX
         }
-
-        
       </div>
 
       <div className={styles["screen-controls"]}>

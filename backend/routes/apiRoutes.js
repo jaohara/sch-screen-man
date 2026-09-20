@@ -10,8 +10,9 @@ import {
 
 // piController functions
 import {
-  checkIfHostIsUp, 
+  checkIfHostIsUp,
   connectAndReboot,
+  getHostStats,
   getHostUptime,
 } from "../piController.js";
 
@@ -103,6 +104,34 @@ router.get('/uptime/:screenId', async (req, res) => {
     const sshResult = await getHostUptime(id);
     console.log(`Completed uptime request, here is the result:`, sshResult);
     res.json(sshResult);
+  }
+  catch (errorObject) {
+    res.status(500).json(errorObject);
+  }
+
+  return;
+});
+
+router.get('/stats/:screenId', async (req, res) => {
+  const id = parseAndCheckScreenIdFromRequest(req, res);
+
+  if (!checkIfPiIdIsNull(id, res)) return;
+  if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
+
+  console.log(`Received request for host ${id} stats...`);
+
+  const { hostIsUp } = await checkIfHostIsUp(id);
+
+  if (!hostIsUp) {
+    const errorObject = createErrorResponseObject("Host can't be reached via ping", "BADHOSTPING");
+    res.status(500).json(errorObject);
+    console.error(`Error getting stats for Screen ${id}: host is not up.`);
+    return;
+  }
+
+  try {
+    const stats = await getHostStats(id);
+    res.json(stats);
   }
   catch (errorObject) {
     res.status(500).json(errorObject);

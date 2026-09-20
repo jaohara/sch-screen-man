@@ -29,7 +29,7 @@ function App() {
     const newScreens = {};
 
     debugLog("UEF", "piConfig:", piConfig);
-    debugLog("UEF", "groupMetaData:", screenGroupMetaData);e
+    debugLog("UEF", "groupMetaData:", screenGroupMetaData);
     
     piConfig.forEach((screen, index) => {
       const screenGroup = screen.group ? screen.group : UNGROUPED_SCREEN_STRING;

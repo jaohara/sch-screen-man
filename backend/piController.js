@@ -122,11 +122,16 @@ export async function getHostUptime(piId) {
 }
 
 const STATS_COMMAND = [
-  "echo '<<<UPTIME>>>'", "cat /proc/uptime",
-  "echo '<<<MEMINFO>>>'", "cat /proc/meminfo",
-  "echo '<<<LOADAVG>>>'", "cat /proc/loadavg",
-  "echo '<<<DISK>>>'", "df -k -P / | tail -n +2",
-  "echo '<<<TEMP>>>'", "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null",
+  "echo '<<<UPTIME>>>'", 
+  "cat /proc/uptime",
+  "echo '<<<MEMINFO>>>'", 
+  "cat /proc/meminfo",
+  "echo '<<<LOADAVG>>>'", 
+  "cat /proc/loadavg",
+  "echo '<<<DISK>>>'", 
+  "df -k -P / | tail -n +2",
+  "echo '<<<TEMP>>>'", 
+  "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null",
 ].join(" ; ");
 
 function splitStatsSections(rawOutput) {

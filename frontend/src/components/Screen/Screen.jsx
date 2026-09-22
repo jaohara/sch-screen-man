@@ -8,12 +8,26 @@ import styles from "./Screen.module.scss";
 
 import Button from '../Button/Button';
 
+import {
+  FaChartColumn,
+  FaClockRotateLeft,
+  FaDatabase,
+  FaMemory,
+  FaRaspberryPi,
+  FaRegClock,
+  FaSpinner,
+  FaTemperatureHalf,
+  FaTerminal,
+} from "react-icons/fa6";
+
 import useScreenHealth, { STATUS } from '../../hooks/useScreenHealth';
 import useScreenStats, { 
   celsiusToFahrenheit, 
   formatMemory,
   formatUptime, 
 } from '../../hooks/useScreenStats';
+
+
 
 function Screen ({
   screen,
@@ -63,58 +77,6 @@ function Screen ({
     return className;
   })();
 
-  const screenDebugTextJSX = (
-    stats === null ? (
-      <p>Stats loading...</p>
-    ) : (
-      <table className={styles["screen-debug-table"]}>
-        <tbody>
-          <tr>
-            <td>Online?</td>
-            <td>{isOnline.toString()}</td>
-          </tr>
-          <tr>
-            <td>Uptime?</td> 
-            {/* <td>{uptimeJSX}</td> */}
-            <td>{formatUptime(stats.uptimeSeconds)}</td>
-          </tr>
-          <tr>
-            <td>Load Average?</td> 
-            <td>{stats.loadAvg.join(" ")}</td>
-          </tr>
-          <tr>
-            <td>Memory?</td>
-            <td>{formatMemory(stats.memory)}</td>
-          </tr>
-          <tr>
-            <td>Disk Space?</td>
-            <td>{formatMemory(stats.disk)}</td>
-          </tr>
-          <tr>
-            <td>Temp?</td>
-            <td>{`${celsiusToFahrenheit(stats.tempC)} F`}</td>
-          </tr>
-          <tr>
-            <td>Rebooting?</td> 
-            <td>{isRebooting.toString()}</td>
-          </tr>
-          {/* <tr>
-            <td>Status Loaded?</td> 
-            <td>{screenStatusIsLoaded.toString()}</td>
-          </tr> */}
-          <tr>
-            <td>Reboot time?</td> 
-            {/* <td>{lastRebootTime ? formatRebootTime(lastRebootTime) : "0"}</td> */}
-            <td>{lastRebootDuration}</td>
-          </tr>
-        </tbody>
-      </table>
-    )
-  );
-
-  const SCREEN_DEBUG_TEXT_ENABLED = true;
-  // const SCREEN_DEBUG_TEXT_ENABLED = false;
-
   return (
     <div className={styles.screen}>
       <div className={styles["screen-info"]}>
@@ -122,14 +84,22 @@ function Screen ({
             <h1>{screen.name}</h1>
             <div className={hostIndicatorPipClassNames}>&nbsp;</div>
           </div>
-          <span className={styles["screen-info-hostname"]}>Hostname: {screen.mdnsHostname}</span>
+          <span className={styles["screen-info-hostname"]}>
+            <span className={styles["screen-info-hostname-icon"]}>
+              {icons["host"]}
+            </span>
+            <span className={styles["screen-info-hostname-name"]}>
+              {screen.mdnsHostname}
+            </span>
+          </span>
       </div>
 
       <div className={styles["screen-description-container"]}>
         <p className={styles["screen-description"]}>{screen.positionDescription}</p>
-        {
-          SCREEN_DEBUG_TEXT_ENABLED && screenDebugTextJSX
-        }
+        <ScreenStatsPanel 
+          stats={stats}
+          lastRebootDuration={lastRebootDuration}
+        />
       </div>
 
       <div className={styles["screen-controls"]}>
@@ -144,10 +114,87 @@ function Screen ({
   )
 }
 
-function ScreenStatsPanel({
+const icons = {
+  "disk": (<FaDatabase />),
+  // "host": (<FaRaspberryPi />),
+  "host": (<FaTerminal />),
+  "uptime": (<FaRegClock />),
+  "memory": (<FaMemory />),
+  "lastReboot": (<FaClockRotateLeft />),
+  "loadAvg": (<FaChartColumn />),
+  "temp": (<FaTemperatureHalf />),
+};
 
-}) { 
-  return (<></>);
+
+function ScreenStatsPanel({ stats, lastRebootDuration }) {
+  // TODO: Move this out to app-wide state with settings
+  const fahrenheitTemp = true;
+
+  const formatRebootTime = (rebootTime) => {
+    let unformattedRebootTime = rebootTime !== null ? rebootTime : 0;
+    // TODO: Fix formatting to only show 2 decimals
+    return `${unformattedRebootTime / 1000}s`;
+  }
+
+  const formatTemperature = (temperature) => {
+    const formattedTemp = fahrenheitTemp ? celsiusToFahrenheit(temperature) : temperature;
+    return `${formattedTemp} ${fahrenheitTemp ? "F" : "C"}`;
+  }
+
+  const statsEntries = stats === null ? null : [
+    {
+      label: "Uptime",
+      icon: icons["uptime"],
+      value: formatUptime(stats.uptimeSeconds),
+    },
+    {
+      label: "Load Average",
+      icon: icons["loadAvg"],
+      value: stats.loadAvg.join(" "),
+    },
+    {
+      label: "Memory",
+      icon: icons["memory"],
+      value: formatMemory(stats.memory),
+    },
+    {
+      label: "Disk Space",
+      icon: icons["disk"],
+      value: formatMemory(stats.disk),
+    },
+    {
+      label: "Temperature",
+      icon: icons["temp"],
+      value: formatTemperature(stats.tempC),
+    },
+    {
+      label: "Last Reboot Duration",
+      icon: icons["lastReboot"],
+      value: formatRebootTime(lastRebootDuration),
+    },
+  ];
+  
+  return (
+    <div className={styles["screen-stats-panel"]}>
+      {
+        stats === null ? (<div className={styles["stats-loading"]}><FaSpinner /></div>) :
+        
+        statsEntries.map((entry, index) => (
+          <div 
+            className={styles["entry"]}
+            key={`stat-entry-${index}`}
+          >
+            <div className={styles["entry-header"]} title={entry.label}>
+              {entry.icon}
+            </div>
+            <div className={styles["entry-value"]}>
+              {entry.value}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  );
 }
 
 export default Screen;

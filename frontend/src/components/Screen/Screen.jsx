@@ -138,7 +138,7 @@ function ScreenStatsPanel({ stats, lastRebootDuration }) {
 
   const formatTemperature = (temperature) => {
     const formattedTemp = fahrenheitTemp ? celsiusToFahrenheit(temperature) : temperature;
-    return `${formattedTemp} ${fahrenheitTemp ? "F" : "C"}`;
+    return `${formattedTemp.toFixed(2)} °${fahrenheitTemp ? "F" : "C"}`;
   }
 
   const statsEntries = stats === null ? null : [

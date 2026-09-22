@@ -115,14 +115,32 @@ export function formatUptime(uptimeSeconds) {
   return `${days} day${days === 1 ? '' : 's'} ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
-export function formatMemory({ totalKb, availableKb } = {}) {
+const GB_IN_KB = 1024 * 1024;
+
+export function formatMemory(
+  { totalKb, availableKb } = {}, 
+  asFraction = true,
+  withPercent = true,
+) {
   if (!Number.isFinite(totalKb) || !Number.isFinite(availableKb)) {
     return null;
   }
 
   const usedPercent = Math.round(((totalKb - availableKb) / totalKb) * 100);
 
-  return `${(availableKb / 1024).toFixed(0)} MB free (${usedPercent}% used)`;
+  const formatKbAmount = (memoryKbAmount) => memoryKbAmount >= GB_IN_KB
+    ? `${(memoryKbAmount / GB_IN_KB).toFixed(1)} GB`
+    : `${(memoryKbAmount / 1024).toFixed(0)} MB`;
+
+  const formattedAvailable = formatKbAmount(availableKb);
+  const formattedTotal = formatKbAmount(totalKb);
+  const formattedUsed = formatKbAmount(totalKb - availableKb);
+
+  if (asFraction) {
+    return `${formattedUsed} / ${formattedTotal}${withPercent ? ` (${usedPercent}%)` : ""}`;
+  }
+
+  return `${formattedAvailable} free${withPercent ? ` (${usedPercent}%)` : ""}`;
 }
 
 export function celsiusToFahrenheit(temperatureCelsius) {

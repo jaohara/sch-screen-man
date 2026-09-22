@@ -408,12 +408,16 @@ function Screen ({
     switch(status) {
       case STATUS.REBOOTING: 
         className += ` ${styles.reboot}`;
+        break;
       case STATUS.UNKNOWN: 
         className += ` ${styles.loading}`;
+        break;
       case STATUS.ONLINE: 
         className += ` ${styles.loaded}`;
+        break;
       case STATUS.OFFLINE: 
         className += ` ${styles.offline}`;
+        break;
       default: {
         // invalid screen id
         className += ` ${styles.invalid}`;
@@ -449,11 +453,11 @@ function Screen ({
           <tr>
             <td>Uptime?</td> 
             {/* <td>{uptimeJSX}</td> */}
-            <td>{formatUptime(stats.uptime)}</td>
+            <td>{formatUptime(stats.uptimeSeconds)}</td>
           </tr>
           <tr>
             <td>Load Average?</td> 
-            <td>{stats.loadAverage.join(" ")}</td>
+            <td>{stats.loadAvg.join(" ")}</td>
           </tr>
           <tr>
             <td>Memory?</td>

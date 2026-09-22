@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { 
   BACKEND_BASE_URL,
-  REQUEST_TIMEOUT, 
+  REQUEST_TIMEOUT,
+  STATS_REQUEST_TIMEOUT,
   STATS_ROUTE,
   STATS_INTERVAL,
 } from '../constants';
@@ -43,7 +44,7 @@ export default function useScreenStats(screenId, { enabled }) {
         const response = await fetch(`${STATS_URL}/${screenId}`, {
           signal: AbortSignal.any([
             controller.signal,
-            AbortSignal.timeout(REQUEST_TIMEOUT),
+            AbortSignal.timeout(STATS_REQUEST_TIMEOUT),
           ]),
         });
 
@@ -60,6 +61,8 @@ export default function useScreenStats(screenId, { enabled }) {
         if (cancelled) {
           return;
         }
+
+        console.log(`useScreenStats: Received stats data: `, data);
 
         setStats(data);
         setError(null);

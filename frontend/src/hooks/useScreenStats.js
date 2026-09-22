@@ -90,7 +90,7 @@ export default function useScreenStats(screenId, { enabled }) {
 
   }, [screenId, enabled]);
 
-  return { stats, error, isState: Boolean(error && stats) };
+  return { stats, error, isStale: Boolean(error && stats) };
 }
 
 

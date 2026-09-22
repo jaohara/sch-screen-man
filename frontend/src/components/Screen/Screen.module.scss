@@ -23,13 +23,13 @@
     font-size: 1.2rem;
   }
   
-  .status, .loaded, .loading, .offline, .reboot {
+  .status, .loaded, .loading, .offline, .reboot, .invalid {
     transition: background-color var(--screen-host-pip-transition-time);
   }
   
   .status {
     // background-color: var(--screen-status-default-background-color);
-    box-shadow: var(--small-box-shadow);
+    // box-shadow: var(--small-box-shadow);
     border-radius: 1rem;
     transition: background-color var(--screen-host-pip-transition-time);
     
@@ -42,6 +42,7 @@
     
   }
   
+  // TODO: change to "online", renaming css var as well
   .loaded {
     background-color: var(--screen-status-loaded-background-color);
   }
@@ -58,6 +59,10 @@
     background-color: var(--screen-status-reboot-background-color);
   }
   
+  .invalid {
+    background-color: var(--screen-status-invalid-background-color);
+  }
+
 }
 
 .screen-info-hostname {

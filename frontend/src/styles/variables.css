@@ -77,6 +77,7 @@
   --screen-group-background-color: transparent;
   --screen-info-hostname-background-color: var(--light-100);
   --screen-status-default-background-color: var(--stoup-yellow);
+  --screen-status-invalid-background-color: var(--light-400);
   --screen-status-loaded-background-color: var(--bright-green);
   /* --screen-status-loaded-background-color: var(--stoup-cyan); */
   --screen-status-loading-background-color: var(--stoup-yellow);
@@ -107,6 +108,7 @@
     --screen-debug-table-background-color: var(--dark-gray);
     --screen-background-color: var(--med-gray);
     --screen-info-hostname-background-color: var(--dark-gray);
+    /* --screen-status-invalid-background-color: var(--light-400); */
     --text-color: var(--light-100);
   }
 }

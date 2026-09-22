@@ -265,6 +265,7 @@ export default function useScreenHealth(screenId) {
     error: state.error,
     lastRebootDuration: state.lastRebootDuration,
     isOnline: state.status === STATUS.ONLINE,
+    isRebooting: state.status === STATUS.REBOOTING,
     canReboot: state.status === STATUS.ONLINE,
     reboot,
   };

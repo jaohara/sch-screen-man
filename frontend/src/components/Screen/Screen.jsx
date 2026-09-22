@@ -20,13 +20,20 @@ import {
   // Does uptime need a timeout as well?
 } from "../../constants";
 
+import useScreenHealth, { STATUS } from '../../hooks/useScreenHealth';
+import useScreenStats, { 
+  celsiusToFahrenheit, 
+  formatMemory,
+  formatUptime, 
+} from '../../hooks/useScreenStats';
+
 const PING_URL = `${BACKEND_BASE_URL}${PING_ROUTE}`;
 const REBOOT_URL = `${BACKEND_BASE_URL}${REBOOT_ROUTE}`;
 const UPTIME_URL = `${BACKEND_BASE_URL}${UPTIME_ROUTE}`;
 
 const EMPTY_UPTIME_OBJECT = { empty: true, };
 
-function Screen ({
+function OldScreen ({
   screen,
 }) {
   const [ screenIsOnline, setScreenIsOnline ] = useState(false);
@@ -266,10 +273,8 @@ function Screen ({
         const data = await handleFetchResponse(response);
         
         // TODO: Remove log
-        // TODO: Use banner/badge notification instead
         // handle the response, for now just log:
         console.log("Response received for this screen:", data);
-        
       }
       catch (error) {
         // TODO: Use banner/badge notification to display this 
@@ -368,6 +373,144 @@ function Screen ({
           label='Reboot'
           icon="reboot"
           onClick={rebootOnClickHandler}
+        />
+      </div>
+    </div>
+  )
+}
+
+function Screen ({
+  screen,
+}) {
+  const {
+    canReboot,
+    error: screenHealthError,
+    isOnline,
+    isRebooting,
+    lastRebootDuration,
+    reboot,
+    status,
+  } = useScreenHealth(screen.screenId);
+
+  const {
+    error: screenStatsError,
+    isStale,
+    stats,
+  } = useScreenStats(screen.screenId, { enabled: isOnline });
+
+  const handleRebootClick = () => reboot();
+
+  const hostIndicatorPipClassNames = (() => {
+    let className = `${styles.status}`;
+
+    // UNKNOWN, ONLINE, OFFLINE, REBOOTING, INVALID
+
+    switch(status) {
+      case STATUS.REBOOTING: 
+        className += ` ${styles.reboot}`;
+      case STATUS.UNKNOWN: 
+        className += ` ${styles.loading}`;
+      case STATUS.ONLINE: 
+        className += ` ${styles.loaded}`;
+      case STATUS.OFFLINE: 
+        className += ` ${styles.offline}`;
+      default: {
+        // invalid screen id
+        className += ` ${styles.invalid}`;
+      }
+    }
+
+    return className;
+  })();
+
+  // const uptimeJSX = (() => {
+  //   let uptimeString = "0 days 00:00:00";
+
+  //   if (uptime && !uptime.empty) {
+  //     const { days, hours, minutes, seconds } = uptime;
+  //     uptimeString = `${days} day${days === 1 ? "" : "s"} ${hours}:${minutes}:${seconds}`
+  //   }
+
+  //   return (<span className={styles["uptime"]}>{uptimeString}</span>);
+  // })();
+
+  // const formatRebootTime = (rebootTime) => `${rebootTime / 1000}s`;
+
+  const screenDebugTextJSX = (
+    stats === null ? (
+      <p>Stats loading...</p>
+    ) : (
+      <table className={styles["screen-debug-table"]}>
+        <tbody>
+          <tr>
+            <td>Online?</td>
+            <td>{isOnline.toString()}</td>
+          </tr>
+          <tr>
+            <td>Uptime?</td> 
+            {/* <td>{uptimeJSX}</td> */}
+            <td>{formatUptime(stats.uptime)}</td>
+          </tr>
+          <tr>
+            <td>Load Average?</td> 
+            <td>{stats.loadAverage.join(" ")}</td>
+          </tr>
+          <tr>
+            <td>Memory?</td>
+            <td>{formatMemory(stats.memory)}</td>
+          </tr>
+          <tr>
+            <td>Disk Space?</td>
+            <td>{formatMemory(stats.disk)}</td>
+          </tr>
+          <tr>
+            <td>Temp?</td>
+            <td>{`${celsiusToFahrenheit(stats.tempC)} F`}</td>
+          </tr>
+          <tr>
+            <td>Rebooting?</td> 
+            <td>{isRebooting.toString()}</td>
+          </tr>
+          {/* <tr>
+            <td>Status Loaded?</td> 
+            <td>{screenStatusIsLoaded.toString()}</td>
+          </tr> */}
+          <tr>
+            <td>Reboot time?</td> 
+            {/* <td>{lastRebootTime ? formatRebootTime(lastRebootTime) : "0"}</td> */}
+            <td>{lastRebootDuration}</td>
+          </tr>
+        </tbody>
+      </table>
+    )
+  );
+
+  const SCREEN_DEBUG_TEXT_ENABLED = true;
+  // const SCREEN_DEBUG_TEXT_ENABLED = false;
+
+  return (
+    <div className={styles.screen}>
+      <div className={styles["screen-info"]}>
+          <div className={styles["screen-info-header"]}>
+            <h1>{screen.name}</h1>
+            <div className={hostIndicatorPipClassNames}>&nbsp;</div>
+          </div>
+          <span className={styles["screen-info-hostname"]}>Hostname: {screen.mdnsHostname}</span>
+      </div>
+
+      <div className={styles["screen-description-container"]}>
+        <p className={styles["screen-description"]}>{screen.positionDescription}</p>
+        {
+          SCREEN_DEBUG_TEXT_ENABLED && screenDebugTextJSX
+        }
+      </div>
+
+      <div className={styles["screen-controls"]}>
+        <Button
+          disabled={!canReboot}
+          label='Reboot'
+          icon="reboot"
+          onClick={handleRebootClick}
         />
       </div>
     </div>

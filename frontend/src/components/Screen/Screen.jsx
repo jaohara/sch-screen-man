@@ -13,9 +13,9 @@ import {
   FaClockRotateLeft,
   FaDatabase,
   FaMemory,
-  FaRaspberryPi,
   FaRegClock,
   FaSpinner,
+  FaSignsPost,
   FaTemperatureHalf,
   FaTerminal,
 } from "react-icons/fa6";
@@ -27,7 +27,23 @@ import useScreenStats, {
   formatUptime, 
 } from '../../hooks/useScreenStats';
 
+const icons = {
+  "disk": (<FaDatabase />),
+  "host": (<FaTerminal />),
+  "uptime": (<FaRegClock />),
+  "memory": (<FaMemory />),
+  "lastReboot": (<FaClockRotateLeft />),
+  "loadAvg": (<FaChartColumn />),
+  "temp": (<FaTemperatureHalf />),
+};
 
+const statusLabels = {
+  [STATUS.UNKNOWN]: "Checking...",
+  [STATUS.ONLINE]: "Online",
+  [STATUS.OFFLINE]: "Offline",
+  [STATUS.REBOOTING]: "Rebooting...",
+  [STATUS.INVALID]: "Invalid Id"
+};
 
 function Screen ({
   screen,
@@ -81,8 +97,11 @@ function Screen ({
     <div className={styles.screen}>
       <div className={styles["screen-info"]}>
           <div className={styles["screen-info-header"]}>
+            <div className={styles["status-badge"]}>
+              <div className={styles["status-badge-label"]}>{statusLabels[status]}</div>
+              <div className={hostIndicatorPipClassNames}>&nbsp;</div>
+            </div>
             <h1>{screen.name}</h1>
-            <div className={hostIndicatorPipClassNames}>&nbsp;</div>
           </div>
           <span className={styles["screen-info-hostname"]}>
             <span className={styles["screen-info-hostname-icon"]}>
@@ -95,7 +114,14 @@ function Screen ({
       </div>
 
       <div className={styles["screen-description-container"]}>
-        <p className={styles["screen-description"]}>{screen.positionDescription}</p>
+        <div className={styles["screen-description-text-container"]}>
+          <div className={styles["screen-description-icon-container"]}>
+            <FaSignsPost />
+          </div>
+          <div className={styles["screen-description-text-wrapper"]}>
+            <p className={styles["screen-description"]}>{screen.positionDescription}</p>
+          </div>
+        </div>
         <ScreenStatsPanel 
           stats={stats}
           lastRebootDuration={lastRebootDuration}
@@ -113,18 +139,6 @@ function Screen ({
     </div>
   )
 }
-
-const icons = {
-  "disk": (<FaDatabase />),
-  // "host": (<FaRaspberryPi />),
-  "host": (<FaTerminal />),
-  "uptime": (<FaRegClock />),
-  "memory": (<FaMemory />),
-  "lastReboot": (<FaClockRotateLeft />),
-  "loadAvg": (<FaChartColumn />),
-  "temp": (<FaTemperatureHalf />),
-};
-
 
 function ScreenStatsPanel({ stats, lastRebootDuration }) {
   // TODO: Move this out to app-wide state with settings

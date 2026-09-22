@@ -12,15 +12,37 @@
   width: 20%;
 }
 
+.screen-info {
+  margin-bottom: var(--common-margin);
+}
+
 .screen-info-header {
-  align-items: center;
+  // align-items: center;
+  flex-direction: column;
   display: flex;
   justify-content: space-between;
-  margin-bottom: var(--common-margin);
+  margin-bottom: .6rem;
   
   h1 {
     margin: 0rem;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+  }
+
+  .status-badge {
+    align-self: flex-end;
+    align-items: center;
+    background-color: var(--screen-info-hostname-background-color);
+    border-radius: var(--common-border-radius);
+    display: flex;
+    padding: .1rem .3rem;
+    justify-content: space-between;
+  }
+
+  .status-badge-label {
+    font-family: monospace;
+    font-size: .65rem;
+    font-weight: bold;
+    padding-right: .5rem;
   }
   
   .status, .loaded, .loading, .offline, .reboot, .invalid {
@@ -49,6 +71,8 @@
   
   .loading {
     background-color: var(--screen-status-loading-background-color);
+    // TODO: Fix this bug to make it actually pulse
+    animation: stats-loading-pulse var(--loading-spinner-animation-time) ease-in-out infinite;
   }
   
   .offline {
@@ -72,13 +96,14 @@
   display: inline-flex;
   align-items: center;
   font-size: .65rem;
-  padding: .4rem .6rem;
+  padding: .2rem .6rem;
 }
 
 .screen-info-hostname-icon {
   align-items: center;
   display: inline-flex;
-  font-size: var(--screen-status-panel-icon-size);
+  // font-size: var(--screen-status-panel-icon-size);
+  font-size: 1.0em;
   padding-right: .5rem;
   
 }
@@ -93,9 +118,39 @@
   justify-content: center;
 }
 
+.screen-description-text-container {
+  border-radius: var(--common-border-radius);
+  border: 0px solid transparent;
+  background-color: var(--screen-debug-table-background-color);
+  font-size: .6rem;
+  padding: .5rem;
+  margin-bottom: var(--common-margin);
+  flex-direction: column;
+  display: flex;
+  height: 5rem;
+}
+
+.screen-description-icon-container {
+  border-bottom: 1px solid var(--screen-stats-entry-border-color);
+  padding: .25rem 0rem;
+  margin-bottom: .25rem;
+
+  svg {
+    font-size: var(--screen-status-panel-icon-size);
+  }
+}
+
+.screen-description-text-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 .screen-description {
-  text-align: center;
-  font-size: .8rem;
+  justify-self: center;
+  margin: 0rem;
+  font-size: .7rem;
 }
 
 .screen-controls {
@@ -134,7 +189,7 @@
   border-radius: var(--common-border-radius);
   border: 0px solid transparent;
   background-color: var(--screen-debug-table-background-color);
-  font-size: .7rem;
+  font-size: .6rem;
   padding: .5rem;
   margin-bottom: var(--common-margin);
 

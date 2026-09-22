@@ -16,7 +16,7 @@ export const PING_ROUTE = "/api/ping";
 // export const PING_TIMEOUT = 30000;
 export const PING_TIMEOUT = 9000;
 export const REBOOT_ROUTE = "/api/reboot";
-export const REBOOT_PING_DELAY = 8000;
+export const REBOOT_PING_DELAY = 15000;
 export const REBOOT_TIMEOUT = 120000;
 // per-request waiting ceiling in ms
 export const REQUEST_TIMEOUT = 5000; 

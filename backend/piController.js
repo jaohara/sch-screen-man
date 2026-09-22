@@ -211,7 +211,7 @@ export async function checkIfHostIsUp(piId) {
   }
   catch (error) {
     console.error(`Error trying to ping host '${host}':`, error);
-    resultObject.message = "Error trying top ping host, see error object in response.";
+    resultObject.message = "Error trying to ping host, see error object in response.";
     resultObject.error = error;
     return resultObject;
   }

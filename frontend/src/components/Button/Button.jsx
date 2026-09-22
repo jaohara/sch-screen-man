@@ -4,8 +4,11 @@ import styles from "./Button.module.scss";
 
 import { MdOutlineRefresh } from 'react-icons/md';
 
+import { FaArrowRotateLeft } from 'react-icons/fa6';
+
 const buttonIcons = {
-  "reboot": (<MdOutlineRefresh />),
+  // "reboot": (<MdOutlineRefresh />),
+  "reboot": (<FaArrowRotateLeft />),
 }
 
 const buttonIconKeys = Object.keys(buttonIcons);

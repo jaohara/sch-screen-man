@@ -22,6 +22,7 @@
   --screen-image-width: 200px;
   --screen-image-height: calc(var(--screen-width) * var(--ratio-height-to-width-16-9));
   --screen-status-size: 12px;
+  --screen-status-panel-icon-size: 1.4em;
   --title-bar-font-size: 2.4rem;
 
   /* Times */
@@ -29,6 +30,7 @@
   --normal-transition-time: 100ms;
   --screen-host-pip-transition-time: 250ms;
   --slow-transition-time: 400ms;
+  --loading-spinner-animation-time: 1.2s;
 
   /* Base Colors */
   --light-100: #efefef;
@@ -76,7 +78,9 @@
   /* --screen-group-background-color: var(--onyx-med); */
   --screen-group-background-color: transparent;
   --screen-info-hostname-background-color: var(--light-100);
+  --screen-stats-entry-border-color: var(--light-200);
   --screen-status-default-background-color: var(--stoup-yellow);
+  --screen-status-invalid-background-color: var(--light-400);
   --screen-status-loaded-background-color: var(--bright-green);
   /* --screen-status-loaded-background-color: var(--stoup-cyan); */
   --screen-status-loading-background-color: var(--stoup-yellow);
@@ -107,6 +111,7 @@
     --screen-debug-table-background-color: var(--dark-gray);
     --screen-background-color: var(--med-gray);
     --screen-info-hostname-background-color: var(--dark-gray);
+    /* --screen-status-invalid-background-color: var(--light-400); */
     --text-color: var(--light-100);
   }
 }

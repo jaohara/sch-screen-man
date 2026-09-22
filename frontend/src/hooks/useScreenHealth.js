@@ -41,6 +41,7 @@ const POLL_DELAY = {
 const initialState = {
   status: STATUS.UNKNOWN,
   rebootStartedAt: null,
+  hasDroppedOffline: false,
   lastRebootDuration: null,
   error: null,
 };
@@ -54,13 +55,14 @@ function reducer(state, action) {
       return {...initialState, status: STATUS.INVALID };
     }
 
-    // pinging a host that is online 
+    // pinging a host that is online
     case 'PING_UP': {
       if (state.status === STATUS.REBOOTING) {
-        const elapsed = action.at - (state.rebootStartedAt);
-
-        // too soon for the host to have actually dropped, false positive
-        if (elapsed < PING_INTERVAL_REBOOT_INITIAL) {
+        // The host hasn't actually gone down yet, so a successful ping here
+        // doesn't confirm the reboot happened - some hosts (e.g. a Pi Zero W)
+        // can take much longer than PING_INTERVAL_REBOOT_INITIAL to drop off
+        // the network after the reboot command is issued.
+        if (!state.hasDroppedOffline) {
           return state;
         }
 
@@ -68,7 +70,8 @@ function reducer(state, action) {
           ...state,
           status: STATUS.ONLINE,
           rebootStartedAt: null,
-          lastRebootDuration: state.rebootStartedAt ? action.at - state.rebootStartedAt : 
+          hasDroppedOffline: false,
+          lastRebootDuration: state.rebootStartedAt ? action.at - state.rebootStartedAt :
             state.lastRebootDuration,
           error: null,
         };
@@ -89,13 +92,14 @@ function reducer(state, action) {
 
         // we're still within the reboot window
         if (elapsed < REBOOT_TIMEOUT) {
-          return state;
+          return state.hasDroppedOffline ? state : { ...state, hasDroppedOffline: true };
         }
 
         return {
           ...state,
           status: STATUS.OFFLINE,
           rebootStartedAt: null,
+          hasDroppedOffline: false,
           error: new Error("Screen did not come back online within the reboot window"),
         };
       }
@@ -110,8 +114,9 @@ function reducer(state, action) {
     case 'REBOOT_REQUESTED': {
       return {
         ...state,
-        status: STATUS.REBOOTING, 
+        status: STATUS.REBOOTING,
         rebootStartedAt: action.at,
+        hasDroppedOffline: false,
         error: action.error,
       };
     }
@@ -246,7 +251,8 @@ export default function useScreenHealth(screenId) {
     try {
       await fetchJson(`${REBOOT_URL}/${screenId}`, {
         signal: abortRef.current?.signal ?? new AbortController().signal,
-        timeoutMs: REQUEST_TIMEOUT,
+        // timeoutMs: REQUEST_TIMEOUT,
+        timeoutMs: REBOOT_TIMEOUT,
       });
     }
     catch (error) {
@@ -265,6 +271,7 @@ export default function useScreenHealth(screenId) {
     error: state.error,
     lastRebootDuration: state.lastRebootDuration,
     isOnline: state.status === STATUS.ONLINE,
+    isRebooting: state.status === STATUS.REBOOTING,
     canReboot: state.status === STATUS.ONLINE,
     reboot,
   };

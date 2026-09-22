@@ -12,24 +12,46 @@
   width: 20%;
 }
 
+.screen-info {
+  margin-bottom: var(--common-margin);
+}
+
 .screen-info-header {
-  align-items: center;
+  // align-items: center;
+  flex-direction: column;
   display: flex;
   justify-content: space-between;
-  margin-bottom: var(--common-margin);
+  margin-bottom: .6rem;
   
   h1 {
     margin: 0rem;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+  }
+
+  .status-badge {
+    align-self: flex-end;
+    align-items: center;
+    background-color: var(--screen-info-hostname-background-color);
+    border-radius: var(--common-border-radius);
+    display: flex;
+    padding: .1rem .3rem;
+    justify-content: space-between;
+  }
+
+  .status-badge-label {
+    font-family: monospace;
+    font-size: .65rem;
+    font-weight: bold;
+    padding-right: .5rem;
   }
   
-  .status, .loaded, .loading, .offline, .reboot {
+  .status, .loaded, .loading, .offline, .reboot, .invalid {
     transition: background-color var(--screen-host-pip-transition-time);
   }
   
   .status {
     // background-color: var(--screen-status-default-background-color);
-    box-shadow: var(--small-box-shadow);
+    // box-shadow: var(--small-box-shadow);
     border-radius: 1rem;
     transition: background-color var(--screen-host-pip-transition-time);
     
@@ -42,12 +64,15 @@
     
   }
   
+  // TODO: change to "online", renaming css var as well
   .loaded {
     background-color: var(--screen-status-loaded-background-color);
   }
   
   .loading {
     background-color: var(--screen-status-loading-background-color);
+    // TODO: Fix this bug to make it actually pulse
+    animation: stats-loading-pulse var(--loading-spinner-animation-time) ease-in-out infinite;
   }
   
   .offline {
@@ -58,15 +83,33 @@
     background-color: var(--screen-status-reboot-background-color);
   }
   
+  .invalid {
+    background-color: var(--screen-status-invalid-background-color);
+  }
+
 }
 
 .screen-info-hostname {
-  font-size: .8rem;
   background-color: var(--screen-info-hostname-background-color);
   border-radius: var(--common-border-radius);
   // font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  font-size: .65rem;
+  padding: .2rem .6rem;
+}
+
+.screen-info-hostname-icon {
+  align-items: center;
+  display: inline-flex;
+  // font-size: var(--screen-status-panel-icon-size);
+  font-size: 1.0em;
+  padding-right: .5rem;
+  
+}
+
+.screen-info-hostname-name {
   font-family: monospace;
-  padding: .4rem .6rem;
 }
 
 .screen-description-container {
@@ -75,29 +118,40 @@
   justify-content: center;
 }
 
-.screen-description {
-  text-align: center;
+.screen-description-text-container {
+  border-radius: var(--common-border-radius);
+  border: 0px solid transparent;
+  background-color: var(--screen-debug-table-background-color);
+  font-size: .6rem;
+  padding: .5rem;
+  margin-bottom: var(--common-margin);
+  flex-direction: column;
+  display: flex;
+  height: 5rem;
 }
 
-// TODO: Remove or reimplement; plan to have a menu screen is currently
-//   abandoned
+.screen-description-icon-container {
+  border-bottom: 1px solid var(--screen-stats-entry-border-color);
+  padding: .25rem 0rem;
+  margin-bottom: .25rem;
 
-// .screen-image-wrapper { 
-//   align-items: center;
-//   box-shadow: var(--small-box-shadow);
-//   display: flex;
-//   justify-content: center;
-//   margin-bottom: var(--common-margin);
-//   max-height: var(--screen-image-height);
-//   max-width: var(--screen-image-width);
-//   min-height: var(--screen-image-height);
-//   min-width: var(--screen-image-width);
-//   overflow: hidden;
-  
-//   &, img {
-//     border-radius: var(--common-border-radius); 
-//   }
-// }
+  svg {
+    font-size: var(--screen-status-panel-icon-size);
+  }
+}
+
+.screen-description-text-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.screen-description {
+  justify-self: center;
+  margin: 0rem;
+  font-size: .7rem;
+}
 
 .screen-controls {
   width: 100%;
@@ -128,5 +182,73 @@
   tr:last-child td {
     border-bottom: 0px solid transparent;
     padding-bottom: 0rem;
+  }
+}
+
+.screen-stats-panel {
+  border-radius: var(--common-border-radius);
+  border: 0px solid transparent;
+  background-color: var(--screen-debug-table-background-color);
+  font-size: .6rem;
+  padding: .5rem;
+  margin-bottom: var(--common-margin);
+
+  .entry {
+    align-items: center;
+    font-family: monospace;
+    border-bottom: 1px solid var(--screen-stats-entry-border-color);
+    display: flex;
+    padding: .5rem .25rem;
+    justify-content: space-between;
+  }
+
+  .entry:last-child {
+    border-bottom: 0px solid transparent;
+  }
+
+  .entry-header {
+    align-items: center;
+    display: flex;
+
+    svg {
+      font-size: var(--screen-status-panel-icon-size);
+    }
+  }
+
+  .entry-value {
+    font-family: monospace;
+  }
+
+  .stats-loading {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0rem;
+
+    svg {
+      font-size: 2.5rem;
+      animation: stats-loading-spin var(--loading-spinner-animation-time) linear infinite,
+        stats-loading-pulse var(--loading-spinner-animation-time) ease-in-out infinite;
+      // animation: stats-loading-spin 1.2s linear infinite,
+      //   stats-loading-pulse 1.2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes stats-loading-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes stats-loading-pulse {
+  0%, 100% {
+    opacity: .4;
+  }
+  50% {
+    opacity: .8;
   }
 }

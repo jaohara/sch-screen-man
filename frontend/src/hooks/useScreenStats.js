@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { 
   BACKEND_BASE_URL,
-  REQUEST_TIMEOUT, 
+  REQUEST_TIMEOUT,
+  STATS_REQUEST_TIMEOUT,
   STATS_ROUTE,
   STATS_INTERVAL,
 } from '../constants';
@@ -31,6 +32,8 @@ export default function useScreenStats(screenId, { enabled }) {
     // Don't poll a screen we already know is down, and don't poll during a reboot.
     // The caller passes `enabled === STATUS.ONLINE`.
     if (!enabled || !Number.isInteger(screenId)) {
+      setStats(null);
+      setError(null);
       return;
     }
 
@@ -43,7 +46,7 @@ export default function useScreenStats(screenId, { enabled }) {
         const response = await fetch(`${STATS_URL}/${screenId}`, {
           signal: AbortSignal.any([
             controller.signal,
-            AbortSignal.timeout(REQUEST_TIMEOUT),
+            AbortSignal.timeout(STATS_REQUEST_TIMEOUT),
           ]),
         });
 
@@ -60,6 +63,8 @@ export default function useScreenStats(screenId, { enabled }) {
         if (cancelled) {
           return;
         }
+
+        console.log(`useScreenStats: Received stats data: `, data);
 
         setStats(data);
         setError(null);
@@ -90,7 +95,7 @@ export default function useScreenStats(screenId, { enabled }) {
 
   }, [screenId, enabled]);
 
-  return { stats, error, isState: Boolean(error && stats) };
+  return { stats, error, isStale: Boolean(error && stats) };
 }
 
 
@@ -112,12 +117,34 @@ export function formatUptime(uptimeSeconds) {
   return `${days} day${days === 1 ? '' : 's'} ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
-export function formatMemory({ totalKb, availableKb } = {}) {
+const GB_IN_KB = 1024 * 1024;
+
+export function formatMemory(
+  { totalKb, availableKb } = {}, 
+  asFraction = true,
+  withPercent = true,
+) {
   if (!Number.isFinite(totalKb) || !Number.isFinite(availableKb)) {
     return null;
   }
 
   const usedPercent = Math.round(((totalKb - availableKb) / totalKb) * 100);
 
-  return `${(availableKb / 1024).toFixed(0)} MB free (${usedPercent}% used)`;
+  const formatKbAmount = (memoryKbAmount) => memoryKbAmount >= GB_IN_KB
+    ? `${(memoryKbAmount / GB_IN_KB).toFixed(1)} GB`
+    : `${(memoryKbAmount / 1024).toFixed(0)} MB`;
+
+  const formattedAvailable = formatKbAmount(availableKb);
+  const formattedTotal = formatKbAmount(totalKb);
+  const formattedUsed = formatKbAmount(totalKb - availableKb);
+
+  if (asFraction) {
+    return `${formattedUsed} / ${formattedTotal}${withPercent ? ` (${usedPercent}%)` : ""}`;
+  }
+
+  return `${formattedAvailable} free${withPercent ? ` (${usedPercent}%)` : ""}`;
+}
+
+export function celsiusToFahrenheit(temperatureCelsius) {
+  return (temperatureCelsius * 1.8) + 32;
 }

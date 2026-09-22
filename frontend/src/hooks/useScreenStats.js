@@ -121,3 +121,7 @@ export function formatMemory({ totalKb, availableKb } = {}) {
 
   return `${(availableKb / 1024).toFixed(0)} MB free (${usedPercent}% used)`;
 }
+
+export function celsiusToFahrenheit(temperatureCelsius) {
+  return (temperatureCelsius * 1.8) + 32;
+}

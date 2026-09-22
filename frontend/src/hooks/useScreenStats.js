@@ -32,6 +32,8 @@ export default function useScreenStats(screenId, { enabled }) {
     // Don't poll a screen we already know is down, and don't poll during a reboot.
     // The caller passes `enabled === STATUS.ONLINE`.
     if (!enabled || !Number.isInteger(screenId)) {
+      setStats(null);
+      setError(null);
       return;
     }
 

@@ -131,9 +131,9 @@ function ScreenStatsPanel({ stats, lastRebootDuration }) {
   const fahrenheitTemp = true;
 
   const formatRebootTime = (rebootTime) => {
-    let unformattedRebootTime = rebootTime !== null ? rebootTime : 0;
+    if (rebootTime === null) return "---"; 
     // TODO: Fix formatting to only show 2 decimals
-    return `${unformattedRebootTime / 1000}s`;
+    return `${(rebootTime / 1000).toFixed(2)}s`;
   }
 
   const formatTemperature = (temperature) => {

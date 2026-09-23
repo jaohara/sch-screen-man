@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { 
   BACKEND_BASE_URL,
-  REQUEST_TIMEOUT,
   STATS_REQUEST_TIMEOUT,
   STATS_ROUTE,
   STATS_INTERVAL,
@@ -20,20 +19,22 @@ const STATS_URL = `${BACKEND_BASE_URL}${STATS_ROUTE}`;
     loadAvg: [0.12, 0.09, 0.05],
     // Convert to tempF in UI
     tempC: 47.2,
+    model: "Raspberry Pi Zero W Rev 1.1",
     collectedAt: 1757280000000
   }
 */
 
 export default function useScreenStats(screenId, { enabled }) {
-  const [ stats, setStats ] = useState(null);
-  const [ error, setError ] = useState(null);
+  const [ rawStats, setStats ] = useState(null);
+  const [ rawError, setError ] = useState(null);
+
+  // Don't show stats for a screen we already know is down, or one that's rebooting.
+  // The caller passes `enabled === STATUS.ONLINE`.
+  const stats = enabled ? rawStats : null;
+  const error = enabled ? rawError : null;
 
   useEffect(() => {
-    // Don't poll a screen we already know is down, and don't poll during a reboot.
-    // The caller passes `enabled === STATUS.ONLINE`.
     if (!enabled || !Number.isInteger(screenId)) {
-      setStats(null);
-      setError(null);
       return;
     }
 

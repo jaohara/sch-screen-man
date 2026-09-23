@@ -5,9 +5,9 @@ import { Client } from "ssh2";
 import ping from "ping";
 import { piConfig } from "./pi-conf.js";
 
-import { 
+import {
   createErrorResponseObject,
-  isValidPiConfigId,
+  logTimestamp,
 } from "./routes/utils.js";
 
 const CONNECTION_ERROR_MESSAGES = {
@@ -122,16 +122,18 @@ export async function getHostUptime(piId) {
 }
 
 const STATS_COMMAND = [
-  "echo '<<<UPTIME>>>'", 
+  "echo '<<<UPTIME>>>'",
   "cat /proc/uptime",
-  "echo '<<<MEMINFO>>>'", 
+  "echo '<<<MEMINFO>>>'",
   "cat /proc/meminfo",
-  "echo '<<<LOADAVG>>>'", 
+  "echo '<<<LOADAVG>>>'",
   "cat /proc/loadavg",
-  "echo '<<<DISK>>>'", 
+  "echo '<<<DISK>>>'",
   "df -k -P / | tail -n +2",
-  "echo '<<<TEMP>>>'", 
+  "echo '<<<TEMP>>>'",
   "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null",
+  "echo '<<<MODEL>>>'",
+  "cat /proc/device-tree/model 2>/dev/null",
 ].join(" ; ");
 
 function splitStatsSections(rawOutput) {
@@ -176,7 +178,10 @@ function parseStatsOutput(rawOutput) {
   const tempRaw = (sections.TEMP ?? "").trim();
   const tempC = tempRaw ? Number(tempRaw) / 1000 : null;
 
-  return { uptimeSeconds, memory, disk, loadAvg, tempC, collectedAt: Date.now() };
+  // /proc/device-tree/model is null-terminated rather than newline-terminated
+  const model = (sections.MODEL ?? "").replace(/\0/g, "").trim() || null;
+
+  return { uptimeSeconds, memory, disk, loadAvg, tempC, model, collectedAt: Date.now() };
 }
 
 export async function getHostStats(piId) {
@@ -188,7 +193,7 @@ export async function getHostStats(piId) {
   return parseStatsOutput(rawOutput);
 }
 
-export async function checkIfHostIsUp(piId) {
+export async function checkIfHostIsUp(piId, caller = "unknown") {
   const configObject = piConfig[piId];
   const { mdnsHostname: host, name: screenName } = configObject;
 
@@ -200,17 +205,26 @@ export async function checkIfHostIsUp(piId) {
   };
 
   try {
-    const res = await ping.promise.probe(host);
-    
+    const res = await ping.promise.probe(host, { min_reply: 3 });
+
+    // Only log when there's something worth seeing - a clean probe on every
+    // poll cycle (every few seconds, per screen, forever) is pure noise.
+    if (!res?.alive || res?.packetLoss > 0) {
+      console.log(
+        `[${logTimestamp()}] checkIfHostIsUp(${caller}): probe result for host '${host}' (piId ${piId}) - `
+        + `alive=${res?.alive}, packetLoss=${res?.packetLoss}, times=${JSON.stringify(res?.times)}`
+      );
+    }
+
     if (res && res.alive) {
       resultObject.hostIsUp = true;
       resultObject.message = `Host #${piId} (${screenName}) is up`;
     }
-    
+
     return resultObject;
   }
   catch (error) {
-    console.error(`Error trying to ping host '${host}':`, error);
+    console.error(`[${logTimestamp()}] checkIfHostIsUp(${caller}): error trying to ping host '${host}':`, error);
     resultObject.message = "Error trying to ping host, see error object in response.";
     resultObject.error = error;
     return resultObject;

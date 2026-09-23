@@ -52,7 +52,9 @@ const initialState = {
 function reducer(state, action) {
   switch(action.type) {
     case 'INVALID_ID': {
-      return {...initialState, status: STATUS.INVALID };
+      const next = {...initialState, status: STATUS.INVALID };
+      console.log(`[useScreenHealth] ${new Date().toISOString()} INVALID_ID: ${state.status} -> ${next.status}`);
+      return next;
     }
 
     // pinging a host that is online
@@ -66,7 +68,7 @@ function reducer(state, action) {
           return state;
         }
 
-        return {
+        const next = {
           ...state,
           status: STATUS.ONLINE,
           rebootStartedAt: null,
@@ -75,14 +77,18 @@ function reducer(state, action) {
             state.lastRebootDuration,
           error: null,
         };
+        console.log(`[useScreenHealth] ${new Date().toISOString()} PING_UP: ${state.status} -> ${next.status} (reboot completed, duration ${next.lastRebootDuration}ms)`);
+        return next;
       }
 
       // nothing changed, skip the render
-      if (state.status === STATUS.ONLINE) { 
+      if (state.status === STATUS.ONLINE) {
         return state;
       }
 
-      return { ...state, status: STATUS.ONLINE, error: null };
+      const next = { ...state, status: STATUS.ONLINE, error: null };
+      console.log(`[useScreenHealth] ${new Date().toISOString()} PING_UP: ${state.status} -> ${next.status}`);
+      return next;
     }
 
     // pinging a host that's either rebooting or down
@@ -92,42 +98,54 @@ function reducer(state, action) {
 
         // we're still within the reboot window
         if (elapsed < REBOOT_TIMEOUT) {
-          return state.hasDroppedOffline ? state : { ...state, hasDroppedOffline: true };
+          if (state.hasDroppedOffline) {
+            return state;
+          }
+          console.log(`[useScreenHealth] ${new Date().toISOString()} PING_DOWN: REBOOTING, host confirmed dropped offline (elapsed ${elapsed}ms)`);
+          return { ...state, hasDroppedOffline: true };
         }
 
-        return {
+        const next = {
           ...state,
           status: STATUS.OFFLINE,
           rebootStartedAt: null,
           hasDroppedOffline: false,
           error: new Error("Screen did not come back online within the reboot window"),
         };
+        console.log(`[useScreenHealth] ${new Date().toISOString()} PING_DOWN: ${state.status} -> ${next.status} (reboot window ${REBOOT_TIMEOUT}ms exceeded, elapsed ${elapsed}ms)`);
+        return next;
       }
-      
+
       if (state.status === STATUS.OFFLINE) {
         return state;
       }
 
-      return { ...state, status: STATUS.OFFLINE };
+      const next = { ...state, status: STATUS.OFFLINE };
+      console.log(`[useScreenHealth] ${new Date().toISOString()} PING_DOWN: ${state.status} -> ${next.status}`);
+      return next;
     }
 
     case 'REBOOT_REQUESTED': {
-      return {
+      const next = {
         ...state,
         status: STATUS.REBOOTING,
         rebootStartedAt: action.at,
         hasDroppedOffline: false,
         error: action.error,
       };
+      console.log(`[useScreenHealth] ${new Date().toISOString()} REBOOT_REQUESTED: ${state.status} -> ${next.status}`);
+      return next;
     }
 
     case 'REBOOT_FAILED': {
-      return {
+      const next = {
         ...state,
         status: STATUS.OFFLINE,
         rebootStartedAt: null,
         error: action.error,
-      }
+      };
+      console.log(`[useScreenHealth] ${new Date().toISOString()} REBOOT_FAILED: ${state.status} -> ${next.status}`, action.error);
+      return next;
     }
 
     default: {

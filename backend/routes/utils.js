@@ -1,3 +1,9 @@
+// Prefix for console logs so entries can be correlated against frontend
+// timestamps when chasing intermittent ping/reboot/stats issues.
+export function logTimestamp() {
+  return new Date().toISOString();
+}
+
 export function createErrorResponseObject(errorString, errorType = null) {
   // TODO: Unify failure/success object structure 
   const errorResponseObject = {

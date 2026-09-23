@@ -85,6 +85,7 @@
   /* --screen-status-loaded-background-color: var(--stoup-cyan); */
   --screen-status-loading-background-color: var(--stoup-yellow);
   --screen-status-offline-background-color: var(--raspberry);
+  --screen-status-polling-background-color: var(--blue);
   --screen-status-reboot-background-color: var(--stoup-yellow);
   --shadow-color: rgba(0,0,0,0.2);
   --text-color: var(--onyx);

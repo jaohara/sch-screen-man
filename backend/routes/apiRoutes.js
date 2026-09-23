@@ -2,9 +2,10 @@ import express from "express";
 
 import { piConfig } from "../pi-conf.js";
 
-import { 
+import {
   createErrorResponseObject,
   isValidPiConfigId,
+  logTimestamp,
   parseAndCheckScreenIdFromRequest,
 } from "./utils.js";
 
@@ -35,14 +36,14 @@ router.get('/reboot/:screenId', async (req, res) => {
   const configObject = piConfig[id];
 
   if (USE_REBOOT_FUNCTION) {
-    console.log(`Checking if Screen ${id} is up before reboot...`);
+    console.log(`[${logTimestamp()}] Checking if Screen ${id} is up before reboot...`);
 
-    const { hostIsUp } = await checkIfHostIsUp(id);
+    const { hostIsUp } = await checkIfHostIsUp(id, "reboot");
 
     if (!hostIsUp) {
       const errorObject = createErrorResponseObject("Host can't be reached via ping", "BADHOSTPING");
       res.status(500).json(errorObject);
-      console.error(`Error rebooting Screen ${id}: host is not up.`);
+      console.error(`[${logTimestamp()}] Error rebooting Screen ${id}: host is not up.`);
       return;
     }
 
@@ -76,9 +77,7 @@ router.get('/ping/:screenId', async (req, res) => {
   if (!checkIfPiIdIsNull(id, res)) return;
   if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
-  console.log(`Received request to check if host ${id} is up...`)
-
-  const result = await checkIfHostIsUp(id);
+  const result = await checkIfHostIsUp(id, "ping");
   return res.json(result);
 });
 
@@ -88,15 +87,15 @@ router.get('/uptime/:screenId', async (req, res) => {
   if (!checkIfPiIdIsNull(id, res)) return;
   if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
-  console.log(`Received request for host ${id} uptime...`);
+  console.log(`[${logTimestamp()}] Received request for host ${id} uptime...`);
 
-  const { hostIsUp } = await checkIfHostIsUp(id);
+  const { hostIsUp } = await checkIfHostIsUp(id, "uptime");
 
   // TODO: Make function for this shared code?
   if (!hostIsUp) {
     const errorObject = createErrorResponseObject("Host can't be reached via ping", "BADHOSTPING");
     res.status(500).json(errorObject);
-    console.error(`Error getting uptime for Screen ${id}: host is not up.`);
+    console.error(`[${logTimestamp()}] Error getting uptime for Screen ${id}: host is not up.`);
     return;
   }
 
@@ -118,14 +117,14 @@ router.get('/stats/:screenId', async (req, res) => {
   if (!checkIfPiIdIsNull(id, res)) return;
   if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
-  console.log(`Received request for host ${id} stats...`);
+  console.log(`[${logTimestamp()}] Received request for host ${id} stats...`);
 
-  const { hostIsUp } = await checkIfHostIsUp(id);
+  const { hostIsUp } = await checkIfHostIsUp(id, "stats");
 
   if (!hostIsUp) {
     const errorObject = createErrorResponseObject("Host can't be reached via ping", "BADHOSTPING");
     res.status(500).json(errorObject);
-    console.error(`Error getting stats for Screen ${id}: host is not up.`);
+    console.error(`[${logTimestamp()}] Error getting stats for Screen ${id}: host is not up.`);
     return;
   }
 

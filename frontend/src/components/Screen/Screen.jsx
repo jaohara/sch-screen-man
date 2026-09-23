@@ -13,6 +13,7 @@ import {
   FaClockRotateLeft,
   FaDatabase,
   FaMemory,
+  FaMicrochip,
   FaRegClock,
   FaSpinner,
   FaSignsPost,
@@ -35,6 +36,7 @@ const icons = {
   "lastReboot": (<FaClockRotateLeft />),
   "loadAvg": (<FaChartColumn />),
   "temp": (<FaTemperatureHalf />),
+  "model": (<FaMicrochip />),
 };
 
 const statusLabels = {
@@ -79,6 +81,11 @@ function Screen ({
         className += ` ${styles.loading}`;
         break;
       case STATUS.ONLINE: 
+        if (stats === null) {
+         className += ` ${styles.polling}`;
+         break;
+        }
+
         className += ` ${styles.loaded}`;
         break;
       case STATUS.OFFLINE: 
@@ -93,12 +100,21 @@ function Screen ({
     return className;
   })();
 
+  const getStatusLabel = (status, stats) => {
+    if (status === STATUS.ONLINE && stats === null) {
+      return "Getting Stats...";
+    }
+
+    return statusLabels[status];
+  }
+
   return (
     <div className={styles.screen}>
       <div className={styles["screen-info"]}>
           <div className={styles["screen-info-header"]}>
             <div className={styles["status-badge"]}>
-              <div className={styles["status-badge-label"]}>{statusLabels[status]}</div>
+              <div className={styles["status-badge-label"]}>{getStatusLabel(status, stats)}</div>
+              {/* <div className={styles["status-badge-label"]}>{statusLabels[status]}</div> */}
               <div className={hostIndicatorPipClassNames}>&nbsp;</div>
             </div>
             <h1>{screen.name}</h1>
@@ -156,6 +172,11 @@ function ScreenStatsPanel({ stats, lastRebootDuration }) {
   }
 
   const statsEntries = stats === null ? null : [
+    {
+      label: "Model",
+      icon: icons["model"],
+      value: stats.model,
+    },
     {
       label: "Uptime",
       icon: icons["uptime"],

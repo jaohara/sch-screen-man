@@ -5,12 +5,16 @@
   border-radius: var(--common-border-radius);
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   justify-content: space-between;
-  min-height: 33vh;
+  // min-height: 33vh;
+  min-height: 512px;
   margin: var(--screen-margin);
   padding: var(--common-padding);
-  width: 20%;
+  // width should be 
+  width: 320px;
 }
+
 
 .screen-info {
   margin-bottom: var(--common-margin);
@@ -45,7 +49,7 @@
     padding-right: .5rem;
   }
   
-  .status, .loaded, .loading, .offline, .reboot, .invalid {
+  .status, .loaded, .loading, .offline, .polling, .reboot, .invalid {
     transition: background-color var(--screen-host-pip-transition-time);
   }
   
@@ -68,11 +72,17 @@
   .loaded {
     background-color: var(--screen-status-loaded-background-color);
   }
+
+  .loading, .polling {
+    animation: stats-loading-pulse var(--loading-spinner-animation-time) ease-in-out infinite;
+  }
   
   .loading {
     background-color: var(--screen-status-loading-background-color);
-    // TODO: Fix this bug to make it actually pulse
-    animation: stats-loading-pulse var(--loading-spinner-animation-time) ease-in-out infinite;
+  }
+  
+  .polling {
+    background-color: var(--screen-status-polling-background-color);
   }
   
   .offline {
@@ -186,12 +196,18 @@
 }
 
 .screen-stats-panel {
+  align-items: center;
+  justify-content: center;
   border-radius: var(--common-border-radius);
   border: 0px solid transparent;
   background-color: var(--screen-debug-table-background-color);
+  display: flex;
+  flex-direction: column;
   font-size: .6rem;
   padding: .5rem;
   margin-bottom: var(--common-margin);
+  flex: 1 0;
+  min-height: 14rem;
 
   .entry {
     align-items: center;
@@ -200,6 +216,7 @@
     display: flex;
     padding: .5rem .25rem;
     justify-content: space-between;
+    width: 100%;
   }
 
   .entry:last-child {
@@ -222,6 +239,7 @@
   .stats-loading {
     align-items: center;
     display: flex;
+    height: 100%;
     justify-content: center;
     padding: 1rem 0rem;
 
@@ -246,9 +264,9 @@
 
 @keyframes stats-loading-pulse {
   0%, 100% {
-    opacity: .4;
+    opacity: .25;
   }
   50% {
-    opacity: .8;
+    opacity: 1;
   }
 }

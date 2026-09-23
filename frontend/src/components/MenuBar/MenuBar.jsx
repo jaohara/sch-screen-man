@@ -9,6 +9,7 @@ function MenuBar ({
   setActiveScreenGroup,
 }) {
 
+  // TODO: Remove this
   const testMenuBarButtonJSX = (
     <>
       <li><button className={styles["menu-bar-button"]}>One</button></li>
@@ -25,7 +26,7 @@ function MenuBar ({
 
       if (!currentScreenGroupMetaData.hidden) {
         return (
-          <li>
+          <li key={`screen-group-{index}`}>
             <button 
               className={`
                 ${styles["menu-bar-button"]} ${

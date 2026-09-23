@@ -1,9 +1,12 @@
 .group {
+  align-items: center;
   background-color: var(--screen-group-background-color);
   border-radius: var(--common-border-radius);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  height: 100%;
+  // justify-content: center;
+  justify-content: flex-start;
   margin-bottom: var(--common-bottom-margin);
   // padding: var(--common-padding);
   width: 100%;
@@ -11,9 +14,35 @@
 
 .screens {
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   display: flex;
-  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  overflow-x: scroll;
+  padding: 0rem 5rem;
+  position: relative;
+  // width: 100%;
+
+  &::before,
+  &::after {
+    content: "";
+    height: 100%;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    width: 5rem;
+    z-index: 1;
+  }
+
+  &::before {
+    background: linear-gradient(to right, var(--background-color), transparent);
+    left: 0;
+  }
+
+  &::after {
+    background: linear-gradient(to left, var(--background-color), transparent);
+    right: 0;
+  }
 }
 
 .header {

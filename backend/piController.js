@@ -5,9 +5,10 @@ import { Client } from "ssh2";
 import ping from "ping";
 import { piConfig } from "./pi-conf.js";
 
-import { 
+import {
   createErrorResponseObject,
   isValidPiConfigId,
+  logTimestamp,
 } from "./routes/utils.js";
 
 const CONNECTION_ERROR_MESSAGES = {
@@ -188,7 +189,7 @@ export async function getHostStats(piId) {
   return parseStatsOutput(rawOutput);
 }
 
-export async function checkIfHostIsUp(piId) {
+export async function checkIfHostIsUp(piId, caller = "unknown") {
   const configObject = piConfig[piId];
   const { mdnsHostname: host, name: screenName } = configObject;
 
@@ -200,17 +201,22 @@ export async function checkIfHostIsUp(piId) {
   };
 
   try {
-    const res = await ping.promise.probe(host);
-    
+    const res = await ping.promise.probe(host, { min_reply: 3 });
+
+    console.log(
+      `[${logTimestamp()}] checkIfHostIsUp(${caller}): probe result for host '${host}' (piId ${piId}) - `
+      + `alive=${res?.alive}, packetLoss=${res?.packetLoss}, times=${JSON.stringify(res?.times)}`
+    );
+
     if (res && res.alive) {
       resultObject.hostIsUp = true;
       resultObject.message = `Host #${piId} (${screenName}) is up`;
     }
-    
+
     return resultObject;
   }
   catch (error) {
-    console.error(`Error trying to ping host '${host}':`, error);
+    console.error(`[${logTimestamp()}] checkIfHostIsUp(${caller}): error trying to ping host '${host}':`, error);
     resultObject.message = "Error trying to ping host, see error object in response.";
     resultObject.error = error;
     return resultObject;

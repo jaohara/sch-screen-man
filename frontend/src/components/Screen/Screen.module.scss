@@ -5,12 +5,15 @@
   border-radius: var(--common-border-radius);
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   justify-content: space-between;
   min-height: 33vh;
   margin: var(--screen-margin);
   padding: var(--common-padding);
-  width: 20%;
+  // width should be 
+  width: 320px;
 }
+
 
 .screen-info {
   margin-bottom: var(--common-margin);

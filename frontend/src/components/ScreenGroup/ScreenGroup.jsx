@@ -19,16 +19,17 @@ function ScreenGroup ({
 
 
   const screenJSX = screens ? (
-    <div className={styles.screens}> 
-      {
-        Object.keys(screens).map((screenIndex) => (
-          <Screen
-            key={screens[screenIndex].screenId}
-            screen={screens[screenIndex]}
-          />
-        ))
-      }
-    </div>) : (
+      <div className={styles.screens}>
+        {
+          Object.keys(screens).map((screenIndex) => (
+            <Screen
+              key={screens[screenIndex].screenId}
+              screen={screens[screenIndex]}
+            />
+          ))
+        }
+      </div>
+    ) : (
       <div className={styles["empty-group"]}>
         No screens configured for this group.
       </div>

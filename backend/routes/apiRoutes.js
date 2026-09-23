@@ -77,8 +77,6 @@ router.get('/ping/:screenId', async (req, res) => {
   if (!checkIfPiIdIsNull(id, res)) return;
   if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
-  console.log(`[${logTimestamp()}] Received request to check if host ${id} is up...`)
-
   const result = await checkIfHostIsUp(id, "ping");
   return res.json(result);
 });

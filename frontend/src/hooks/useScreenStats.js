@@ -25,15 +25,16 @@ const STATS_URL = `${BACKEND_BASE_URL}${STATS_ROUTE}`;
 */
 
 export default function useScreenStats(screenId, { enabled }) {
-  const [ stats, setStats ] = useState(null);
-  const [ error, setError ] = useState(null);
+  const [ rawStats, setStats ] = useState(null);
+  const [ rawError, setError ] = useState(null);
+
+  // Don't show stats for a screen we already know is down, or one that's rebooting.
+  // The caller passes `enabled === STATUS.ONLINE`.
+  const stats = enabled ? rawStats : null;
+  const error = enabled ? rawError : null;
 
   useEffect(() => {
-    // Don't poll a screen we already know is down, and don't poll during a reboot.
-    // The caller passes `enabled === STATUS.ONLINE`.
     if (!enabled || !Number.isInteger(screenId)) {
-      setStats(null);
-      setError(null);
       return;
     }
 

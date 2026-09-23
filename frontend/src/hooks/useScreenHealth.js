@@ -65,7 +65,6 @@ function reducer(state, action) {
         // can take much longer than PING_INTERVAL_REBOOT_INITIAL to drop off
         // the network after the reboot command is issued.
         if (!state.hasDroppedOffline) {
-          console.log(`[useScreenHealth] ${new Date().toISOString()} PING_UP: still REBOOTING, host has not dropped offline yet - no change`);
           return state;
         }
 
@@ -100,7 +99,6 @@ function reducer(state, action) {
         // we're still within the reboot window
         if (elapsed < REBOOT_TIMEOUT) {
           if (state.hasDroppedOffline) {
-            console.log(`[useScreenHealth] ${new Date().toISOString()} PING_DOWN: still REBOOTING (elapsed ${elapsed}ms), already marked dropped offline - no change`);
             return state;
           }
           console.log(`[useScreenHealth] ${new Date().toISOString()} PING_DOWN: REBOOTING, host confirmed dropped offline (elapsed ${elapsed}ms)`);

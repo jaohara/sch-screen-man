@@ -7,7 +7,6 @@ import { piConfig } from "./pi-conf.js";
 
 import {
   createErrorResponseObject,
-  isValidPiConfigId,
   logTimestamp,
 } from "./routes/utils.js";
 
@@ -208,10 +207,14 @@ export async function checkIfHostIsUp(piId, caller = "unknown") {
   try {
     const res = await ping.promise.probe(host, { min_reply: 3 });
 
-    console.log(
-      `[${logTimestamp()}] checkIfHostIsUp(${caller}): probe result for host '${host}' (piId ${piId}) - `
-      + `alive=${res?.alive}, packetLoss=${res?.packetLoss}, times=${JSON.stringify(res?.times)}`
-    );
+    // Only log when there's something worth seeing - a clean probe on every
+    // poll cycle (every few seconds, per screen, forever) is pure noise.
+    if (!res?.alive || res?.packetLoss > 0) {
+      console.log(
+        `[${logTimestamp()}] checkIfHostIsUp(${caller}): probe result for host '${host}' (piId ${piId}) - `
+        + `alive=${res?.alive}, packetLoss=${res?.packetLoss}, times=${JSON.stringify(res?.times)}`
+      );
+    }
 
     if (res && res.alive) {
       resultObject.hostIsUp = true;

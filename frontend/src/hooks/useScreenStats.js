@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { 
   BACKEND_BASE_URL,
-  REQUEST_TIMEOUT,
   STATS_REQUEST_TIMEOUT,
   STATS_ROUTE,
   STATS_INTERVAL,

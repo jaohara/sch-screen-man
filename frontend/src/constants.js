@@ -12,16 +12,12 @@ export const PING_INTERVAL_REBOOT = 2000;
 export const PING_INTERVAL_REBOOT_INITIAL = 8000;
 export const PING_INTERVAL_TIME = 3000;
 export const PING_ROUTE = "/api/ping";
-// TODO: Increase timeout to 
-// export const PING_TIMEOUT = 30000;
-export const PING_TIMEOUT = 9000;
 export const REBOOT_ROUTE = "/api/reboot";
-export const REBOOT_PING_DELAY = 15000;
 // TODO: Maybe shorten - needs to be longer for RPi 0 W
 // export const REBOOT_TIMEOUT = 120000;
 export const REBOOT_TIMEOUT = 180000;
 // per-request waiting ceiling in ms
-export const REQUEST_TIMEOUT = 5000; 
+export const REQUEST_TIMEOUT = 10000; 
 export const STATS_REQUEST_TIMEOUT = 15000;
 export const STATS_ROUTE = "/api/stats";
 // New - interval for requesting stats like host memory usage

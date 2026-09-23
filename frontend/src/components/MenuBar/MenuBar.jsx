@@ -9,6 +9,7 @@ function MenuBar ({
   setActiveScreenGroup,
 }) {
 
+  // TODO: Remove this
   const testMenuBarButtonJSX = (
     <>
       <li><button className={styles["menu-bar-button"]}>One</button></li>

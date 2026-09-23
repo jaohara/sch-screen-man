@@ -123,16 +123,18 @@ export async function getHostUptime(piId) {
 }
 
 const STATS_COMMAND = [
-  "echo '<<<UPTIME>>>'", 
+  "echo '<<<UPTIME>>>'",
   "cat /proc/uptime",
-  "echo '<<<MEMINFO>>>'", 
+  "echo '<<<MEMINFO>>>'",
   "cat /proc/meminfo",
-  "echo '<<<LOADAVG>>>'", 
+  "echo '<<<LOADAVG>>>'",
   "cat /proc/loadavg",
-  "echo '<<<DISK>>>'", 
+  "echo '<<<DISK>>>'",
   "df -k -P / | tail -n +2",
-  "echo '<<<TEMP>>>'", 
+  "echo '<<<TEMP>>>'",
   "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null",
+  "echo '<<<MODEL>>>'",
+  "cat /proc/device-tree/model 2>/dev/null",
 ].join(" ; ");
 
 function splitStatsSections(rawOutput) {
@@ -177,7 +179,10 @@ function parseStatsOutput(rawOutput) {
   const tempRaw = (sections.TEMP ?? "").trim();
   const tempC = tempRaw ? Number(tempRaw) / 1000 : null;
 
-  return { uptimeSeconds, memory, disk, loadAvg, tempC, collectedAt: Date.now() };
+  // /proc/device-tree/model is null-terminated rather than newline-terminated
+  const model = (sections.MODEL ?? "").replace(/\0/g, "").trim() || null;
+
+  return { uptimeSeconds, memory, disk, loadAvg, tempC, model, collectedAt: Date.now() };
 }
 
 export async function getHostStats(piId) {

@@ -19,6 +19,7 @@ const STATS_URL = `${BACKEND_BASE_URL}${STATS_ROUTE}`;
     loadAvg: [0.12, 0.09, 0.05],
     // Convert to tempF in UI
     tempC: 47.2,
+    model: "Raspberry Pi Zero W Rev 1.1",
     collectedAt: 1757280000000
   }
 */

@@ -27,6 +27,15 @@ const STATS_URL = `${BACKEND_BASE_URL}${STATS_ROUTE}`;
 export default function useScreenStats(screenId, { enabled }) {
   const [ rawStats, setStats ] = useState(null);
   const [ rawError, setError ] = useState(null);
+  const [ prevEnabled, setPrevEnabled ] = useState(enabled);
+
+  // Reset during render (not in an effect) so a re-enable never paints a
+  // frame of stats left over from before the screen went offline/rebooted.
+  if (enabled !== prevEnabled) {
+    setPrevEnabled(enabled);
+    setStats(null);
+    setError(null);
+  }
 
   // Don't show stats for a screen we already know is down, or one that's rebooting.
   // The caller passes `enabled === STATUS.ONLINE`.

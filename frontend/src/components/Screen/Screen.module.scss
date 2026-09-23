@@ -73,7 +73,7 @@
     background-color: var(--screen-status-loaded-background-color);
   }
 
-  .loading, .polling {
+  .loading, .polling, .reboot {
     animation: stats-loading-pulse var(--loading-spinner-animation-time) ease-in-out infinite;
   }
   

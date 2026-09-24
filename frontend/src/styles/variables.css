@@ -23,7 +23,6 @@
   --screen-image-height: calc(var(--screen-width) * var(--ratio-height-to-width-16-9));
   --screen-status-size: 12px;
   --screen-status-panel-icon-size: 1.4em;
-  --title-bar-font-size: 2.4rem;
 
   /* Times */
   --fast-transition-time: 60ms;

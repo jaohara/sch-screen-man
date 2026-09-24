@@ -1,4 +1,4 @@
-export const APP_TITLE = "Stoup Capitol Hill Screen Manager";
+export const APP_TITLE = "Menu Screen Manager";
 // TODO: Change to production URL
 // export const BACKEND_BASE_URL = "http://localhost:3000";
 // TODO: Change to static server ip on LAN

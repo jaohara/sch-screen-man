@@ -4,7 +4,6 @@ import {
 } from 'react'
 import styles from './App.module.scss';
 
-// import TitleBar from './components/TitleBar/TitleBar.jsx';
 import MenuBar from './components/MenuBar/MenuBar.jsx';
 import ScreenGroup from './components/ScreenGroup/ScreenGroup';
 

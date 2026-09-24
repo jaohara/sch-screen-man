@@ -85,7 +85,6 @@ function App() {
       <div className={styles["main-container"]}>
         {currentScreenGroupJSX}
       </div>
-
     </div>
   );
 }

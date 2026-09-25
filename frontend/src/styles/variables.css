@@ -23,6 +23,8 @@
   --screen-image-height: calc(var(--screen-width) * var(--ratio-height-to-width-16-9));
   --screen-status-size: 12px;
   --screen-status-panel-icon-size: 1.4em;
+  --sidebar-entry-padding: .75rem;
+  --sidebar-entry-margin: .25rem;
 
   /* Times */
   --fast-transition-time: 60ms;
@@ -86,6 +88,11 @@
   --screen-status-offline-background-color: var(--raspberry);
   --screen-status-polling-background-color: var(--blue);
   --screen-status-reboot-background-color: var(--stoup-yellow);
+  --sidebar-background-color: var(--light-200);
+  /* --sidebar-entry-hover-color: var(--blue); */
+  --sidebar-entry-hover-color: var(--light-100);
+  --sidebar-entry-active-color: var(--light-100);
+  --sidebar-entry-selected-border-color: var(--light-300);
   --shadow-color: rgba(0,0,0,0.2);
   --text-color: var(--onyx);
   
@@ -111,6 +118,7 @@
     --screen-debug-table-background-color: var(--dark-gray);
     --screen-background-color: var(--med-gray);
     --screen-info-hostname-background-color: var(--dark-gray);
+    --sidebar-background-color: var(--med-gray);
     /* --screen-status-invalid-background-color: var(--light-400); */
     --text-color: var(--light-100);
   }

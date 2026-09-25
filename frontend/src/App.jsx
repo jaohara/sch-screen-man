@@ -4,6 +4,7 @@ import {
 } from 'react'
 import styles from './App.module.scss';
 
+import SideBar from './components/SideBar/SideBar.jsx';
 import MenuBar from './components/MenuBar/MenuBar.jsx';
 import ScreenGroup from './components/ScreenGroup/ScreenGroup';
 
@@ -76,6 +77,8 @@ function App() {
 
   return (
     <div className={styles.app}>
+      <SideBar />
+      
       <MenuBar 
         activeScreenGroup={activeScreenGroup}
         screenGroupMetaData={screenGroupMetaData}

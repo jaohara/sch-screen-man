@@ -20,7 +20,6 @@ export const REBOOT_TIMEOUT = 180000;
 export const REQUEST_TIMEOUT = 10000; 
 export const STATS_REQUEST_TIMEOUT = 15000;
 export const STATS_ROUTE = "/api/stats";
-// New - interval for requesting stats like host memory usage
-export const STATS_INTERVAL = 300000;
+export const STATS_INTERVAL = 15000;
 export const UNGROUPED_SCREEN_STRING = "Ungrouped";
 export const UPTIME_ROUTE = "/api/uptime";

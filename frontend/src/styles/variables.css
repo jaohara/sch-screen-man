@@ -114,6 +114,7 @@
   /* --button-border-color: var(--blue); */
     --button-border-color: var(--light-gray);
     --button-hover-background-color: var(--light-gray);
+    --button-hover-border-color: var(--light-300);
     --button-hover-text-color: var(--light-100);
     --button-text-color: var(--light-100);
     --menu-bar-background-color: var(--med-gray);

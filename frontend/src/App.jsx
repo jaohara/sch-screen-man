@@ -66,8 +66,8 @@ function App() {
 
   const currentScreenGroupJSX = activeScreenGroup ? (
     <ScreenGroup
-      metaData={screens[activeScreenGroup].metaData}
-      screens={screens[activeScreenGroup].screens}
+      metaData={screens[activeScreenGroup]?.metaData}
+      screens={screens[activeScreenGroup]?.screens}
     />
   ) : (
     <p className={styles["main-container-message"]}>
@@ -78,7 +78,7 @@ function App() {
   return (
     <div className={styles.app}>
       <SideBar />
-      
+
       <MenuBar 
         activeScreenGroup={activeScreenGroup}
         screenGroupMetaData={screenGroupMetaData}

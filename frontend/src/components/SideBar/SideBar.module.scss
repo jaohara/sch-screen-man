@@ -1,6 +1,7 @@
 .sidebar {
   // background-color: var(--sidebar-background-color);
   background-color: var(--sidebar-background-color);
+  border: var(--container-border-size) solid var(--border-color);
   border-bottom-right-radius: var(--common-border-radius);
   border-top-right-radius: var(--common-border-radius);
   padding: var(--common-padding);

@@ -1,0 +1,23 @@
+.input {
+  background-color: var(--input-background-color);
+  border: var(--common-border-size) solid;
+  border-color: var(--input-border-color);
+  border-radius: var(--common-border-radius);
+  font-size: var(--input-font-size);
+  padding: var(--input-padding);
+  transition: border-color var(--normal-transition-time);
+  width: var(--input-width);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--input-border-focus-color);
+  
+  &:hover {
+    border-color: var(--input-border-focus-color);
+  }
+}
+
+.input:hover {
+  border-color: var(--input-border-hover-color);
+}

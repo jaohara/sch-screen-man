@@ -1,11 +1,20 @@
-import { useState } from "react";
-
 import styles from "./TextInput.module.scss";
 
-export default function TextInput ({}) {
+import InputWrapper from "../InputWrapper/InputWrapper";
+
+export default function TextInput ({
+  label,
+  setValue,
+  value,
+}) {
   return (
-    <>
-      Unimplemented TextInput
-    </>
+    <InputWrapper label={label}>
+      <input
+        className={`${styles["input"]}`}
+        type="text"
+        onChange={(e) => setValue(e.value)}
+        value={value}
+      />
+    </InputWrapper>
   );
 }

@@ -13,10 +13,19 @@
   --button-icon-right-margin: .5em;
   --common-bottom-margin: 3rem;
   --common-border-radius: 8px;
-  --common-border-size: 2px;
+  --common-border-size: 1px;
+  /* --common-border-size: 2px; */
+  --container-border-size: 0px;
   --common-margin: 1rem;
   --common-padding: 1rem;
+  --input-font-size: 1rem;
+  --input-padding: .5rem;
+  --input-width: 50%;
   --menu-button-padding-vertical: var(--common-padding);
+  --panel-desktop-width: 768px;
+  --panel-max-height: 80vh;
+  /* --panel-padding: 1.5rem; */
+  --panel-padding: 2rem;
   --screen-group-header-font-size: 1.4rem;
   --screen-margin: .25rem;
   --screen-icon-svg-size: 14px;
@@ -35,6 +44,7 @@
   --loading-spinner-animation-time: 1.2s;
 
   /* Base Colors */
+  --light-000: #fff;
   --light-100: #efefef;
   --light-200: #deddda;
   --light-300: #c0bfbc;
@@ -61,19 +71,32 @@
   --background-color: var(--light-100);
   /* --border-color: var(--white); */
   --border-color: var(--med-gray);
+  --border-color: var(--light-300);
   /* --button-background-color: var(--blue); */
   --button-background-color: var(--light-300);
   /* --button-border-color: var(--blue); */
-  --button-border-color: var(--light-300);
+  /* --button-border-color: var(--light-300); */
+  --button-border-color: var(--light-200);
   --button-disabled-border-color: white;
   --button-hover-background-color: var(--light-100);
   --button-hover-border-color: var(--light-300);
   --button-hover-text-color: var(--onyx);
   --button-text-color: var(--onyx);
+  --card-background-color: var(--light-100);
+  /* --input-background-color: var(--light-100); */
+  --dropdown-icon-hover-color: var(--light-400);
+  --dropdown-option-hover-background-color: var(--light-200);
+  --input-background-color: var(--light-000);
+  /* --input-border-color: var(--light-300); */
+  --input-border-color: var(--light-200);
+  --input-border-hover-color: var(--light-300);
+  --input-border-focus-color: var(--blue);
+  --input-label-color: var(--light-gray);
   --menu-bar-background-color: var(--light-200);
   --menu-bar-group-icon-background-color: var(--light-100);
   --menu-button-active-background-color: var(--light-100);
   --menu-button-active-border-color: var(--light-400);
+  --panel-background-color: var(--light-200);
   /* --screen-background-color: var(--onyx); */
   --screen-background-color: var(--light-200);
   --screen-debug-table-background-color: var(--light-100);
@@ -95,12 +118,16 @@
   --sidebar-entry-hover-color: var(--light-100);
   --sidebar-entry-active-color: var(--light-100);
   --sidebar-entry-selected-border-color: var(--light-300);
-  --shadow-color: rgba(0,0,0,0.2);
+  --shadow-color: rgba(0,0,0,0.1);
+  /* --slider-pip-color: var(--light-100); */
+  --slider-pip-color: var(--light-000);
+  --slider-background-color: var(--light-300);
+  --slider-background-toggled-color: var(--blue);
   --text-color: var(--onyx);
   
   /* Common Values */
   --small-box-shadow: 0px 2px 4px var(--shadow-color);
-  --small-box-shadow-raised: 0px 3px 6px var(--shadow-color);
+  --small-box-shadow-raised: 0px 2px 3px var(--shadow-color);
 
   font-family: var(--app-font-stack);
 }

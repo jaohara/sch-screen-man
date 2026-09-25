@@ -1,11 +1,25 @@
-import { useState } from "react";
-
 import styles from "./ToggleSlider.module.scss";
 
-export default function ToggleSlider ({}) {
+import InputWrapper from "../InputWrapper/InputWrapper";
+
+export default function ToggleSlider ({
+  label,
+  setValue,
+  value,
+}) {
   return (
-    <>
-      Unimplemented ToggleSlider
-    </>
+    <InputWrapper label={label}>
+      <div 
+        className={`
+          ${styles["slider-wrapper"]}
+          ${value && styles["toggled"]}  
+        `}
+        onClick={() => setValue(!value)}
+      >
+        <div 
+          className={styles["pip"]}
+        />
+      </div>
+    </InputWrapper>
   );
 }

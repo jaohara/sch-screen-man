@@ -1,0 +1,33 @@
+.slider-wrapper {
+  // width: 48px;
+  width: 56px;
+  // background-color: red;
+  background-color: var(--slider-background-color);
+  // border: 1px solid var(--input-border-color);
+  border-radius: 16px;
+  padding: 4px;
+  transition: background-color var(--normal-transition-time);
+}
+
+.slider-wrapper.toggled {
+  // background-color: green;
+  background-color: var(--slider-background-toggled-color);
+}
+
+.slider-wrapper:hover { 
+  cursor: pointer;
+}
+
+.pip {
+  height: 20px;
+  width: 20px;
+  background-color: var(--slider-pip-color);
+  // border: 2px solid var(--input-border-color);
+  border-radius: 10px;
+  transform: translateX(0px);
+  transition: transform var(--normal-transition-time);
+}
+
+.toggled .pip {
+  transform: translateX(28px);
+}

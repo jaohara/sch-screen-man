@@ -1,0 +1,13 @@
+.input-container {
+  // border-radius: var(--common-border-radius);
+  // background-color: var(--card-background-color);
+  // padding: var(--common-padding);
+  border-bottom: 1px solid;
+  border-color: var(--light-200);
+  display: flex;
+  padding: 1rem 0rem;
+
+  &:last-of-type, &.no-border {
+    border-bottom: 0px solid;
+  }
+}

@@ -62,10 +62,12 @@
   border-radius: var(--common-border-radius);
   border: 1px solid;
   border-color: transparent;
+  color: inherit;
   margin-bottom: var(--sidebar-entry-margin);
   display: flex;
   padding: var(--sidebar-entry-padding);
-  transition: 
+  text-decoration: none;
+  transition:
     background-color var(--fast-transition-time),
     border-color var(--fast-transition-time);
 

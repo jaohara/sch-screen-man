@@ -4,6 +4,14 @@ import {
 } from 'react'
 import styles from './App.module.scss';
 
+import { Routes, Route } from "react-router";
+
+import Layout from './layouts/Layout.jsx';
+import DashboardPage from './pages/DashboardPage/DashboardPage.jsx';
+import ContentPage from './pages/ContentPage/ContentPage.jsx';
+import SchedulePage from './pages/SchedulePage/SchedulePage.jsx';
+import SettingsPage from './pages/SettingsPage/SettingsPage.jsx';
+
 import SideBar from './components/SideBar/SideBar.jsx';
 import MenuBar from './components/MenuBar/MenuBar.jsx';
 import ScreenGroup from './components/ScreenGroup/ScreenGroup';
@@ -76,19 +84,33 @@ function App() {
   );
 
   return (
-    <div className={styles.app}>
-      <SideBar />
+    // <div className={styles.app}>
+    //   <SideBar />
 
-      <MenuBar 
-        activeScreenGroup={activeScreenGroup}
-        screenGroupMetaData={screenGroupMetaData}
-        setActiveScreenGroup={setActiveScreenGroup}
-      />
+    //   {/* <MenuBar 
+    //     activeScreenGroup={activeScreenGroup}
+    //     screenGroupMetaData={screenGroupMetaData}
+    //     setActiveScreenGroup={setActiveScreenGroup}
+    //   /> */}
 
-      <div className={styles["main-container"]}>
-        {currentScreenGroupJSX}
-      </div>
-    </div>
+    //   <div className={styles["main-container"]}>
+    //     {/* <MenuBar 
+    //       activeScreenGroup={activeScreenGroup}
+    //       screenGroupMetaData={screenGroupMetaData}
+    //       setActiveScreenGroup={setActiveScreenGroup}
+    //     />
+    //     {currentScreenGroupJSX} */}
+
+    //   </div>
+    // </div>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<DashboardPage />} />
+        <Route path="content" element={<ContentPage />} />
+        <Route path="schedule" element={<SchedulePage />} />
+        <Route path="settings" element={<SettingsPage />} />
+      </Route>
+    </Routes>
   );
 }
 

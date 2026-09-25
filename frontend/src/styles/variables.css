@@ -70,6 +70,7 @@
   --button-hover-text-color: var(--onyx);
   --button-text-color: var(--onyx);
   --menu-bar-background-color: var(--light-200);
+  --menu-bar-group-icon-background-color: var(--light-100);
   --menu-button-active-background-color: var(--light-100);
   --menu-button-active-border-color: var(--light-400);
   --panel-background-color: var(--light-200);

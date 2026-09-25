@@ -57,6 +57,9 @@ export default function MenuBar ({
           className={styles["menu-bar-group-icon"]}
         >
           <FaTags />
+          <span className={styles["menu-bar-group-label"]}>
+            Groups:
+          </span>
         </li>
         {menuBarButtonJSX}
       </ul>

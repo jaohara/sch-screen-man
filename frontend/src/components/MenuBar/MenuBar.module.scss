@@ -54,5 +54,21 @@
 }
 
 .menu-bar-group-icon {
+  align-items: center;
+  background-color: var(--menu-bar-group-icon-background-color);
+  // background-color: red;
+  border: 1px solid transparent;
+  border-radius: var(--common-border-radius);
+  display: flex;
+  font-size: .85rem;
+  font-weight: bold;
+  // padding: var(--menu-button-padding-vertical) 0rem;
+  justify-content: center;
+  padding: var(--common-padding);
+  margin: 0rem var(--common-margin);
+  // width: 3.25rem;
+}
 
+.menu-bar-group-label {
+  margin-left: .5rem;
 }

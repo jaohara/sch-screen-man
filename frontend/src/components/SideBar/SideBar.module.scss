@@ -98,11 +98,17 @@
 .sidebar-entry-label {
   font-size: .8rem;
   font-weight: bold;
+  max-width: 0;
   opacity: 0;
-  transition: opacity var(--normal-transition-time);
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    opacity var(--normal-transition-time),
+    max-width var(--normal-transition-time);
 }
 
 .open .sidebar-entry-label {
+  max-width: 10rem;
   opacity: 1.0;
 }
 

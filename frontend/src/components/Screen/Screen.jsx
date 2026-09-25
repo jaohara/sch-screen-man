@@ -6,7 +6,7 @@ import {
 
 import styles from "./Screen.module.scss";
 
-import Button from '../Button/Button';
+import Button from '@/components/Button/Button';
 
 import {
   FaChartColumn,
@@ -21,12 +21,12 @@ import {
   FaTerminal,
 } from "react-icons/fa6";
 
-import useScreenHealth, { STATUS } from '../../hooks/useScreenHealth';
-import useScreenStats, { 
-  celsiusToFahrenheit, 
+import useScreenHealth, { STATUS } from '@/hooks/useScreenHealth';
+import useScreenStats, {
+  celsiusToFahrenheit,
   formatMemory,
-  formatUptime, 
-} from '../../hooks/useScreenStats';
+  formatUptime,
+} from '@/hooks/useScreenStats';
 
 const icons = {
   "disk": (<FaDatabase />),

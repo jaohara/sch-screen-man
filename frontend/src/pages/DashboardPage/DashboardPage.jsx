@@ -5,12 +5,12 @@ import {
 
 import styles from './DashboardPage.module.scss';
 
-import MenuBar from '../../components/MenuBar/MenuBar';
-import ScreenGroup from '../../components/ScreenGroup/ScreenGroup';
+import MenuBar from '@/components/MenuBar/MenuBar';
+import ScreenGroup from '@/components/ScreenGroup/ScreenGroup';
 
 import { groupMetaData as screenGroupMetaData, piConfig } from '../../../pi-conf.js';
 
-import { UNGROUPED_SCREEN_STRING } from '../../constants.js';
+import { UNGROUPED_SCREEN_STRING } from '@/constants.js';
 
 function debugLog(location, message, loggedData) {
   console.log(`DashboardPage::${location}::${message}`);

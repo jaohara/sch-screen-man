@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import styles from "./ScreenGroup.module.scss";
 
-import Screen from '../Screen/Screen';
+import Screen from '@/components/Screen/Screen';
 
 function ScreenGroup ({
   // metadata object for each screen group

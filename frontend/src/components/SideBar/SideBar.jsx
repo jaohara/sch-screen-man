@@ -70,7 +70,6 @@ export default function SideBar ({}) {
         className={styles["sidebar-toggle"]}
         onClick={handleSidebarToggleClick}
       >
-        {/* Handle open state styling with css rule matching parent (.sidebar.open) */}
         <div className={styles["sidebar-toggle-icon"]}>
           {ICONS["toggle"]}
         </div>

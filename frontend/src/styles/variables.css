@@ -67,7 +67,7 @@
   --button-border-color: var(--light-300);
   --button-disabled-border-color: white;
   --button-hover-background-color: var(--light-100);
-  --button-hover-border-color: var(--blue);
+  --button-hover-border-color: var(--light-300);
   --button-hover-text-color: var(--onyx);
   --button-text-color: var(--onyx);
   --menu-bar-background-color: var(--light-200);

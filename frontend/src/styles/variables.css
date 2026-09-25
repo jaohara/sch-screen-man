@@ -19,6 +19,7 @@
   --menu-button-padding-vertical: var(--common-padding);
   --screen-group-header-font-size: 1.4rem;
   --screen-margin: .25rem;
+  --screen-icon-svg-size: 14px;
   --screen-image-width: 200px;
   --screen-image-height: calc(var(--screen-width) * var(--ratio-height-to-width-16-9));
   --screen-status-size: 12px;

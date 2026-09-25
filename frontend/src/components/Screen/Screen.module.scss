@@ -270,3 +270,13 @@
     opacity: 1;
   }
 }
+
+
+// SVG Icon rendering fix
+.screen-info-hostname-icon svg,
+.screen-description-icon-container svg,
+.entry-header svg {
+  display: block;
+  width: var(--screen-icon-svg-size);
+  height: var(--screen-icon-svg-size);
+}

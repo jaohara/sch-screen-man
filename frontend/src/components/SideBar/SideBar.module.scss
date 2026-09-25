@@ -48,6 +48,8 @@
 
 .sidebar-toggle-icon svg {
   transition: transform var(--normal-transition-time);
+  // force rasterization to fix rendering issues
+  transform: translateZ(0);
 }
 
 .open .sidebar-toggle {

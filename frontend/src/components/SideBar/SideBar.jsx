@@ -55,7 +55,7 @@ const sidebarItems = [
 
 export default function SideBar ({}) {
   // TODO: This will probably be handled by the router 
-  const [ currentTab, setCurrentTab ] = useState(sidebarItems[0].label); 
+  const [ currentTab, setCurrentTab ] = useState(sidebarItems[0].name); 
 
   const { sidebarOpen } = useUIState();
   const dispatch = useUIDispatch();

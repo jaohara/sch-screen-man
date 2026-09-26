@@ -26,6 +26,12 @@ app.use('/api', apiRoutes);
 // serve static files from ./public
 app.use(express.static('public'));
 
+// client-side routing: any other GET falls through to the SPA shell so
+// react-router can handle the path (e.g. a refresh on /content)
+app.get(/^(?!\/api).*/, (req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
 app.listen(port, () => {
   console.log(`Express server listening at http://localhost:${port}`);
 });

@@ -1,14 +1,14 @@
 .screen {
   background-color: var(--screen-background-color);
-  // box-shadow: var(--small-box-shadow-raised);
-  // border: var(--common-border-size) solid var(--border-color);
+  box-shadow: var(--small-box-shadow-raised);
+  border: var(--container-border-size) solid var(--border-color);
   border-radius: var(--common-border-radius);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   justify-content: space-between;
   // min-height: 33vh;
-  min-height: 512px;
+  min-height: 576px;
   margin: var(--screen-margin);
   padding: var(--common-padding);
   // width should be 
@@ -269,4 +269,14 @@
   50% {
     opacity: 1;
   }
+}
+
+
+// SVG Icon rendering fix
+.screen-info-hostname-icon svg,
+.screen-description-icon-container svg,
+.entry-header svg {
+  display: block;
+  width: var(--screen-icon-svg-size);
+  height: var(--screen-icon-svg-size);
 }

@@ -1,4 +1,4 @@
-export const APP_TITLE = "Stoup Capitol Hill Screen Manager";
+export const APP_TITLE = "Menu Screen Manager";
 // TODO: Change to production URL
 // export const BACKEND_BASE_URL = "http://localhost:3000";
 // TODO: Change to static server ip on LAN
@@ -20,7 +20,6 @@ export const REBOOT_TIMEOUT = 180000;
 export const REQUEST_TIMEOUT = 10000; 
 export const STATS_REQUEST_TIMEOUT = 15000;
 export const STATS_ROUTE = "/api/stats";
-// New - interval for requesting stats like host memory usage
-export const STATS_INTERVAL = 300000;
+export const STATS_INTERVAL = 15000;
 export const UNGROUPED_SCREEN_STRING = "Ungrouped";
 export const UPTIME_ROUTE = "/api/uptime";

@@ -5,7 +5,7 @@ import {
   STATS_REQUEST_TIMEOUT,
   STATS_ROUTE,
   STATS_INTERVAL,
-} from '../constants';
+} from '@/constants';
 
 const STATS_URL = `${BACKEND_BASE_URL}${STATS_ROUTE}`;
 

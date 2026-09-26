@@ -1,0 +1,117 @@
+.sidebar {
+  // background-color: var(--sidebar-background-color);
+  background-color: var(--sidebar-background-color);
+  border: var(--container-border-size) solid var(--border-color);
+  border-bottom-right-radius: var(--common-border-radius);
+  border-top-right-radius: var(--common-border-radius);
+  padding: var(--common-padding);
+  position: fixed;
+  // height: 90vh;
+  height: calc(100vh - calc(var(--common-margin) * 2));
+  top: var(--common-margin);
+  transform: width var(--normal-transition-time);
+  z-index: 50;
+
+  //test
+  width: 4.5rem;
+
+  &.open {
+    width: 14rem;
+  }
+
+  &.open .sidebar-toggle-icon svg {
+    transform: rotate(180deg);
+  }
+}
+
+.sidebar-toggle {
+  border-radius: var(--common-border-radius);
+  border: 1px solid;
+  border-color: transparent;
+  display: flex;
+  padding: var(--sidebar-entry-padding);
+  margin-bottom: var(--sidebar-entry-margin);
+  justify-content: flex-end;
+  transition: 
+    background-color var(--fast-transition-time),
+    border-color var(--fast-transition-time);
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--sidebar-entry-active-color);
+  }
+}
+
+.sidebar-toggle-icon {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-toggle-icon svg {
+  transition: transform var(--normal-transition-time);
+  // force rasterization to fix rendering issues
+  transform: translateZ(0);
+}
+
+.open .sidebar-toggle {
+  // background-color: red;
+}
+
+.sidebar-entry {
+  align-items: center;
+  background-color: transparent;
+  border-radius: var(--common-border-radius);
+  border: 1px solid;
+  border-color: transparent;
+  color: inherit;
+  margin-bottom: var(--sidebar-entry-margin);
+  display: flex;
+  padding: var(--sidebar-entry-padding);
+  text-decoration: none;
+  transition:
+    background-color var(--fast-transition-time),
+    border-color var(--fast-transition-time);
+
+  &:last-child {
+    margin-bottom: 0rem;
+  }
+
+  &:hover {
+    background-color: var(--sidebar-entry-hover-color);
+    // border-color: var(--sidebar-entry-selected-border-color);
+    cursor: pointer;
+  }
+
+  &.active {
+    background-color: var(--sidebar-entry-active-color);
+    // border-color: var(--sidebar-entry-selected-border-color);
+  }
+}
+
+.sidebar-entry-icon {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+}
+
+.open .sidebar-entry-icon {
+  padding-right: var(--common-padding);
+}
+
+.sidebar-entry-label {
+  font-size: .8rem;
+  font-weight: bold;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    opacity var(--normal-transition-time),
+    max-width var(--normal-transition-time);
+}
+
+.open .sidebar-entry-label {
+  max-width: 10rem;
+  opacity: 1.0;
+}
+

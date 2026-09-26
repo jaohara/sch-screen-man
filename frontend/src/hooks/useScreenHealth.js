@@ -15,7 +15,7 @@ import {
   PING_INTERVAL_REBOOT,   // new: e.g. 2000 — tight only while we're waiting on a boot
   PING_INTERVAL_REBOOT_INITIAL, // initial reboot delay to ensure host's network drops
   REBOOT_TIMEOUT,
-} from '../constants';
+} from '@/constants';
 
 const PING_URL = `${BACKEND_BASE_URL}${PING_ROUTE}`;
 const REBOOT_URL = `${BACKEND_BASE_URL}${REBOOT_ROUTE}`;

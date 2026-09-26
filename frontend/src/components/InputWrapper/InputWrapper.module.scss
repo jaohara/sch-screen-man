@@ -1,0 +1,13 @@
+.input-wrapper {
+  width: 100%;
+}
+
+.label {
+  align-items: center;
+  color: var(--input-label-color);
+  display: flex;
+  font-size: .8rem;
+  justify-content: space-between;
+  user-select: none;
+  font-weight: bold;
+}

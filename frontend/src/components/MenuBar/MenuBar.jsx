@@ -1,9 +1,11 @@
-import React from 'react';
-
 import styles from "./MenuBar.module.scss";
 
+import { 
+  FaRegImages,
+  FaTags,
+ } from 'react-icons/fa6';
 
-function MenuBar ({
+export default function MenuBar ({
   activeScreenGroup,
   screenGroupMetaData,
   setActiveScreenGroup,
@@ -26,7 +28,10 @@ function MenuBar ({
 
       if (!currentScreenGroupMetaData.hidden) {
         return (
-          <li key={`screen-group-{index}`}>
+          <li
+            className={styles["menu-bar-list-item"]} 
+            key={`screen-group-{index}`}
+          >
             <button 
               className={`
                 ${styles["menu-bar-button"]} ${
@@ -45,11 +50,19 @@ function MenuBar ({
 
   return (
     <div className={styles["menu-bar"]}>
+      {/* <div className={styles["menu-bar-group-icon"]}>
+      </div> */}
       <ul>
+        <li 
+          className={styles["menu-bar-group-icon"]}
+        >
+          <FaTags />
+          <span className={styles["menu-bar-group-label"]}>
+            Groups:
+          </span>
+        </li>
         {menuBarButtonJSX}
       </ul>
     </div>
   );
 }
-
-export default MenuBar;

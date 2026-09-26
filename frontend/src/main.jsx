@@ -4,8 +4,20 @@ import App from './App.jsx';
 import './styles/style.css';
 import './styles/variables.css';
 
+import { BrowserRouter } from "react-router";
+
+import { SettingsProvider } from './context/SettingsContext.jsx';
+import { UIStateProvider } from './context/UIContext.jsx';
+
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <SettingsProvider>
+      <UIStateProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </UIStateProvider>
+    </SettingsProvider>
   </React.StrictMode>,
 );

@@ -1,0 +1,15 @@
+.panel {
+  border-radius: var(--common-border-radius);
+  background-color: var(--panel-background-color);
+  // TODO: Revisit idea with borders here - add to 
+  border: var(--container-border-size) solid var(--light-300);
+  display: flex;
+  flex-direction: column;
+  padding: var(--panel-padding);
+  max-height: var(--panel-max-height);
+  width: var(--panel-desktop-width);
+}
+
+.panel.max-height {
+  height: var(--panel-max-height);
+}

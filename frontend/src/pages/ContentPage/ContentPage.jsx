@@ -40,8 +40,38 @@ export default function ContentPage () {
   const [ newContentURL, setNewContentURL ] = useState("");
   const [ currentContent, setCurrentContent ] = useState(TEST_CONTENT);
 
-  const handleAddContentClick = () => {
+  const [ contentNameHasError, setContentNameHasError ] = useState(false);
+  const [ contentURLHasError, setContentURLHasError ] = useState(false);
 
+  const handleAddContentClick = () => {
+    let hasError = false;
+
+    if (!newContentName || newContentName === "") {
+      setContentNameHasError(true);
+      hasError = true;
+    }
+
+    if (!newContentURL || newContentURL === "") {
+      setContentURLHasError(true);
+      hasError = true;
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    setContentNameHasError(false);
+    setContentURLHasError(false);
+    setNewContentName("");
+    setNewContentURL("");
+
+    const newContent = {
+      name: newContentName,
+      url: newContentURL,
+      screens: [],
+    };
+
+    setCurrentContent([...currentContent, newContent]);
   };
 
   return (
@@ -56,6 +86,7 @@ export default function ContentPage () {
         </p>
         <InputContainer>
           <TextInput 
+            error={contentNameHasError}
             label={"Name"}
             value={newContentName}
             setValue={setNewContentName}
@@ -64,6 +95,7 @@ export default function ContentPage () {
 
         <InputContainer noBorder>
           <TextInput 
+            error={contentURLHasError}
             label={"URL"}
             value={newContentURL}
             setValue={setNewContentURL}

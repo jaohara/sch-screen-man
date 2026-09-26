@@ -44,14 +44,16 @@ export default function SettingsPage () {
       <Card>
         <InputContainer>
           <ToggleSlider 
+            disabled={settingsLocked}
             label={"Display screen Temperatures in Fahrenheit?"}
             value={fahrenheitTemps}
             onClick={handleFahrenheitToggle}
-          />
+            />
         </InputContainer>
 
         <InputContainer>
           <TextInput 
+            disabled={settingsLocked}
             label={"Memory usage warning threshold? (%)"}
             type={"number"}
             value={memoryWarnPercent}
@@ -61,6 +63,7 @@ export default function SettingsPage () {
 
         <InputContainer>
           <TextInput 
+            disabled={settingsLocked}
             label={"Memory usage urgent threshold? (%)"}
             type={"number"}
             value={memoryUrgentPercent}

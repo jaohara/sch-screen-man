@@ -5,8 +5,15 @@
   background-color: var(--slider-background-color);
   // border: 1px solid var(--input-border-color);
   border-radius: 16px;
+  opacity: 1.0;
   padding: 4px;
-  transition: background-color var(--normal-transition-time);
+  transition: 
+    background-color var(--normal-transition-time),
+    opacity var(--normal-transition-time);
+}
+
+.disabled {
+  opacity: var(--input-disabled-opacity);
 }
 
 .slider-wrapper.toggled {
@@ -16,6 +23,11 @@
 
 .slider-wrapper:hover { 
   cursor: pointer;
+
+}
+
+.slider-wrapper.disabled:hover {
+  cursor:not-allowed;
 }
 
 .pip {

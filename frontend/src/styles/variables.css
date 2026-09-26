@@ -90,6 +90,7 @@
   --button-text-color: var(--onyx);
   --card-background-color: var(--light-100);
   --checkbox-checked-color: var(--blue);
+  --content-screen-badge-color: var(--light-200);
   /* --input-background-color: var(--light-100); */
   --dropdown-icon-hover-color: var(--light-400);
   --dropdown-option-hover-background-color: var(--light-200);
@@ -134,6 +135,8 @@
   --slider-background-color: var(--light-300);
   --slider-background-toggled-color: var(--blue);
   --text-color: var(--onyx);
+
+  --input-disabled-opacity: 0.5;
   
   /* Common Values */
   --small-box-shadow: 0px 2px 4px var(--shadow-color);
@@ -148,16 +151,17 @@
     /* --border-color: var(--white); */
     --border-color: var(--med-gray);
     --button-background-color: var(--light-gray);
-  /* --button-border-color: var(--blue); */
+    /* --button-border-color: var(--blue); */
     --button-border-color: var(--light-gray);
     --button-hover-background-color: var(--light-gray);
-    --button-hover-border-color: var(--light-300);
+    --button-hover-border-color: var(--lighter-gray);
     --button-hover-text-color: var(--light-100);
     --button-text-color: var(--light-100);
     --card-background-color: var(--dark-gray);
+    --content-screen-badge-color: var(--light-gray);
     --input-background-color: var(--med-gray);
     --input-border-color: var(--light-gray);
-    --input-border-hover-color: var(--dark-gray);
+    --input-border-hover-color: var(--lighter-gray);
     --input-container-border-color: var(--med-gray);
     --input-label-color: var(--light-100);
     --lock-header-toggle-background-color: var(--dark-gray);

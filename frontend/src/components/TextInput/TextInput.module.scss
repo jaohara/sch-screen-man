@@ -4,8 +4,11 @@
   border-color: var(--input-border-color);
   border-radius: var(--common-border-radius);
   font-size: var(--input-font-size);
+  opacity: 1.0;
   padding: var(--input-padding);
-  transition: border-color var(--normal-transition-time);
+  transition: 
+    border-color var(--normal-transition-time),
+    opacity var(--normal-transition-time);
   width: var(--input-width);
 
   &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
@@ -16,6 +19,10 @@
   &[type="number"] {
     -moz-appearance: textfield;
   }
+}
+
+.input.disabled {
+  opacity: var(--input-disabled-opacity);
 }
 
 .input.numeric {
@@ -41,4 +48,9 @@
 
 .input:hover {
   border-color: var(--input-border-hover-color);
+}
+
+.input.disabled:hover {
+  border-color: var(--input-border-color);
+  cursor: default;
 }

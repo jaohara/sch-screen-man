@@ -75,16 +75,14 @@ export default function ContentPage () {
   };
 
   return (
-    <Panel>
-      <h1>Content</h1>
-      <p>
-      </p>
+    <Panel maxHeight>
+      <h1>Content Management</h1>
       <Card>
-        <h2>Add Content</h2>
-        <p>
+        {/* <h2>Add Content</h2> */}
+        {/* <p>
           Add pages (menus, advertisements, etc.) to show on screens.
-        </p>
-        <InputContainer>
+        </p> */}
+        <InputContainer noTopPadding>
           <TextInput 
             error={contentNameHasError}
             label={"Name"}
@@ -102,7 +100,7 @@ export default function ContentPage () {
           />
         </InputContainer>
 
-        <InputContainer>
+        <InputContainer noBottomPadding >
           <Button
             icon="add"
             label={"Add Content"}
@@ -112,8 +110,7 @@ export default function ContentPage () {
         </InputContainer>
       </Card>
 
-      <Card>
-        <h2>Current Content</h2>
+      <Card scrollOverflow grow>
         {
           // TODO: include edge cases (no content added, currentContent is null)
           currentContent && currentContent.map((content) => (

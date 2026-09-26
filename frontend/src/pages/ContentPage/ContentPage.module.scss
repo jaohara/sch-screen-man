@@ -3,8 +3,13 @@
   border-color: var(--input-container-border-color);
   padding: 1rem 0rem;
 
+  &:first-of-type {
+    padding-top: 0rem;
+  }
+
   &:last-of-type {
     border-bottom: 0px solid;
+    padding-bottom: 0rem;
   }
 }
 

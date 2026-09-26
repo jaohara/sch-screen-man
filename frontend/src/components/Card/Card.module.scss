@@ -9,3 +9,11 @@
     margin-bottom: 0rem;
   }
 }
+
+.grow {
+  flex-grow: 1;
+}
+
+.card.scroll-overflow {
+  overflow-y: scroll;
+}

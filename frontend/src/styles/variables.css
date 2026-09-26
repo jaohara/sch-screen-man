@@ -28,7 +28,7 @@
   --lock-header-icon-size: 20px;
   --menu-button-padding-vertical: var(--common-padding);
   --panel-desktop-width: 768px;
-  --panel-max-height: 80vh;
+  --panel-max-height: calc(100vh - var(--common-margin) * 2);
   /* --panel-padding: 1.5rem; */
   --panel-padding: 2rem;
   --screen-group-header-font-size: 1.4rem;

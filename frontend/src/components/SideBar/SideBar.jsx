@@ -13,6 +13,7 @@ import {
   FaDisplay,
   FaGauge,
   FaGear,
+  FaObjectGroup,
   FaSliders,
   FaRectangleList,
 } from "react-icons/fa6";
@@ -23,6 +24,7 @@ const ICONS = {
   // "content": (<FaRectangleList />),
   // TODO: Maybe not the best - return to this later
   "content": (<FaDisplay />),
+  "components": (<FaObjectGroup />),
   "schedule": (<FaClock />),
   // "settings": (<FaGear />),
   "settings": (<FaSliders />),
@@ -55,6 +57,15 @@ const sidebarItems = [
     icon: ICONS["settings"],
     path: "/settings",
   },
+  // ================================
+  // Test Page for Demoing Components
+  {
+    name: "components",
+    label: "Components",
+    icon: ICONS["components"],
+    path: "/components",
+  },
+  // ================================
 ];
 
 export default function SideBar ({}) {

@@ -18,6 +18,10 @@
   }
 }
 
+.input.numeric {
+  font-family: monospace;
+}
+
 .input.error { 
   border-color: var(--input-error-border-color);
 }

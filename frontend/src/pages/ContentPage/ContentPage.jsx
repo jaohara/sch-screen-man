@@ -11,6 +11,11 @@ import DropdownMenu from "@/components/DropdownMenu/DropdownMenu";
 import CheckBox from "@/components/CheckBox/CheckBox";
 import ToggleSlider from "@/components/ToggleSlider/ToggleSlider";
 
+import {
+  FaDisplay,
+  FaLink,
+} from "react-icons/fa6";
+
 const TEST_CONTENT = [
   {
     name: "Example Content 1",
@@ -35,14 +40,20 @@ export default function ContentPage () {
   const [ newContentURL, setNewContentURL ] = useState("");
   const [ currentContent, setCurrentContent ] = useState(TEST_CONTENT);
 
+  const handleAddContentClick = () => {
+
+  };
+
   return (
     <Panel>
-      <h1>Content Page</h1>
+      <h1>Content</h1>
       <p>
-        I'm going to use this panel to test the UI components.
       </p>
       <Card>
         <h2>Add Content</h2>
+        <p>
+          Add pages (menus, advertisements, etc.) to show on screens.
+        </p>
         <InputContainer>
           <TextInput 
             label={"Name"}
@@ -51,7 +62,7 @@ export default function ContentPage () {
           />
         </InputContainer>
 
-        <InputContainer>
+        <InputContainer noBorder>
           <TextInput 
             label={"URL"}
             value={newContentURL}
@@ -61,13 +72,16 @@ export default function ContentPage () {
 
         <InputContainer>
           <Button
+            icon="add"
             label={"Add Content"}
+            onClick={handleAddContentClick}
+            smallText
           />
         </InputContainer>
       </Card>
 
       <Card>
-        <h2>Content</h2>
+        <h2>Current Content</h2>
         {
           // TODO: include edge cases (no content added, currentContent is null)
           currentContent && currentContent.map((content) => (
@@ -89,14 +103,14 @@ function ContentItem ({ content }) {
       <h1 className={styles["content-item-name"]}>{name}</h1>
       
       <div className={styles["content-item-url"]}>
-        <span className={styles["content-url-label"]}>URL: </span>
+        <span className={styles["content-url-label"]}><FaLink />&nbsp;:</span>
         <span className={styles["content-url"]}>
           <a href={url}>{url}</a>
         </span>
       </div>
 
       <div className={styles["content-item-screens"]}>
-        <span className={styles["content-screens-label"]}>Used by: </span>
+        <span className={styles["content-screens-label"]}><FaDisplay />&nbsp;:</span>
         {
           screens && screens.length > 0 ? screens.map((name, index) => (
             <span

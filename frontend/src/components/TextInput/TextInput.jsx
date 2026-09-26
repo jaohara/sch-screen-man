@@ -33,6 +33,7 @@ export default function TextInput ({
           ${styles["input"]}
           ${small ? styles["small"] : ""}
           ${hasError() ? styles["error"] : ""}
+          ${inputType === "number" ? styles["numeric"] : ""}
         `}
         type={inputType}
         onChange={(e) => setValue(e.target.value)}

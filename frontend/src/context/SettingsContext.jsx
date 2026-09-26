@@ -2,6 +2,8 @@ import { createContext, use, useReducer } from "react";
 
 const DEFAULTS = {
   fahrenheitTemps: true,
+  memoryWarnPercent: 85,
+  memoryUrgentPercent: 95,
 };
 
 // TODO: Load settings from persistent storage later, for now use defaults

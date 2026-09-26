@@ -64,7 +64,7 @@ export default function ComponentPage () {
   return (
     <Panel>
       <h1>Component Test</h1>
-      
+
       <Card>
         <h1>Inputs</h1>
         <p>
@@ -93,7 +93,8 @@ export default function ComponentPage () {
           <ToggleSlider 
             label="Toggle Slider"
             value={toggle}
-            setValue={setToggle}
+            // setValue={setToggle}
+            onClick={(e) => setToggle(!toggle)}
           />
         </InputContainer>
 

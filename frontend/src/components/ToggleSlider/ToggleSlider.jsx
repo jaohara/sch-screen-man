@@ -4,6 +4,7 @@ import InputWrapper from "../InputWrapper/InputWrapper";
 
 export default function ToggleSlider ({
   label,
+  onClick,
   setValue,
   value,
 }) {
@@ -14,7 +15,8 @@ export default function ToggleSlider ({
           ${styles["slider-wrapper"]}
           ${value && styles["toggled"]}  
         `}
-        onClick={() => setValue(!value)}
+        // onClick={() => setValue(!value)}
+        onClick={onClick}
       >
         <div 
           className={styles["pip"]}

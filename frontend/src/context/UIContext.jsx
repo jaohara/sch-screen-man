@@ -2,6 +2,7 @@ import { createContext, use, useReducer } from "react";
 
 const DEFAULTS = {
   sidebarOpen: false,
+  settingsLocked: false,
 };
 
 // TODO: Load ui state from persistent storage later, for now use defaults

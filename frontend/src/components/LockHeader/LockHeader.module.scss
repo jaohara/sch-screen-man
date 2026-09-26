@@ -1,0 +1,27 @@
+.lock-header {
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  margin-bottom: 22px;
+}
+
+.lock-header h1 {
+  margin-bottom: 0rem;
+}
+
+.lock-header svg {
+  height: var(--lock-header-icon-size);
+  width: var(--lock-header-icon-size);
+}
+
+.toggle-container {
+  border-radius: var(--common-border-radius);
+  background-color: var(--lock-header-toggle-background-color);
+  align-items: center;
+  display: flex;
+  padding: .5rem 1rem;
+  
+  & svg:first-of-type {
+    margin-right: .5rem;
+  }
+}

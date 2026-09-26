@@ -25,6 +25,7 @@
   --input-padding: .5rem;
   --input-width: 50%;
   --input-small-fixed-width: 6rem;
+  --lock-header-icon-size: 20px;
   --menu-button-padding-vertical: var(--common-padding);
   --panel-desktop-width: 768px;
   --panel-max-height: 80vh;
@@ -100,6 +101,7 @@
   --input-border-focus-color: var(--blue);
   --input-container-border-color: var(--light-200);
   --input-label-color: var(--lighter-gray);
+  --lock-header-toggle-background-color: var(--light-100);
   --menu-bar-background-color: var(--light-200);
   --menu-bar-group-icon-background-color: var(--light-100);
   --menu-button-active-background-color: var(--light-100);
@@ -158,6 +160,7 @@
     --input-border-hover-color: var(--dark-gray);
     --input-container-border-color: var(--med-gray);
     --input-label-color: var(--light-100);
+    --lock-header-toggle-background-color: var(--dark-gray);
     --menu-bar-background-color: var(--med-gray);
     --menu-bar-group-icon-background-color: var(--light-gray);
     --menu-button-active-background-color: var(--light-gray);

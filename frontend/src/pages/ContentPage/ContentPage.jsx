@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import styles from "./ContentPage.module.scss";
+
 import Panel from "@/components/Panel/Panel";
 import Card from "@/components/Card/Card";
 import InputContainer from "@/components/InputContainer/InputContainer";
@@ -9,125 +11,105 @@ import DropdownMenu from "@/components/DropdownMenu/DropdownMenu";
 import CheckBox from "@/components/CheckBox/CheckBox";
 import ToggleSlider from "@/components/ToggleSlider/ToggleSlider";
 
-const DROPDOWN_OPTIONS = [
+const TEST_CONTENT = [
   {
-    label: "One",
-    value: "one",
+    name: "Example Content 1",
+    url: "https://google.com",
+    screens: ["Test Screen 1", "Test Screen 2"],
   },
   {
-    label: "Two",
-    value: "two",
+    name: "Example Content 2",
+    url: "https://google.com",
+    screens: ["Test Screen 1",],
   },
   {
-    label: "Three",
-    value: "three",
-  },
-  {
-    label: "Four",
-    value: "four",
-  },
-  {
-    label: "Five",
-    value: "five",
-  },
-  {
-    label: "Six",
-    value: "six",
-  },
-  {
-    label: "Seven",
-    value: "seven",
-  },
-  {
-    label: "Eight",
-    value: "eight",
-  },
-  {
-    label: "Nine",
-    value: "nine",
-  },
-  {
-    label: "Ten",
-    value: "ten",
+    name: "Example Content 3",
+    url: "https://google.com",
+    screens: ["Test Screen 2", "Test Screen 3"],
   },
 ];
 
-export default function ContentPage () {
-  const [ text, setText ] = useState("");
-  const [ num, setNum ] = useState("");
-  const [ toggle, setToggle ] = useState(false);
-  const [ check1, setCheck1 ] = useState(false);
-  const [ check2, setCheck2 ] = useState(true);
-  const [ dropdownValue, setDropdownValue ] = useState(DROPDOWN_OPTIONS[0]);
 
+export default function ContentPage () {
+  const [ newContentName, setNewContentName ] = useState("");
+  const [ newContentURL, setNewContentURL ] = useState("");
+  const [ currentContent, setCurrentContent ] = useState(TEST_CONTENT);
 
   return (
     <Panel>
-      <h1>Content Page - Component Test</h1>
+      <h1>Content Page</h1>
       <p>
         I'm going to use this panel to test the UI components.
       </p>
       <Card>
-        <h1>Inputs</h1>
-        <p>
-          These are the inputs that the app needs.
-        </p>
-
+        <h2>Add Content</h2>
         <InputContainer>
           <TextInput 
-            label="Text Input"
-            value={text}
-            setValue={setText}
+            label={"Name"}
+            value={newContentName}
+            setValue={setNewContentName}
           />
         </InputContainer>
 
         <InputContainer>
           <TextInput 
-            label="Number Input"
-            value={num}
-            setValue={setNum}
-            type="number"
-            small
+            label={"URL"}
+            value={newContentURL}
+            setValue={setNewContentURL}
           />
         </InputContainer>
 
         <InputContainer>
-          <ToggleSlider 
-            label="Toggle Slider"
-            value={toggle}
-            setValue={setToggle}
+          <Button
+            label={"Add Content"}
           />
         </InputContainer>
+      </Card>
 
-        <InputContainer>
-          <CheckBox 
-            label="Checkbox 1"
-            checked={check1}
-            setChecked={setCheck1}
-          />
-        </InputContainer>
-
-        <InputContainer>
-          <CheckBox 
-            label="Checkbox 2"
-            checked={check2}
-            setChecked={setCheck2}
-          />
-        </InputContainer>
-
-        <InputContainer noBorder={true}>
-          <DropdownMenu 
-            label="Dropdown"
-            options={DROPDOWN_OPTIONS}
-            value={dropdownValue}
-            setValue={setDropdownValue}
-          />
-        </InputContainer>
-
-        <InputContainer>
-          <Button />
-        </InputContainer>
+      <Card>
+        <h2>Content</h2>
+        {
+          // TODO: include edge cases (no content added, currentContent is null)
+          currentContent && currentContent.map((content) => (
+            <ContentItem
+              content={content}
+            />
+          ))
+        }
       </Card>
     </Panel>
   );
+}
+
+function ContentItem ({ content }) {
+  const { name, url, screens } = content;
+
+  return (
+    <div className={styles["content-item"]}>
+      <h1 className={styles["content-item-name"]}>{name}</h1>
+      
+      <div className={styles["content-item-url"]}>
+        <span className={styles["content-url-label"]}>URL: </span>
+        <span className={styles["content-url"]}>
+          <a href={url}>{url}</a>
+        </span>
+      </div>
+
+      <div className={styles["content-item-screens"]}>
+        <span className={styles["content-screens-label"]}>Used by: </span>
+        {
+          screens && screens.length > 0 ? screens.map((name, index) => (
+            <span
+              className={styles["content-item-screen-name"]}
+              key={`content-item-screen-${index}`}
+            >
+              {name}
+            </span>
+          )) : (
+            <span className={styles["content-screens-none"]}>None</span>
+          )
+        }
+      </div>
+    </div>
+  )
 }

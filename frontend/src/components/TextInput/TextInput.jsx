@@ -2,17 +2,40 @@ import styles from "./TextInput.module.scss";
 
 import InputWrapper from "../InputWrapper/InputWrapper";
 
+const ALLOWED_INPUT_TYPES  = ["text", "number", "password", ]
+const DEFAULT_TYPE = "text";
+
 export default function TextInput ({
   label,
   setValue,
+  small = false,
+  type = DEFAULT_TYPE,
   value,
 }) {
+  const inputType = ALLOWED_INPUT_TYPES.includes(type) ? type : DEFAULT_TYPE;
+
+  const hasError = () => {
+    if (type === "number") {
+      if (value === "") {
+        return false;
+      }
+
+      return isNaN(Number(value));
+    }
+
+    return false;
+  }
+
   return (
     <InputWrapper label={label}>
       <input
-        className={`${styles["input"]}`}
-        type="text"
-        onChange={(e) => setValue(e.value)}
+        className={`
+          ${styles["input"]}
+          ${small ? styles["small"] : ""}
+          ${hasError() ? styles["error"] : ""}
+        `}
+        type={inputType}
+        onChange={(e) => setValue(e.target.value)}
         value={value}
       />
     </InputWrapper>

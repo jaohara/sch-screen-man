@@ -7,6 +7,23 @@
   padding: var(--input-padding);
   transition: border-color var(--normal-transition-time);
   width: var(--input-width);
+
+  &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+.input.error { 
+  border-color: var(--input-error-border-color);
+}
+
+.input.small {
+  width: var(--input-small-fixed-width);
 }
 
 .input:focus-visible {

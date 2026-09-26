@@ -86,6 +86,8 @@ export default function ContentPage () {
             label="Number Input"
             value={num}
             setValue={setNum}
+            type="number"
+            small
           />
         </InputContainer>
 
@@ -100,16 +102,16 @@ export default function ContentPage () {
         <InputContainer>
           <CheckBox 
             label="Checkbox 1"
-            value={check1}
-            setValue={setCheck1}
+            checked={check1}
+            setChecked={setCheck1}
           />
         </InputContainer>
 
         <InputContainer>
           <CheckBox 
             label="Checkbox 2"
-            value={check2}
-            setValue={setCheck2}
+            checked={check2}
+            setChecked={setCheck2}
           />
         </InputContainer>
 

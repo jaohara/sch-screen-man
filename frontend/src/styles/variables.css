@@ -11,6 +11,8 @@
   --button-min-width: 48px;
   --button-padding: .6rem 1.2rem;
   --button-icon-right-margin: .5em;
+  --checkbox-size: 24px;
+  --checkbox-check-size: 18px;
   --common-bottom-margin: 3rem;
   --common-border-radius: 8px;
   --common-border-size: 1px;
@@ -21,6 +23,7 @@
   --input-font-size: 1rem;
   --input-padding: .5rem;
   --input-width: 50%;
+  --input-small-fixed-width: 6rem;
   --menu-button-padding-vertical: var(--common-padding);
   --panel-desktop-width: 768px;
   --panel-max-height: 80vh;
@@ -64,6 +67,7 @@
   --dark-gray: #1c1c1c;
   --med-gray: #2d2d2d;
   --light-gray: #3e3e3e;
+  --lighter-gray: #4f4f4f;
   --raspberry: #D81159;
 
   /* Colors (Role) */
@@ -83,15 +87,18 @@
   --button-hover-text-color: var(--onyx);
   --button-text-color: var(--onyx);
   --card-background-color: var(--light-100);
+  --checkbox-checked-color: var(--blue);
   /* --input-background-color: var(--light-100); */
   --dropdown-icon-hover-color: var(--light-400);
   --dropdown-option-hover-background-color: var(--light-200);
   --input-background-color: var(--light-000);
   /* --input-border-color: var(--light-300); */
+  --input-error-border-color: var(--raspberry);
   --input-border-color: var(--light-200);
   --input-border-hover-color: var(--light-300);
   --input-border-focus-color: var(--blue);
-  --input-label-color: var(--light-gray);
+  --input-container-border-color: var(--light-200);
+  --input-label-color: var(--lighter-gray);
   --menu-bar-background-color: var(--light-200);
   --menu-bar-group-icon-background-color: var(--light-100);
   --menu-button-active-background-color: var(--light-100);
@@ -144,6 +151,12 @@
     --button-hover-border-color: var(--light-300);
     --button-hover-text-color: var(--light-100);
     --button-text-color: var(--light-100);
+    --card-background-color: var(--dark-gray);
+    --input-background-color: var(--med-gray);
+    --input-border-color: var(--light-gray);
+    --input-border-hover-color: var(--dark-gray);
+    --input-container-border-color: var(--med-gray);
+    --input-label-color: var(--light-100);
     --menu-bar-background-color: var(--med-gray);
     --menu-bar-group-icon-background-color: var(--light-gray);
     --menu-button-active-background-color: var(--light-gray);
@@ -153,6 +166,8 @@
     --screen-info-hostname-background-color: var(--dark-gray);
     --screen-stats-entry-border-color: var(--med-gray);
     --sidebar-background-color: var(--med-gray);
+    --slider-background-color: var(--med-gray);
+    --slider-pip-color: var(--light-400);
     --sidebar-entry-active-color: var(--light-gray);
     --sidebar-entry-hover-color: var(--light-gray);
     /* --screen-status-invalid-background-color: var(--light-400); */

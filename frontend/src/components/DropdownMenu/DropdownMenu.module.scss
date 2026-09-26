@@ -64,6 +64,7 @@
   font-size: var(--input-font-size);
   transition: background-color var(--normal-transition-time);
   user-select: none;
+  font-weight: normal;
 }
 
 .dropdown-option:hover {

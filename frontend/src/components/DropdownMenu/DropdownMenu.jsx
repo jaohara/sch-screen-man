@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import styles from "./DropdownMenu.module.scss";
 
@@ -35,6 +35,7 @@ export default function DropdownMenu ({
 
   const [ open, setOpen ] = useState(false);
   const [ selectedLabel, setSelectedLabel ] = useState(defaultLabel);
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => setOpen(!open);
 
@@ -45,9 +46,29 @@ export default function DropdownMenu ({
     toggleDropdown();
   }
 
+  // closes the dropdown on an outside click
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const handleOutsideClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [open])
+
   return (
     <InputWrapper label={label}>
-      <div className={styles["dropdown"]}>
+      <div 
+        className={styles["dropdown"]}
+        ref={dropdownRef}
+      >
         <button 
           className={`
             ${styles["dropdown-trigger"]}

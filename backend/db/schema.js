@@ -1,0 +1,1 @@
+// sqliteTable() defs - settings, screens, content, (later) schedule

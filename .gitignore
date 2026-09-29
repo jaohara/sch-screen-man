@@ -143,3 +143,5 @@ route-config.js.*
 CLAUDE.local.md
 CLAUDE.local.old
 
+# Development SQLite database
+backend/data/

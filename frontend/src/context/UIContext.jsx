@@ -1,13 +1,20 @@
-import { createContext, use, useReducer } from "react";
+import { createContext, use, useEffect, useReducer } from "react";
 
 const DEFAULTS = {
   sidebarOpen: false,
   settingsLocked: false,
 };
 
-// TODO: Load ui state from persistent storage later, for now use defaults
+const STORAGE_KEY = "sch-screen-man:ui-state";
+
 function loadUIState() {
-  return DEFAULTS;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? { ...DEFAULTS, ...JSON.parse(stored) } : DEFAULTS;
+  } catch (err) {
+    console.warn("[UIContext::loadUIState] Failed to load UI state from localStorage, using defaults.", err);
+    return DEFAULTS;
+  }
 }
 
 function reducer(state, action) {
@@ -31,6 +38,14 @@ export function UIStateProvider({ children }) {
 
   // make state changes with dispatch():
   // - dispatch({ type: "set", key: "sidebarOpen", value: true });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(uiState));
+    } catch (err) {
+      console.error("[UIContext::useEffect] Failed to save UI state to localStorage.", err);
+    }
+  }, [uiState]);
 
   return (
     <UIStateContext value={uiState}>

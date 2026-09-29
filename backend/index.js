@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 
 import apiRoutes from './routes/apiRoutes.js';
+import { runMigrations } from './db/client.js';
+
+runMigrations();
 
 const app = express();
 const port = 3000;

@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "node db/seed.js"
   },
   "engines": {
     "node": ">=24.0.0"

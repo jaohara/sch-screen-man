@@ -6,6 +6,7 @@ import './styles/variables.css';
 
 import { BrowserRouter } from "react-router";
 
+import { ScreensProvider } from './context/ScreensContext.jsx';
 import { SettingsProvider } from './context/SettingsContext.jsx';
 import { UIStateProvider } from './context/UIContext.jsx';
 
@@ -14,9 +15,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <SettingsProvider>
       <UIStateProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <ScreensProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ScreensProvider>
       </UIStateProvider>
     </SettingsProvider>
   </React.StrictMode>,

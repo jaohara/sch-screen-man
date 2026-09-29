@@ -61,6 +61,7 @@ export default function DashboardPage() {
     debugLog("UEF", "Finished making newScreens, setting screen in state to:", newScreens);
 
     setScreens(newScreens);
+    // TODO: still have activeScreenGroup managed outside of the screens context
     setActiveScreenGroup(Object.keys(screenGroupMetaData)[0]);
   }, []);
 

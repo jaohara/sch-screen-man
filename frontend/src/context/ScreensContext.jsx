@@ -41,6 +41,8 @@ function reducer(state, action) {
   switch (action.type) {
     case "set":
       return {...state, [action.key]: action.value};
+    case "hydrate":
+      return {...state, ...action.screenData};
     default:
       throw new Error(`[ScreensContext::reducer] Unknown action: ${action.type}`);
   }

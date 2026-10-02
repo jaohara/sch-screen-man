@@ -17,6 +17,9 @@ function reducer(state, action) {
       return {...state, [action.key]: action.value };
     case "toggle":
       return {...state, [action.key]: !state[action.key]};
+    // TODO: Activate (and potentially rename data) when switching to SQLite
+    // case "hydrate":
+    //   return {...state, ...action.data};
     case "reset":
       return DEFAULTS;
     default:

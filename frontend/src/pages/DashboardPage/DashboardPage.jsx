@@ -8,6 +8,8 @@ import styles from './DashboardPage.module.scss';
 import MenuBar from '@/components/MenuBar/MenuBar';
 import ScreenGroup from '@/components/ScreenGroup/ScreenGroup';
 
+import { useScreens } from '@/context/ScreensContext';
+
 import { groupMetaData as screenGroupMetaData, piConfig } from '../../../pi-conf.js';
 
 import { UNGROUPED_SCREEN_STRING } from '@/constants.js';
@@ -24,7 +26,14 @@ export default function DashboardPage() {
   const [ activeScreenGroup, setActiveScreenGroup ] = useState(null);
   const [ screens, setScreens ] = useState(null);
 
+
+  // TODO: Transitioning over to using ScreensContext
+  const screensContextData = useScreens();
+
   useEffect(() => {
+    // TODO: Remove this temp debug log
+    console.log(`**UEF**: Data pulled from context: `, screensContextData);
+
     // parse piConfig into groups of screens and save as screens
     const newScreens = {};
 

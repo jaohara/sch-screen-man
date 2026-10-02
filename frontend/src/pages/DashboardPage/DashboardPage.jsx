@@ -1,7 +1,4 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useState } from 'react';
 
 import styles from './DashboardPage.module.scss';
 
@@ -10,82 +7,31 @@ import ScreenGroup from '@/components/ScreenGroup/ScreenGroup';
 
 import { useScreens } from '@/context/ScreensContext';
 
-import { groupMetaData as screenGroupMetaData, piConfig } from '../../../pi-conf.js';
-
-import { UNGROUPED_SCREEN_STRING } from '@/constants.js';
-
-function debugLog(location, message, loggedData) {
-  console.log(`DashboardPage::${location}::${message}`);
-
-  if (loggedData) {
-    console.log(loggedData);
-  }
-}
-
 export default function DashboardPage() {
   const [ activeScreenGroup, setActiveScreenGroup ] = useState(null);
-  const [ screens, setScreens ] = useState(null);
 
+  const { 
+    groups, 
+    loading: screenDataLoading,
+    screensByGroup: screens, 
+  } = useScreens();
 
-  // TODO: Transitioning over to using ScreensContext
-  const screensContextData = useScreens();
-
-  useEffect(() => {
-    // TODO: Remove this temp debug log
-    console.log(`**UEF**: Data pulled from context: `, screensContextData);
-
-    // parse piConfig into groups of screens and save as screens
-    const newScreens = {};
-
-    debugLog("UEF", "piConfig:", piConfig);
-    debugLog("UEF", "groupMetaData:", screenGroupMetaData);
-    
-    piConfig.forEach((screen, index) => {
-      const screenGroup = screen.group ? screen.group : UNGROUPED_SCREEN_STRING;
-      
-      // append index to screen object to build reboot route
-      screen.screenId = index;
-      
-      if (Object.hasOwn(newScreens, screenGroup)) {
-        // Do any further processing of the screen config objects here
-        newScreens[screenGroup].screens.push(screen);
-        return;
-      }
-      else {
-        // create the group object
-        newScreens[screenGroup] = {};
-
-        // create the array for the screens in the group with the current screen added
-        newScreens[screenGroup].screens = [screen];
-
-        const metaDataKey = screen.group;
-
-        // append metadata to the screen group
-        if (Object.keys(screenGroupMetaData).includes(metaDataKey)){
-          newScreens[screenGroup].metaData = screenGroupMetaData[metaDataKey];
-        }
-      }
-    });
-    
-    debugLog("UEF", "Finished making newScreens, setting screen in state to:", newScreens);
-
-    setScreens(newScreens);
-    // TODO: still have activeScreenGroup managed outside of the screens context
-    setActiveScreenGroup(Object.keys(screenGroupMetaData)[0]);
-  }, []);
+  // Used to avoid calling setActiveScreenGroup in a useEffect
+  const firstGroupKey = Object.keys(groups)[0] ?? null;
+  const effectiveScreenGroup = activeScreenGroup ?? (screenDataLoading ? null : firstGroupKey);
 
   return (
     <>
       <MenuBar 
-        activeScreenGroup={activeScreenGroup}
-        screenGroupMetaData={screenGroupMetaData}
+        activeScreenGroup={effectiveScreenGroup}
+        screenGroupMetaData={groups}
         setActiveScreenGroup={setActiveScreenGroup}
       />
 
-      {activeScreenGroup ? (
+      {effectiveScreenGroup ? (
         <ScreenGroup
-          metaData={screens[activeScreenGroup]?.metaData}
-          screens={screens[activeScreenGroup]?.screens}
+          metaData={screens[effectiveScreenGroup]?.metaData}
+          screens={screens[effectiveScreenGroup]?.screens}
         />
       ) : (
         <p className={styles["main-container-message"]}>

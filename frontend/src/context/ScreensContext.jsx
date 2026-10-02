@@ -6,10 +6,16 @@ import { UNGROUPED_SCREEN_STRING } from "@/constants";
 import { groupMetaData, piConfig } from "../../pi-conf";
 
 function loadScreens() {
+  
   // TODO: move from pulling from DB here rather than config file exports
   const screenData = {};
   screenData.screensByGroup = {};
   screenData.groups = groupMetaData;
+  
+  
+  // TODO: Handle this differently with actual async loads 
+  screenData.loading = true;
+
 
   piConfig.forEach((screen, index) => {
     const screenGroup = screen.group ? screen.group : UNGROUPED_SCREEN_STRING;
@@ -33,6 +39,8 @@ function loadScreens() {
       }
     }
   });
+
+  screenData.loading = false;
 
   return screenData;
 }

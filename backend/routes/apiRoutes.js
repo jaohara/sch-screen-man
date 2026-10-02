@@ -2,16 +2,22 @@ import express from "express";
 
 import { piConfig } from "../pi-conf.js";
 
-
-// TODO: Refactor to use persistent storage for Settings
+// db access
 import { getSettings,  updateSettings } from "../db/settings.js";
+import { 
+  createContent,
+  deleteContent, 
+  listContent, 
+  getContentById,
+  updateContent, 
+} from "../db/content.js";
 
 
 import {
   createErrorResponseObject,
   isValidPiConfigId,
   logTimestamp,
-  parseAndCheckScreenIdFromRequest,
+  parseAndCheckIdFromRequest,
 } from "./utils.js";
 
 // piController functions
@@ -30,9 +36,9 @@ router.get('/reboot/:screenId', async (req, res) => {
     TODO: RETURN ALL RESPONSES AS JSON
     - This will allow your server to receive responses without a reload
   */
-  const id = parseAndCheckScreenIdFromRequest(req, res);
+  const id = parseAndCheckIdFromRequest(req, res, "screenId");
 
-  if (!checkIfPiIdIsNull(id, res)) return;
+  if (!checkIfIdIsNull(id, res)) return;
   if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
   // TODO: remove this flag and debug path
@@ -77,9 +83,9 @@ router.get('/reboot/:screenId', async (req, res) => {
 router.get('/ping/:screenId', async (req, res) => {
   // check id validity here, as piController::checkIfHostIsUp could be called as a helper
   //  function by piController::connectAndReboot
-  const id = parseAndCheckScreenIdFromRequest(req, res);
+  const id = parseAndCheckIdFromRequest(req, res, "screenId");
 
-  if (!checkIfPiIdIsNull(id, res)) return;
+  if (!checkIfIdIsNull(id, res)) return;
   if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
   const result = await checkIfHostIsUp(id, "ping");
@@ -87,9 +93,9 @@ router.get('/ping/:screenId', async (req, res) => {
 });
 
 router.get('/uptime/:screenId', async (req, res) => {
-  const id = parseAndCheckScreenIdFromRequest(req, res);
+  const id = parseAndCheckIdFromRequest(req, res, "screenId");
 
-  if (!checkIfPiIdIsNull(id, res)) return;
+  if (!checkIfIdIsNull(id, res)) return;
   if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
   console.log(`[${logTimestamp()}] Received request for host ${id} uptime...`);
@@ -117,9 +123,9 @@ router.get('/uptime/:screenId', async (req, res) => {
 });
 
 router.get('/stats/:screenId', async (req, res) => {
-  const id = parseAndCheckScreenIdFromRequest(req, res);
+  const id = parseAndCheckIdFromRequest(req, res, "screenId");
 
-  if (!checkIfPiIdIsNull(id, res)) return;
+  if (!checkIfIdIsNull(id, res)) return;
   if (!checkIfPiIdIsValidForConfig(id, piConfig, res)) return;
 
   console.log(`[${logTimestamp()}] Received request for host ${id} stats...`);
@@ -152,10 +158,55 @@ router.get('/settings', (req, res) => {
 
 router.patch('/settings', (req, res) => {
   // TODO: Probably needs logic for checking if the request body is alright
-  console.log("PATCH:/settings: received req.body:", req.body);
 
+  // TODO: Remove logging after testing
+  console.log("PATCH:/settings: received req.body:", req.body);
+  
   res.json(updateSettings(req.body));
-})
+});
+
+
+// Content Routes
+
+// list all
+router.get('/content', (req, res) => {
+  res.json(listContent());
+});
+
+// get by id
+router.get('/content/:contentId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "contentId");
+  if (!checkIfIdIsNull(id, res, "content")) return;
+  res.json(getContentById(id));
+});
+
+// create content
+router.post('/content', (req, res) => {
+  // TODO: Remove logging after testing
+  console.log("POST:/content: received req.body:", req.body);
+  
+  res.json(createContent(req.body));
+});
+
+// update content
+router.patch('/content/:contentId', (req, res) => {
+  // TODO: Remove logging after testing
+  console.log("PATCH:/content: received req.body:", req.body);
+  
+  const id = parseAndCheckIdFromRequest(req, res, "contentId");
+  if (!checkIfIdIsNull(id, res, "content")) return;
+  res.json(updateContent(id, req.body));
+});
+
+// delete content
+router.delete('/content/:contentId', (req, res) => {
+  // TODO: Remove logging after testing
+  console.log("DELETE:/content: received req.body:", req.body);
+  
+  const id = parseAndCheckIdFromRequest(req, res, "contentId");
+  if (!checkIfIdIsNull(id, res, "content")) return;
+  res.json(deleteContent(id));
+});
 
 
 // common helper code
@@ -166,9 +217,10 @@ router.patch('/settings', (req, res) => {
  * @param {*} res the express response object
  * @returns boolean value fore whether or not the pi id is null
  */
-function checkIfPiIdIsNull(id, res) {
+function checkIfIdIsNull(id, res, idType) {
   if (id === null) {
-    const errorObject = createErrorResponseObject("No screen ID was provided.", "NULLID");
+    const errorString = `No ${idType ? idType + " " : ""}ID was provided.`;
+    const errorObject = createErrorResponseObject(errorString, "NULLID");
     console.error(`Error with request:`, errorObject);
     res.status(500).json(errorObject);
     return false;

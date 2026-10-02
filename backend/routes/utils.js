@@ -20,9 +20,8 @@ export function createErrorResponseObject(errorString, errorType = null) {
   return (errorResponseObject);
 }
 
-export function parseAndCheckScreenIdFromRequest(req, res) {
-  const { screenId } = req.params;
-  const id = parseInt(screenId);
+export function parseAndCheckIdFromRequest(req, res, paramName) {
+  const id = parseInt(req.params[paramName]);
 
   if (isNaN(id)) {
     const errorString = "Provided ID is not a number.";

@@ -2,6 +2,11 @@ import express from "express";
 
 import { piConfig } from "../pi-conf.js";
 
+
+// TODO: Refactor to use persistent storage for Settings
+import { getSettings,  updateSettings } from "../db/settings.js";
+
+
 import {
   createErrorResponseObject,
   isValidPiConfigId,
@@ -138,6 +143,19 @@ router.get('/stats/:screenId', async (req, res) => {
 
   return;
 });
+
+
+// Settings Routes
+router.get('/settings', (req, res) => {
+  res.json(getSettings());
+});
+
+router.patch('/settings', (req, res) => {
+  // TODO: Probably needs logic for checking if the request body is alright
+  console.log("PATCH:/settings: received req.body:", req.body);
+
+  res.json(updateSettings(req.body));
+})
 
 
 // common helper code

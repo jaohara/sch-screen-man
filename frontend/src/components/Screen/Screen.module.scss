@@ -223,17 +223,32 @@
     border-bottom: 0px solid transparent;
   }
 
-  .entry-header {
+  .entry-header, .entry-warning, .entry-urgent {
     align-items: center;
     display: flex;
+    flex-grow: 0;
 
     svg {
       font-size: var(--screen-status-panel-icon-size);
     }
   }
 
+  .entry-warning, .entry-urgent{
+    margin-left: .5rem;
+  }
+
+  .entry-warning svg {
+    fill: var(--icon-warning-color);
+  }
+
+  .entry-urgent svg {
+    fill: var(--icon-urgent-color);
+  }
+
   .entry-value {
     font-family: monospace;
+    flex-grow: 1;
+    text-align: right;
   }
 
   .stats-loading {

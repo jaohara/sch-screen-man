@@ -138,7 +138,8 @@ export function formatMemory(
     return null;
   }
 
-  const usedPercent = Math.round(((totalKb - availableKb) / totalKb) * 100);
+  // const usedPercent = Math.round(((totalKb - availableKb) / totalKb) * 100);
+  const usedPercent = getMemoryUsagePercent({totalKb, availableKb});
 
   const formatKbAmount = (memoryKbAmount) => memoryKbAmount >= GB_IN_KB
     ? `${(memoryKbAmount / GB_IN_KB).toFixed(1)} GB`
@@ -153,6 +154,10 @@ export function formatMemory(
   }
 
   return `${formattedAvailable} free${withPercent ? ` (${usedPercent}%)` : ""}`;
+}
+
+export function getMemoryUsagePercent({ totalKb, availableKb } = {}) {
+  return Math.round(((totalKb - availableKb) / totalKb) * 100);
 }
 
 export function celsiusToFahrenheit(temperatureCelsius) {

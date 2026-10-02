@@ -1,9 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-
+import { useEffect } from "react";
 import styles from "./Screen.module.scss";
 
 import Button from '@/components/Button/Button';
@@ -19,6 +14,7 @@ import {
   FaSignsPost,
   FaTemperatureHalf,
   FaTerminal,
+  FaTriangleExclamation,
 } from "react-icons/fa6";
 
 import useScreenHealth, { STATUS } from '@/hooks/useScreenHealth';
@@ -26,7 +22,10 @@ import useScreenStats, {
   celsiusToFahrenheit,
   formatMemory,
   formatUptime,
+  getMemoryUsagePercent,
 } from '@/hooks/useScreenStats';
+
+import { useSettings } from "@/context/SettingsContext";
 
 const icons = {
   "disk": (<FaDatabase />),
@@ -157,8 +156,19 @@ function Screen ({
 }
 
 function ScreenStatsPanel({ stats, lastRebootDuration }) {
+  const { 
+    fahrenheitTemps,
+    memoryUrgentPercent,
+    memoryWarnPercent,
+    loading: settingsLoading,
+  } = useSettings();
+
+  const settingsData = useSettings();
+
+  useEffect(() => console.log("ScreenStatsPanel: settingsData:", settingsData), [settingsLoading]);
+
   // TODO: Move this out to app-wide state with settings
-  const fahrenheitTemp = true;
+  // const fahrenheitTemp = true;
 
   const formatRebootTime = (rebootTime) => {
     if (rebootTime === null) return "---"; 
@@ -167,8 +177,8 @@ function ScreenStatsPanel({ stats, lastRebootDuration }) {
   }
 
   const formatTemperature = (temperature) => {
-    const formattedTemp = fahrenheitTemp ? celsiusToFahrenheit(temperature) : temperature;
-    return `${formattedTemp.toFixed(2)} °${fahrenheitTemp ? "F" : "C"}`;
+    const formattedTemp = fahrenheitTemps ? celsiusToFahrenheit(temperature) : temperature;
+    return `${formattedTemp.toFixed(2)} °${fahrenheitTemps ? "F" : "C"}`;
   }
 
   const statsEntries = stats === null ? null : [
@@ -191,6 +201,8 @@ function ScreenStatsPanel({ stats, lastRebootDuration }) {
       label: "Memory",
       icon: icons["memory"],
       value: formatMemory(stats.memory),
+      warning: getMemoryUsagePercent(stats.memory) >= memoryWarnPercent,
+      urgent: getMemoryUsagePercent(stats.memory) >= memoryUrgentPercent,
     },
     {
       label: "Disk Space",
@@ -222,6 +234,23 @@ function ScreenStatsPanel({ stats, lastRebootDuration }) {
             <div className={styles["entry-header"]} title={entry.label}>
               {entry.icon}
             </div>
+
+            {
+              entry.warning && !entry.urgent && (
+                <div className={styles["entry-warning"]} title={"Warning!"}>
+                  <FaTriangleExclamation />  
+                </div>
+              )
+            }
+
+            {
+              entry.urgent && (
+                <div className={styles["entry-urgent"]} title={"Urgent!"}>
+                  <FaTriangleExclamation />  
+                </div>
+              )
+            }
+
             <div className={styles["entry-value"]}>
               {entry.value}
             </div>

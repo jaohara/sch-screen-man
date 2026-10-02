@@ -23,6 +23,9 @@ app.use(cors({
   origin: corsOriginArray,
 }))
 
+// use JSON
+app.use(express.json());
+
 // use the router defined in ./routes/apiRoutes.js to handle api-relevant routes
 app.use('/api', apiRoutes);
 

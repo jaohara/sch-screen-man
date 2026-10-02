@@ -37,7 +37,7 @@
   --screen-image-width: 200px;
   --screen-image-height: calc(var(--screen-width) * var(--ratio-height-to-width-16-9));
   --screen-status-size: 12px;
-  --screen-status-panel-icon-size: 1.4em;
+  --screen-status-panel-icon-size: 1.8em;
   --sidebar-entry-padding: .75rem;
   --sidebar-entry-margin: .25rem;
 
@@ -94,6 +94,8 @@
   /* --input-background-color: var(--light-100); */
   --dropdown-icon-hover-color: var(--light-400);
   --dropdown-option-hover-background-color: var(--light-200);
+  --icon-urgent-color: var(--raspberry);
+  --icon-warning-color: var(--stoup-yellow);
   --input-background-color: var(--light-000);
   /* --input-border-color: var(--light-300); */
   --input-error-border-color: var(--raspberry);

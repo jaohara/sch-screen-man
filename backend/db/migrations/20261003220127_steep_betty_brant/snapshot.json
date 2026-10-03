@@ -1,0 +1,504 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "id": "f9d14d16-93c3-42d8-83f1-0324461e59b9",
+  "prevIds": [
+    "67241bf7-cd9f-41f0-bec7-462c71d2b23c"
+  ],
+  "ddl": [
+    {
+      "name": "content",
+      "entityType": "tables"
+    },
+    {
+      "name": "screen_groups",
+      "entityType": "tables"
+    },
+    {
+      "name": "screen_schedules",
+      "entityType": "tables"
+    },
+    {
+      "name": "screens",
+      "entityType": "tables"
+    },
+    {
+      "name": "settings",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "content"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "entityType": "columns",
+      "table": "content"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "url",
+      "entityType": "columns",
+      "table": "content"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(current_timestamp)",
+      "generated": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "table": "content"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(current_timestamp)",
+      "generated": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "table": "content"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "screen_groups"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "entityType": "columns",
+      "table": "screen_groups"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "false",
+      "generated": null,
+      "name": "hidden",
+      "entityType": "columns",
+      "table": "screen_groups"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "pretty_name",
+      "entityType": "columns",
+      "table": "screen_groups"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(current_timestamp)",
+      "generated": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "table": "screen_groups"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(current_timestamp)",
+      "generated": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "table": "screen_groups"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "screen_schedules"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "content_id",
+      "entityType": "columns",
+      "table": "screen_schedules"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "screen_id",
+      "entityType": "columns",
+      "table": "screen_schedules"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "start",
+      "entityType": "columns",
+      "table": "screen_schedules"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "end",
+      "entityType": "columns",
+      "table": "screen_schedules"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(current_timestamp)",
+      "generated": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "table": "screen_schedules"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(current_timestamp)",
+      "generated": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "table": "screen_schedules"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "mdns_hostname",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "ip",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "username",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "password",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "group_id",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "position_description",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "display_order",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "note",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "default_content_id",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(current_timestamp)",
+      "generated": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(current_timestamp)",
+      "generated": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "table": "screens"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "settings"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "true",
+      "generated": null,
+      "name": "fahrenheit_temps",
+      "entityType": "columns",
+      "table": "settings"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "85",
+      "generated": null,
+      "name": "memory_warn_percent",
+      "entityType": "columns",
+      "table": "settings"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "95",
+      "generated": null,
+      "name": "memory_urgent_percent",
+      "entityType": "columns",
+      "table": "settings"
+    },
+    {
+      "columns": [
+        "content_id"
+      ],
+      "tableTo": "content",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "fk_screen_schedules_content_id_content_id_fk",
+      "entityType": "fks",
+      "table": "screen_schedules"
+    },
+    {
+      "columns": [
+        "screen_id"
+      ],
+      "tableTo": "screens",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "fk_screen_schedules_screen_id_screens_id_fk",
+      "entityType": "fks",
+      "table": "screen_schedules"
+    },
+    {
+      "columns": [
+        "group_id"
+      ],
+      "tableTo": "screen_groups",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "nameExplicit": false,
+      "name": "fk_screens_group_id_screen_groups_id_fk",
+      "entityType": "fks",
+      "table": "screens"
+    },
+    {
+      "columns": [
+        "default_content_id"
+      ],
+      "tableTo": "content",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "nameExplicit": false,
+      "name": "fk_screens_default_content_id_content_id_fk",
+      "entityType": "fks",
+      "table": "screens"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "content_pk",
+      "table": "content",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "screen_groups_pk",
+      "table": "screen_groups",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "screen_schedules_pk",
+      "table": "screen_schedules",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "screens_pk",
+      "table": "screens",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "settings_pk",
+      "table": "settings",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "name"
+      ],
+      "nameExplicit": false,
+      "name": "screen_groups_name_unique",
+      "entityType": "uniques",
+      "table": "screen_groups"
+    },
+    {
+      "columns": [
+        "mdns_hostname"
+      ],
+      "nameExplicit": false,
+      "name": "screens_mdns_hostname_unique",
+      "entityType": "uniques",
+      "table": "screens"
+    }
+  ],
+  "renames": []
+}

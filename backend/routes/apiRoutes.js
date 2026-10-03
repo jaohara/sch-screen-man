@@ -33,6 +33,15 @@ import {
 } from "../db/screenSchedules.js";
 
 import {
+  createScreenGroup,
+  deleteScreenGroup,
+  getScreenGroupById,
+  getScreenGroupByName,
+  listScreenGroups,
+  updateScreenGroup,
+} from "../db/screenGroups.js";
+
+import {
   createErrorResponseObject,
   isValidPiConfigId,
   logTimestamp,
@@ -324,6 +333,54 @@ router.delete('/schedules/id/:scheduleId', (req, res) => {
   const id = parseAndCheckIdFromRequest(req, res, "scheduleId");
   if (!checkIfIdIsNull(id, res, "schedule")) return;
   res.json(deleteScreenSchedule(id));
+});
+
+
+// screenGroups routes
+
+// list all screen groups
+router.get('/groups', (req, res) => {
+  const excludeEmpty = req.query.excludeEmpty !== "false";
+  const excludeHidden = req.query.excludeHidden === "true";
+  res.json(listScreenGroups(excludeEmpty, excludeHidden));
+});
+
+// get screen group by name
+router.get('/groups/name/:name', (req, res) => {
+  const { name } = req.params;
+  res.json(getScreenGroupByName(name));
+});
+
+// get screen group by db id
+router.get('/groups/id/:groupId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "groupId");
+  if (!checkIfIdIsNull(id, res, "group")) return;
+  res.json(getScreenGroupById(id));
+});
+
+// create screen group
+router.post('/groups', (req, res) => {
+  // TODO: Remove logging after testing
+  console.log("POST:/groups: received req.body:", req.body);
+  res.json(createScreenGroup(req.body));
+});
+
+// update screen group
+router.patch('/groups/id/:groupId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "groupId");
+  if (!checkIfIdIsNull(id, res, "group")) return;
+
+  // TODO: Remove logging after testing
+  console.log(`PATCH:/groups/id/${id}: received req.body:`, req.body);
+
+  res.json(updateScreenGroup(id, req.body));
+});
+
+// delete screen group by db id
+router.delete('/groups/id/:groupId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "groupId");
+  if (!checkIfIdIsNull(id, res, "group")) return;
+  res.json(deleteScreenGroup(id));
 });
 
 

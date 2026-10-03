@@ -49,7 +49,8 @@ export function createScreenSchedule(values) {
     end: values.end,
   };
 
-  return db.insert(screenSchedules).values(newScreenSchedule).returning().get();
+  const inserted = db.insert(screenSchedules).values(newScreenSchedule).returning().get();
+  return getScreenScheduleById(inserted.id);
 }
 
 export function updateScreenSchedule(id, partial) {

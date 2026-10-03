@@ -4,6 +4,7 @@ import { piConfig } from "../pi-conf.js";
 
 // db access
 import { getSettings,  updateSettings } from "../db/settings.js";
+
 import { 
   createContent,
   deleteContent, 
@@ -12,6 +13,14 @@ import {
   updateContent, 
 } from "../db/content.js";
 
+import {
+  createScreen,
+  deleteScreenById,
+  getScreenById,
+  getScreenByHostname,
+  listScreens,
+  updateScreen,
+} from "../db/screens.js";
 
 import {
   createErrorResponseObject,
@@ -200,14 +209,29 @@ router.patch('/content/:contentId', (req, res) => {
 
 // delete content
 router.delete('/content/:contentId', (req, res) => {
-  // TODO: Remove logging after testing
-  console.log("DELETE:/content: received req.body:", req.body);
-  
   const id = parseAndCheckIdFromRequest(req, res, "contentId");
   if (!checkIfIdIsNull(id, res, "content")) return;
   res.json(deleteContent(id));
 });
 
+
+// Screen Routes
+router.get('/screens', (req, res) => {
+  res.json(listScreens());
+});
+
+router.get('/screens/hostname/:hostname', (req, res) => {
+  // TODO: Should have some check for a valid hostname, right?
+  const { hostname } = req.params;
+  res.json(getScreenByHostname(hostname));
+});
+
+// TODO: Uses DB screen ID, not the one from the pi-conf array approach
+router.get('/screens/id/:screenId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "screenId");
+  if (!checkIfIdIsNull(id, res, "screen")) return;
+  res.json(getScreenById(id));
+});
 
 // common helper code
 /**

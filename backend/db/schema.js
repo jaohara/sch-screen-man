@@ -20,6 +20,16 @@ export const content = sqliteTable("content", {
   updatedAt: text("updated_at").notNull().default(sql`(current_timestamp)`),
 });
 
+// Menu groups: 
+export const screenGroups = sqliteTable("screen_groups", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull().unique(),
+  hidden: integer("hidden", { mode: "boolean" }).notNull().default(false),
+  prettyName: text("pretty_name").notNull(),
+  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
+  updatedAt: text("updated_at").notNull().default(sql`(current_timestamp)`),
+});
+
 // Mirrors pi-conf.js's piConfig entries. `mdnsHostname` is the closest thing
 // to a stable identifier today — the planned hostname-as-ID migration hasn't
 // happened yet, so `id` here is still an internal surrogate key, not the
@@ -31,7 +41,8 @@ export const screens = sqliteTable("screens", {
   ip: text("ip"),
   username: text("username").notNull(),
   password: text("password").notNull(),
-  groupName: text("group_name"),
+  // groupName: text("group_name"),
+  groupId: integer("group_id").references(() => screenGroups.id, { onDelete: "set null"}),
   positionDescription: text("position_description"),
   displayOrder: integer("display_order"),
   note: text("note"),

@@ -39,3 +39,14 @@ export const screens = sqliteTable("screens", {
   createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
   updatedAt: text("updated_at").notNull().default(sql`(current_timestamp)`),
 });
+
+// Table to represent schedule entries mapping content to screens with a scheduled time
+export const screenSchedules = sqliteTable("screen_schedules", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  contentId: integer("content_id").notNull().references(() => content.id, {onDelete: "cascade"}),
+  screenId: integer("screen_id").notNull().references(() => screens.id, {onDelete: "cascade"}),
+  start: text("start").notNull(),
+  end: text("end").notNull(),
+  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
+  updatedAt: text("updated_at").notNull().default(sql`(current_timestamp)`),
+});

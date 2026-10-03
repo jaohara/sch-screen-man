@@ -18,6 +18,7 @@ fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 export const db = drizzle({ connection: DB_PATH });
 
 db.run(sql`PRAGMA journal_mode = WAL`);
+db.run(sql`PRAGMA foriegn_keys = ON`)
 
 // Applies any migration in db/migrations/ not yet recorded in the DB.
 // Idempotent — safe to call on every server start, fresh file or not.

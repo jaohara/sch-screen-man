@@ -216,22 +216,52 @@ router.delete('/content/:contentId', (req, res) => {
 
 
 // Screen Routes
+
+// list all screens
 router.get('/screens', (req, res) => {
   res.json(listScreens());
 });
 
+// get screen by hostname
 router.get('/screens/hostname/:hostname', (req, res) => {
   // TODO: Should have some check for a valid hostname, right?
   const { hostname } = req.params;
   res.json(getScreenByHostname(hostname));
 });
 
+// get screen by DB id
 // TODO: Uses DB screen ID, not the one from the pi-conf array approach
 router.get('/screens/id/:screenId', (req, res) => {
   const id = parseAndCheckIdFromRequest(req, res, "screenId");
   if (!checkIfIdIsNull(id, res, "screen")) return;
   res.json(getScreenById(id));
 });
+
+// create screen
+router.post('/screens', (req, res) => {
+  // TODO: Remove logging after testing
+  console.log("POST:/screens: received req.body:", req.body);
+  res.json(createScreen(req.body));
+});
+
+// update screen
+router.patch('/screens/id/:screenId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "screenId");
+  if (!checkIfIdIsNull(id, res, "screen")) return;
+  
+  // TODO: Remove logging after testing
+  console.log(`PATCH:/screens/id/${id}: received req.body:`, req.body);
+  
+  res.json(updateScreen(id, req.body));
+});
+
+// delete screen by db id
+router.delete('/screens/id/:screenId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "screenId");
+  if (!checkIfIdIsNull(id, res, "screen")) return;
+  res.json(deleteScreenById(id));
+});
+
 
 // common helper code
 /**

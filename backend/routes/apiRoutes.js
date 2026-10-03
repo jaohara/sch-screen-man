@@ -23,6 +23,16 @@ import {
 } from "../db/screens.js";
 
 import {
+  createScreenSchedule,
+  deleteScreenSchedule,
+  getScreenScheduleById,
+  getScreenSchedulesByContentId,
+  getScreenSchedulesByScreenId,
+  listScreenSchedules,
+  updateScreenSchedule,
+} from "../db/screenSchedules.js";
+
+import {
   createErrorResponseObject,
   isValidPiConfigId,
   logTimestamp,
@@ -260,6 +270,60 @@ router.delete('/screens/id/:screenId', (req, res) => {
   const id = parseAndCheckIdFromRequest(req, res, "screenId");
   if (!checkIfIdIsNull(id, res, "screen")) return;
   res.json(deleteScreenById(id));
+});
+
+
+// screenSchedules routes
+
+// list all screen schedules
+router.get('/schedules', (req, res) => {
+  res.json(listScreenSchedules());
+});
+
+// get screen schedule by db id
+router.get('/schedules/id/:scheduleId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "scheduleId");
+  if (!checkIfIdIsNull(id, res, "schedule")) return;
+  res.json(getScreenScheduleById(id));
+});
+
+// get screen schedules by screen id
+router.get('/schedules/screen/:screenId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "screenId");
+  if (!checkIfIdIsNull(id, res, "screen")) return;
+  res.json(getScreenSchedulesByScreenId(id));
+});
+
+// get screen schedules by content id
+router.get('/schedules/content/:contentId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "contentId");
+  if (!checkIfIdIsNull(id, res, "content")) return;
+  res.json(getScreenSchedulesByContentId(id));
+});
+
+// create screen schedule
+router.post('/schedules', (req, res) => {
+  // TODO: Remove logging after testing
+  console.log("POST:/schedules: received req.body:", req.body);
+  res.json(createScreenSchedule(req.body));
+});
+
+// update screen schedule
+router.patch('/schedules/id/:scheduleId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "scheduleId");
+  if (!checkIfIdIsNull(id, res, "schedule")) return;
+
+  // TODO: Remove logging after testing
+  console.log(`PATCH:/schedules/id/${id}: received req.body:`, req.body);
+
+  res.json(updateScreenSchedule(id, req.body));
+});
+
+// delete screen schedule by db id
+router.delete('/schedules/id/:scheduleId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "scheduleId");
+  if (!checkIfIdIsNull(id, res, "schedule")) return;
+  res.json(deleteScreenSchedule(id));
 });
 
 

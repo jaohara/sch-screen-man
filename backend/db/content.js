@@ -61,7 +61,7 @@ export function updateContent(id, partial) {
     .set({ ...partial, updatedAt: sql`(current_timestamp)` })
     .where(eq(content.id, id))
     .run();
-  return getContentById(id);
+  return getContentByIdWithRelations(id);
 }
 
 export function deleteContent(id) {

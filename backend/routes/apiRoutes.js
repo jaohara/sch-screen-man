@@ -11,6 +11,7 @@ import {
   listContent,
   listContentWithRelations,
   getContentById,
+  getContentByIdWithRelations,
   updateContent, 
 } from "../db/content.js";
 
@@ -203,15 +204,23 @@ router.get('/content', (req, res) => {
   res.json(listContentWithRelations());
 });
 
+// list all without appending screens
 router.get('/content/raw', (req, res) => {
   res.json(listContent());
+});
+
+// get by id without appending screens
+router.get('/content/raw/:contentId', (req, res) => {
+  const id = parseAndCheckIdFromRequest(req, res, "contentId");
+  if (!checkIfIdIsNull(id, res, "content")) return;
+  res.json(getContentById(id));
 });
 
 // get by id
 router.get('/content/:contentId', (req, res) => {
   const id = parseAndCheckIdFromRequest(req, res, "contentId");
   if (!checkIfIdIsNull(id, res, "content")) return;
-  res.json(getContentById(id));
+  res.json(getContentByIdWithRelations(id));
 });
 
 // create content

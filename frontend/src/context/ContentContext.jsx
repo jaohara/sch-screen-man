@@ -27,13 +27,9 @@ function reducer(state, action) {
     case "remove":
       return {...state, data: state.data.filter((content) => content.id !== action.id) };
     case "modify":
-      return {...state, data: state.data.map((content) => {
-        if (content.id !== action.id) {
-          return content;
-        }
-
-        return { ...content, ...action.partial };
-      })};
+      return {...state, data: state.data.map((content) => 
+        content.id !== action.item.id ? content : { ...content, ...action.item }
+      )};
     case "hydrate":
       return {...state, data: [...action.data], loading: false };
     default:
@@ -87,25 +83,8 @@ export function ContentProvider({ children }) {
       headers: { "Content-Type": "application/json" },
     })
       .then(res => res.json())
-      .then(data => dispatch({ type: "modify", item:  }))
-
-
-
-
-
-
-
-
-    // ==========================================
-    // TODO: RESUME HERE, IMPLEMENTING LIKE ABOVE
-    // ==========================================
-
-
-
-
-
-
-    
+      .then(data => dispatch({ type: "modify", item: data }))
+      .catch(err => console.error(`[ContentContext::modifyContent] Failed to modify ${id}:`, err));
 
 
     // dispatch({
@@ -119,7 +98,7 @@ export function ContentProvider({ children }) {
     //   })
     // });
 
-    dispatch({ type: "modify", id, partial });
+    // dispatch({ type: "modify", id, partial });
   };
 
   return (

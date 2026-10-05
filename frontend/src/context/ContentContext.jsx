@@ -38,7 +38,6 @@ function reducer(state, action) {
 }
 
 const ContentContext = createContext(null);
-// const ContentDispatchContext = createContext(null);
 const ContentActionContext = createContext(null);
 
 export function ContentProvider({ children }) {
@@ -74,9 +73,7 @@ export function ContentProvider({ children }) {
       .catch(err => console.error(`[ContentContext::removeContent] Failed to remove ${id}:`, err));
   };
 
-  // 
   const modifyContent = (id, partial) => {
-
     fetch(`${CONTENT_ROUTE}/${id}`, {
       method: "PATCH",
       body: JSON.stringify(partial),
@@ -85,20 +82,6 @@ export function ContentProvider({ children }) {
       .then(res => res.json())
       .then(data => dispatch({ type: "modify", item: data }))
       .catch(err => console.error(`[ContentContext::modifyContent] Failed to modify ${id}:`, err));
-
-
-    // dispatch({
-    //   type: "set",
-    //   data: contentRef.current.data.map((content) => {
-    //     if (content.id !== id) {
-    //       return content;
-    //     }
-
-    //     return { ...content, ...partial };
-    //   })
-    // });
-
-    // dispatch({ type: "modify", id, partial });
   };
 
   return (

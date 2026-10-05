@@ -47,6 +47,11 @@ export function getContentById(id) {
   return db.select().from(content).where(eq(content.id, id)).get();
 }
 
+export function getContentByIdWithRelations(id) {
+  const rows = selectContentWithRelations().where(eq(content.id, id)).all();
+  return groupContentWithRelations(rows)[0] ?? null;
+}
+
 export function createContent({ name, url }) {
   return db.insert(content).values({ name, url }).returning().get();
 }

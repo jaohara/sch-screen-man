@@ -81,7 +81,13 @@ export function ContentProvider({ children }) {
   // 
   const modifyContent = (id, partial) => {
 
-
+    fetch(`${CONTENT_ROUTE}/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(partial),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then(res => res.json())
+      .then(data => dispatch({ type: "modify", item:  }))
 
 
 

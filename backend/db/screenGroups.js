@@ -26,10 +26,14 @@ export function listScreenGroups(
   let rows = query.all();
 
   if (excludeHidden) {
+    // TODO: Remove debug logging
+    console.log("[screenGroups::listScreenGroups] Excluding hidden groups.");
     rows = rows.filter((row) => !row.hidden);
   }
-
+  
   if (excludeEmpty) {
+    // TODO: Remove debug logging
+    console.log("[screenGroups::listScreenGroups] Excluding empty groups.");
     rows = rows.filter((row) => row.screenCount > 0);
   }
 

@@ -1,7 +1,43 @@
 import { eq, sql } from "drizzle-orm";
 
 import { db } from "./client.js";
-import { content } from "./schema.js";
+import { content, screens, screenSchedules } from "./schema.js";
+
+function selectContentWithRelations() {
+  return db
+    .select({
+      id: content.id,
+      name: content.name,
+      url: content.url,
+      screenMdnsHostname: screens.mdnsHostname,
+      screenName: screens.name,
+    })
+    .from(content)
+    .leftJoin(screenSchedules, eq(content.id, screenSchedules.contentId))
+    .leftJoin(screens, eq(screenSchedules.screenId, screens.id));
+}
+
+// Flattens the joined rows from selectContentWithRelations() into one object
+// per content row, with its matched screens nested as a list (empty if none).
+function groupContentWithRelations(rows) {
+  const contentById = new Map();
+
+  for (const row of rows) {
+    if (!contentById.has(row.id)) {
+      contentById.set(row.id, { id: row.id, name: row.name, url: row.url, screens: [] });
+    }
+
+    if (row.screenMdnsHostname !== null) {
+      contentById.get(row.id).screens.push({ mdnsHostname: row.screenMdnsHostname, name: row.screenName });
+    }
+  }
+
+  return [...contentById.values()];
+}
+
+export function listContentWithRelations() {
+  return groupContentWithRelations(selectContentWithRelations().all());
+}
 
 export function listContent() {
   return db.select().from(content).all();
@@ -24,5 +60,5 @@ export function updateContent(id, partial) {
 }
 
 export function deleteContent(id) {
-  db.delete(content).where(eq(content.id, id)).run();
+  return db.delete(content).where(eq(content.id, id)).run();
 }

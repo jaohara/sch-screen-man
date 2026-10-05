@@ -8,7 +8,8 @@ import { getSettings,  updateSettings } from "../db/settings.js";
 import { 
   createContent,
   deleteContent, 
-  listContent, 
+  listContent,
+  listContentWithRelations,
   getContentById,
   updateContent, 
 } from "../db/content.js";
@@ -198,6 +199,11 @@ router.patch('/settings', (req, res) => {
 
 // list all
 router.get('/content', (req, res) => {
+  // res.json(listContent());
+  res.json(listContentWithRelations());
+});
+
+router.get('/content/raw', (req, res) => {
   res.json(listContent());
 });
 

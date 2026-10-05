@@ -9,16 +9,18 @@ import { BrowserRouter } from "react-router";
 import { ScreensProvider } from './context/ScreensContext.jsx';
 import { SettingsProvider } from './context/SettingsContext.jsx';
 import { UIStateProvider } from './context/UIContext.jsx';
-
+import { ContentProvider } from './context/ContentContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <SettingsProvider>
       <UIStateProvider>
         <ScreensProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <ContentProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ContentProvider>
         </ScreensProvider>
       </UIStateProvider>
     </SettingsProvider>

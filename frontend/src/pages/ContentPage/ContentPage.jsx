@@ -16,6 +16,8 @@ import {
   FaLink,
 } from "react-icons/fa6";
 
+import { useContent, useContentActions } from "@/context/ContentContext";
+
 const TEST_CONTENT = [
   {
     name: "Example Content 1",

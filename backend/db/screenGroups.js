@@ -24,6 +24,11 @@ export function listScreenGroups(
   const query = selectScreenGroupsWithScreenCount();
 
   let rows = query.all();
+  
+  if (excludeEmpty) {
+    // TODO: Remove debug logging
+    console.log("[screenGroups::listScreenGroups] Excluding empty groups.");
+    rows = rows.filter((row) => row.screenCount > 0);
 
   if (excludeHidden) {
     // TODO: Remove debug logging
@@ -31,10 +36,6 @@ export function listScreenGroups(
     rows = rows.filter((row) => !row.hidden);
   }
   
-  if (excludeEmpty) {
-    // TODO: Remove debug logging
-    console.log("[screenGroups::listScreenGroups] Excluding empty groups.");
-    rows = rows.filter((row) => row.screenCount > 0);
   }
 
   return rows;

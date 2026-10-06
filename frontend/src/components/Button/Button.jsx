@@ -2,17 +2,16 @@ import React from 'react';
 
 import styles from "./Button.module.scss";
 
-import { MdOutlineRefresh } from 'react-icons/md';
-
 import { 
   FaArrowRotateLeft,
+  FaPencil,
   FaPlus,
   FaRegTrashCan,
 } from 'react-icons/fa6';
 
 const buttonIcons = {
-  // "reboot": (<MdOutlineRefresh />),
   "add": (<FaPlus />),
+  "edit": (<FaPencil />),
   "reboot": (<FaArrowRotateLeft />),
   "remove": (<FaRegTrashCan />),
 }
@@ -20,9 +19,6 @@ const buttonIcons = {
 const buttonIconKeys = Object.keys(buttonIcons);
 
 const iconExists = (icon) => buttonIconKeys.includes(icon);
-
-// TODO: Update to 
-const REBOOT_URL = "";
 
 function Button ({
   disabled = false,

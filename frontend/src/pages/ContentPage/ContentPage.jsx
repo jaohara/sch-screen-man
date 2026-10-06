@@ -106,10 +106,6 @@ export default function ContentPage () {
     <Panel maxHeight>
       <h1>Content Management</h1>
       <Card>
-        {/* <h2>Add Content</h2> */}
-        {/* <p>
-          Add pages (menus, advertisements, etc.) to show on screens.
-        </p> */}
         <InputContainer noTopPadding>
           <TextInput 
             error={contentNameHasError}
@@ -139,20 +135,40 @@ export default function ContentPage () {
       </Card>
 
       <Card scrollOverflow grow>
-        {
+        {/* {
           // TODO: include edge cases (no content added, currentContent is null)
           currentContent && currentContent.map((content) => (
             <ContentItem
               content={content}
             />
           ))
+        } */}
+
+        {/* TODO: Test this code branch */}
+
+        {
+          contentLoading ? (
+            <>
+              {/* TODO: Use loading component */}
+              Loading...
+            </>
+          ) : (
+            content.map((item) => (
+              <ContentItem
+                content={item}
+              />
+            ))
+          )
         }
       </Card>
     </Panel>
   );
 }
 
-function ContentItem ({ content }) {
+function ContentItem ({ 
+  content,
+  handleDeleteClick = () => {},
+}) {
   const { name, url, screens } = content;
 
   return (
@@ -180,6 +196,14 @@ function ContentItem ({ content }) {
             <span className={styles["content-screens-none"]}>None</span>
           )
         }
+      </div>
+
+      <div className={styles["content-item-controls"]}>
+        {/* TODO: theme and use trash icon */}
+        <Button
+          label="Delete"
+          onClick={handleDeleteClick}
+        />
       </div>
     </div>
   )

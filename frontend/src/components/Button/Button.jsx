@@ -7,12 +7,14 @@ import { MdOutlineRefresh } from 'react-icons/md';
 import { 
   FaArrowRotateLeft,
   FaPlus,
+  FaRegTrashCan,
 } from 'react-icons/fa6';
 
 const buttonIcons = {
   // "reboot": (<MdOutlineRefresh />),
   "add": (<FaPlus />),
   "reboot": (<FaArrowRotateLeft />),
+  "remove": (<FaRegTrashCan />),
 }
 
 const buttonIconKeys = Object.keys(buttonIcons);

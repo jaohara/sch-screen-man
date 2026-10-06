@@ -7,6 +7,7 @@ import Card from "@/components/Card/Card";
 import InputContainer from "@/components/InputContainer/InputContainer";
 import TextInput from "@/components/TextInput/TextInput";
 import Button from "@/components/Button/Button";
+import ToggleSlider from "@/components/ToggleSlider/ToggleSlider";
 
 import {
   FaDisplay,
@@ -16,6 +17,8 @@ import {
 import { useContent, useContentActions } from "@/context/ContentContext";
 
 export default function ContentPage () {
+  const [ deleteContentLocked, setDeleteContentLocked ] = useState(true);
+
   const [ newContentName, setNewContentName ] = useState("");
   const [ newContentURL, setNewContentURL ] = useState("");
 
@@ -102,6 +105,15 @@ export default function ContentPage () {
     // setCurrentContent([...currentContent, newContent]);
   };
 
+  const handleDeleteClick = async (id) => {
+    try {
+      await removeContent(id);
+    }
+    catch (error) {
+      console.error("[ContentPage::handleDeleteClick] Error adding content: ", error);
+    }
+  }
+
   return (
     <Panel maxHeight>
       <h1>Content Management</h1>
@@ -156,10 +168,17 @@ export default function ContentPage () {
             </>
           ) : (
             <>
+              <ToggleSlider
+                label="Lock Edits"
+                onClick={() => setDeleteContentLocked(!deleteContentLocked)}
+                value={deleteContentLocked}
+              />
               {
                 content.map((item) => (
                   <ContentItem
+                    editLock={deleteContentLocked}
                     content={item}
+                    handleDeleteClick={handleDeleteClick}
                   />
                 ))
               }
@@ -172,10 +191,11 @@ export default function ContentPage () {
 }
 
 function ContentItem ({ 
+  editLock = false,
   content,
   handleDeleteClick = () => {},
 }) {
-  const { name, url, screens } = content;
+  const { id, name, url, screens } = content;
 
   console.log("[ContentPage::ContentItem] received content: ", content);
   console.log("[ContentPage::ContentItem] name: ", name);
@@ -216,8 +236,9 @@ function ContentItem ({
         <Button
           icon={"remove"}
           label="Delete"
+          locked={editLock}
           noLabel
-          onClick={handleDeleteClick}
+          onClick={() => handleDeleteClick(id)}
         />
       </div> 
     </div>

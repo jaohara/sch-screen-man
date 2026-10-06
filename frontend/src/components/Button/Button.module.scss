@@ -46,3 +46,18 @@
 .button.small-text {
   font-size: var(--button-small-font-size);
 }
+
+.button.loading {
+  svg {
+    animation: stats-loading-spin var(--loading-spinner-animation-time) linear infinite;
+  }
+}
+
+@keyframes loading-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

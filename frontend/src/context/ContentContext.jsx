@@ -51,37 +51,61 @@ export function ContentProvider({ children }) {
   }, []);
 
   const addContent = (newContent) => {
-    fetch(CONTENT_ROUTE, {
+    return fetch(CONTENT_ROUTE, {
       method: "POST",
       body: JSON.stringify(newContent),
       headers: { "Content-Type": "application/json" },
     })
-      .then(res => res.json())
-      .then(data => dispatch({ type: "add", item: data }))
-      .catch(err => console.error(`[ContentContext::addContent] Failed to add: `, newContent, err));
+      .then(async res => {
+        const data = await res.json();
 
-    // TODO: How would I have the UI aware of a failure? 
-    //   Should it have a timeout on content being mutated?
+        if (!res.ok) {
+          throw new Error(
+            `[ContentContext::addContent] ${data.message ?? `Request failed with status ${res.status}`}`
+          );
+        }
+
+        return data;
+      })
+      .then(data => dispatch({ type: "add", item: data }));
   };
 
   const removeContent = (id) => {
-    fetch(`${CONTENT_ROUTE}/${id}`, {
+    return fetch(`${CONTENT_ROUTE}/${id}`, {
       method: "DELETE",
     })
-      .then(res => res.json())
-      .then(() => dispatch({ type: "remove", id }))
-      .catch(err => console.error(`[ContentContext::removeContent] Failed to remove ${id}:`, err));
+      .then(async res => {
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(
+            `[ContentContext::removeContent] ${data.message ?? `Request failed with status ${res.status}`}`
+          );
+        }
+
+        return data;
+      })
+      .then(() => dispatch({ type: "remove", id }));
   };
 
   const modifyContent = (id, partial) => {
-    fetch(`${CONTENT_ROUTE}/${id}`, {
+    return fetch(`${CONTENT_ROUTE}/${id}`, {
       method: "PATCH",
       body: JSON.stringify(partial),
       headers: { "Content-Type": "application/json" },
     })
-      .then(res => res.json())
-      .then(data => dispatch({ type: "modify", item: data }))
-      .catch(err => console.error(`[ContentContext::modifyContent] Failed to modify ${id}:`, err));
+      .then(async res => {
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(
+            `[ContentContext::modifyContent] ${data.message ?? `Request failed with status ${res.status}`}`
+          );
+        }
+
+        return data;
+      })
+      .then(data => dispatch({ type: "modify", item: data }));
   };
 
   return (

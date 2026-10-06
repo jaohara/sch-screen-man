@@ -7,9 +7,6 @@ import Card from "@/components/Card/Card";
 import InputContainer from "@/components/InputContainer/InputContainer";
 import TextInput from "@/components/TextInput/TextInput";
 import Button from "@/components/Button/Button";
-import DropdownMenu from "@/components/DropdownMenu/DropdownMenu";
-import CheckBox from "@/components/CheckBox/CheckBox";
-import ToggleSlider from "@/components/ToggleSlider/ToggleSlider";
 
 import {
   FaDisplay,
@@ -18,33 +15,16 @@ import {
 
 import { useContent, useContentActions } from "@/context/ContentContext";
 
-const TEST_CONTENT = [
-  {
-    name: "Example Content 1",
-    url: "https://google.com",
-    screens: ["Test Screen 1", "Test Screen 2"],
-  },
-  {
-    name: "Example Content 2",
-    url: "https://google.com",
-    screens: ["Test Screen 1",],
-  },
-  {
-    name: "Example Content 3",
-    url: "https://google.com",
-    screens: ["Test Screen 2", "Test Screen 3"],
-  },
-];
-
-
 export default function ContentPage () {
   const [ newContentName, setNewContentName ] = useState("");
   const [ newContentURL, setNewContentURL ] = useState("");
-  const [ currentContent, setCurrentContent ] = useState(TEST_CONTENT);
 
   const [ contentNameHasError, setContentNameHasError ] = useState(false);
   const [ contentURLHasError, setContentURLHasError ] = useState(false);
 
+  const [ addButtonIsLocked, setAddButtonIsLocked ] = useState(false);
+
+  
   const { 
     data: content,
     loading: contentLoading,
@@ -75,15 +55,15 @@ export default function ContentPage () {
     console.log("[ContentPage::useEffect] 'content' is: ", content);
   }, [content]);
 
-  const handleAddContentClick = () => {
+  const handleAddContentClick = async () => {
     let hasError = false;
 
-    if (!newContentName || newContentName === "") {
+    if (!newContentName || newContentName.trim() === "") {
       setContentNameHasError(true);
       hasError = true;
     }
 
-    if (!newContentURL || newContentURL === "") {
+    if (!newContentURL || newContentURL.trim() === "") {
       setContentURLHasError(true);
       hasError = true;
     }
@@ -92,18 +72,30 @@ export default function ContentPage () {
       return;
     }
 
+    setAddButtonIsLocked(true);
+
     const newContent = {
-      name: newContentName,
-      url: newContentURL,
+      name: newContentName.trim(),
+      url: newContentURL.trim(),
     };
 
-    addContent(newContent);
-
+    try {
+      await addContent(newContent);
+    }
+    catch (error) {
+      console.error("[ContentPage::handlAddContentClick] Error adding content: ", error);
+      setAddButtonIsLocked(false);
+      return;
+    }
+    
+    
     // TODO: Maybe don't remove these yet
-    // setContentNameHasError(false);
-    // setContentURLHasError(false);
-    // setNewContentName("");
-    // setNewContentURL("");
+    // 
+    setAddButtonIsLocked(false);
+    setContentNameHasError(false);
+    setContentURLHasError(false);
+    setNewContentName("");
+    setNewContentURL("");
 
 
 
@@ -136,6 +128,8 @@ export default function ContentPage () {
           <Button
             icon="add"
             label={"Add Content"}
+            locked={addButtonIsLocked}
+            loading={addButtonIsLocked}
             onClick={handleAddContentClick}
             smallText
           />
@@ -169,7 +163,6 @@ export default function ContentPage () {
                   />
                 ))
               }
-              {/* Loaded. */}
             </>
           )
         }

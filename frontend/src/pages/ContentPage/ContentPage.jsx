@@ -71,6 +71,10 @@ export default function ContentPage () {
   //   if (!contentLoading) 
   // }, [contentLoading]);
 
+  useEffect(() => {
+    console.log("[ContentPage::useEffect] 'content' is: ", content);
+  }, [content]);
+
   const handleAddContentClick = () => {
     let hasError = false;
 
@@ -88,18 +92,22 @@ export default function ContentPage () {
       return;
     }
 
-    setContentNameHasError(false);
-    setContentURLHasError(false);
-    setNewContentName("");
-    setNewContentURL("");
-
     const newContent = {
       name: newContentName,
       url: newContentURL,
-      screens: [],
     };
 
-    setCurrentContent([...currentContent, newContent]);
+    addContent(newContent);
+
+    // TODO: Maybe don't remove these yet
+    // setContentNameHasError(false);
+    // setContentURLHasError(false);
+    // setNewContentName("");
+    // setNewContentURL("");
+
+
+
+    // setCurrentContent([...currentContent, newContent]);
   };
 
   return (
@@ -153,11 +161,16 @@ export default function ContentPage () {
               Loading...
             </>
           ) : (
-            content.map((item) => (
-              <ContentItem
-                content={item}
-              />
-            ))
+            <>
+              {
+                content.map((item) => (
+                  <ContentItem
+                    content={item}
+                  />
+                ))
+              }
+              {/* Loaded. */}
+            </>
           )
         }
       </Card>
@@ -170,6 +183,13 @@ function ContentItem ({
   handleDeleteClick = () => {},
 }) {
   const { name, url, screens } = content;
+
+  console.log("[ContentPage::ContentItem] received content: ", content);
+  console.log("[ContentPage::ContentItem] name: ", name);
+  console.log("[ContentPage::ContentItem] url: ", url);
+  console.log("[ContentPage::ContentItem] screens: ", screens);
+
+  // return;
 
   return (
     <div className={styles["content-item"]}>
@@ -185,12 +205,12 @@ function ContentItem ({
       <div className={styles["content-item-screens"]}>
         <span className={styles["content-screens-label"]}><FaDisplay />&nbsp;:</span>
         {
-          screens && screens.length > 0 ? screens.map((name, index) => (
+          screens && screens.length > 0 ? screens.map((screen, index) => (
             <span
               className={styles["content-item-screen-name"]}
               key={`content-item-screen-${index}`}
             >
-              {name}
+              {screen.name}
             </span>
           )) : (
             <span className={styles["content-screens-none"]}>None</span>
@@ -201,10 +221,12 @@ function ContentItem ({
       <div className={styles["content-item-controls"]}>
         {/* TODO: theme and use trash icon */}
         <Button
+          icon={"remove"}
           label="Delete"
+          noLabel
           onClick={handleDeleteClick}
         />
-      </div>
+      </div> 
     </div>
   )
 }

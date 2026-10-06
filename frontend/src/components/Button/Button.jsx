@@ -24,6 +24,7 @@ function Button ({
   disabled = false,
   icon,
   label = "Button",
+  noLabel = false,
   onClick = () => {},
   smallText = false,
 }) {
@@ -36,6 +37,8 @@ function Button ({
     return "";
   })();
 
+  const effectiveLabel = noLabel ? "" : label;
+
   return (
     <button
       disabled={disabled}
@@ -46,7 +49,7 @@ function Button ({
       onClick={onClick}
     >
       {iconJSX}
-      {label}
+      {effectiveLabel}
     </button>
   )  
 }

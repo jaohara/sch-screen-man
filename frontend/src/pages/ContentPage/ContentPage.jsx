@@ -191,7 +191,7 @@ function ContentItem ({
       <div className={styles["content-item-url"]}>
         <span className={styles["content-url-label"]}><FaLink />&nbsp;:</span>
         <span className={styles["content-url"]}>
-          <a href={url}>{url}</a>
+          <a href={url} target="_blank">{url}</a>
         </span>
       </div>
 
@@ -206,7 +206,7 @@ function ContentItem ({
               {screen.name}
             </span>
           )) : (
-            <span className={styles["content-screens-none"]}>None</span>
+            <span className={styles["content-screens-none"]}>Not used</span>
           )
         }
       </div>

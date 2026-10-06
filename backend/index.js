@@ -12,6 +12,7 @@ const port = 3000;
 // TODO: Add local test IPs as necessary
 const corsOriginArray = [
   "http://localhost:5173",
+  "http://desktop:5173",
   "http://192.168.1.46:5173",
   /^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/,
 ];

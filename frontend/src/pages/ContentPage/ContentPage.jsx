@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./ContentPage.module.scss";
 
@@ -44,6 +44,32 @@ export default function ContentPage () {
 
   const [ contentNameHasError, setContentNameHasError ] = useState(false);
   const [ contentURLHasError, setContentURLHasError ] = useState(false);
+
+  const { 
+    data: content,
+    loading: contentLoading,
+  } = useContent();
+
+  const { 
+    addContent, 
+    removeContent,
+    modifyContent,
+  } = useContentActions();
+
+  // TODO:
+
+  // Implementation Tasks:
+  // =====================
+  // - Use contentLoading to gate content list with loading component
+  // - Build content list from actual content data
+  // - Use ContentActions for action handlers
+  // - Add delete button to delete existing contente
+  // - Think of UI presentation for modifying content (use inputs, edit in place?)
+
+  // TODO: Might not need this 
+  // useEffect(() => {
+  //   if (!contentLoading) 
+  // }, [contentLoading]);
 
   const handleAddContentClick = () => {
     let hasError = false;

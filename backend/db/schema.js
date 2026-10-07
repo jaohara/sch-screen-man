@@ -58,6 +58,13 @@ export const screenSchedules = sqliteTable("screen_schedules", {
   screenId: integer("screen_id").notNull().references(() => screens.id, {onDelete: "cascade"}),
   start: text("start").notNull(),
   end: text("end").notNull(),
+  sun: integer("sun", { mode: "boolean" }).notNull().default(false),
+  mon: integer("mon", { mode: "boolean" }).notNull().default(false),
+  tue: integer("tue", { mode: "boolean" }).notNull().default(false),
+  wed: integer("wed", { mode: "boolean" }).notNull().default(false),
+  thu: integer("thu", { mode: "boolean" }).notNull().default(false),
+  fri: integer("fri", { mode: "boolean" }).notNull().default(false),
+  sat: integer("sat", { mode: "boolean" }).notNull().default(false),
   createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
   updatedAt: text("updated_at").notNull().default(sql`(current_timestamp)`),
 });
